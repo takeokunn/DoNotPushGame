@@ -11,12 +11,16 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Don%27t_push\source\Dxkeystate.cpp" />
+    <ClCompile Include="..\Don%27t_push\source\game.cpp" />
     <ClCompile Include="source\DxGraphicHandle.cpp" />
     <ClCompile Include="source\DxSoundHandle.cpp" />
     <ClCompile Include="source\load.cpp" />
     <ClCompile Include="source\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Don%27t_push\source\Dxkeystate.h" />
+    <ClInclude Include="..\Don%27t_push\source\game.h" />
     <ClInclude Include="source\define.h" />
     <ClInclude Include="source\DxGraphicHandle.h" />
     <ClInclude Include="source\DxHandleException.h" />

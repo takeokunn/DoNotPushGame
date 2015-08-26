@@ -1,31 +1,25 @@
-#include "DxLib.h"
+ï»¿#include "DxLib.h"
 #include "DxGraphicHandle.h"
 #include "define.h"
 #include "load.h"
+#include "Dxkeystate.h"
 #include <exception>
-using img_arr_t = std::unordered_map < std::string, DxGHandle > ;
-//‰Šú‰»ŠÖ”
+//åˆæœŸåŒ–é–¢æ•°s
 int init(){
-	SetMainWindowText("ƒAƒvƒŠƒP[ƒVƒ‡ƒ“");
+	SetMainWindowText("ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³");
 	SetOutApplicationLogValidFlag(FALSE);
 	SetGraphMode(WINDOW_WIDTH, WINDOW_HEIGHT, 16);
 	ChangeWindowMode(TRUE);
 	SetBackgroundColor(255, 255, 255);
-	if (DxLib_Init() == -1)return -1;// ƒGƒ‰[‚ª‹N‚«‚½‚ç’¼‚¿‚ÉI—¹
+	if (DxLib_Init() == -1)return -1;// ã‚¨ãƒ©ãƒ¼ãŒèµ·ããŸã‚‰ç›´ã¡ã«çµ‚äº†
 	//SetTransColor(0, 0, 254);
 	SetDrawScreen(DX_SCREEN_BACK);
 	ClearDrawScreen();
 	return 0;
 }
 
-//ó‘ÔŠÇ—
-enum class Status{
-	TITLE,
-	GAME,
-	END
-};
 
-//ƒ^ƒCƒgƒ‹ˆ—
+//ã‚¿ã‚¤ãƒˆãƒ«å‡¦ç†
 Status title(img_arr_t& img_arr){
 	ClearDrawScreen();
 	img_arr["title"].DrawGraph(0, 0, false);
@@ -34,16 +28,17 @@ Status title(img_arr_t& img_arr){
 	return Status::GAME;
 }
 
-//GAMEˆ—
+//GAMEå‡¦ç†
 Status game(img_arr_t& img_arr){
 	ClearDrawScreen();
 	img_arr["game"].DrawGraph(0, 0, false);
 	ScreenFlip();
+	
 	while (CheckHitKey(KEY_INPUT_D) != 1);
 	return Status::END;
 }
 
-//ƒŠƒUƒ‹ƒgˆ—
+//ãƒªã‚¶ãƒ«ãƒˆå‡¦ç†
 Status end(img_arr_t& img_arr){
 	img_arr["end"].DrawGraph(0, 0, false);
 	ScreenFlip();
@@ -62,13 +57,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 {
 	init();
 
-	//•Ï”’è‹`------------------------------------------------------
+	//å¤‰æ•°å®šç¾©------------------------------------------------------
 
 	Status status_ = Status::TITLE;
 	auto img_arr = make_image_array();
 
 
-	//ˆ—-----------------------------------------------------------
+	//å‡¦ç†-----------------------------------------------------------
 
 	try{
 		while (1){
@@ -88,7 +83,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				return -1;
 				break;
 			}
-			ScreenFlip();//— ‰æ–Ê•\¦
+			ScreenFlip();//è£ç”»é¢è¡¨ç¤º
 		}
 	}
 	catch (std::exception&){
@@ -96,7 +91,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		return -1;
 	}
 
-	//I—¹ˆ—--------------------------------------------------------------
+	//çµ‚äº†å‡¦ç†--------------------------------------------------------------
 
 	DxLib_End();
 

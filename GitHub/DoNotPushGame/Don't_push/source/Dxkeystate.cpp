@@ -24,40 +24,40 @@ bool keystate::shift() const NOEXCEPT {
 	return this->lshift() || this->rshift();
 }
 bool keystate::lshift() const NOEXCEPT {
-	return 1 == this->keystatebuf[KEY_INPUT_LSHIFT];
+	return 0 != this->keystatebuf[KEY_INPUT_LSHIFT];
 }
 bool keystate::rshift() const NOEXCEPT {
-	return 1 == this->keystatebuf[KEY_INPUT_RSHIFT];
+	return 0 != this->keystatebuf[KEY_INPUT_RSHIFT];
 }
 bool keystate::ctrl() const NOEXCEPT {
 	return this->lctrl() || this->rctrl();
 }
 bool keystate::lctrl() const NOEXCEPT {
-	return 1 == this->keystatebuf[KEY_INPUT_LCONTROL];
+	return 0 != this->keystatebuf[KEY_INPUT_LCONTROL];
 }
 bool keystate::rctrl() const NOEXCEPT {
-	return 1 == this->keystatebuf[KEY_INPUT_RCONTROL];
+	return 0 != this->keystatebuf[KEY_INPUT_RCONTROL];
 }
 bool keystate::esc() const NOEXCEPT {
-	return 1 == this->keystatebuf[KEY_INPUT_ESCAPE];
+	return 0 != this->keystatebuf[KEY_INPUT_ESCAPE];
 }
 bool keystate::right() const NOEXCEPT {
-	return 1 == this->keystatebuf[KEY_INPUT_LEFT];
+	return 0 != this->keystatebuf[KEY_INPUT_LEFT];
 }
 bool keystate::up() const NOEXCEPT {
-	return 1 == this->keystatebuf[KEY_INPUT_UP];
+	return 0 != this->keystatebuf[KEY_INPUT_UP];
 }
 bool keystate::left() const NOEXCEPT {
-	return 1 == this->keystatebuf[KEY_INPUT_RIGHT];
+	return 0 != this->keystatebuf[KEY_INPUT_RIGHT];
 }
 bool keystate::down() const NOEXCEPT {
-	return 1 == this->keystatebuf[KEY_INPUT_DOWN];
+	return 0 != this->keystatebuf[KEY_INPUT_DOWN];
 }
 bool keystate::enter() const NOEXCEPT {
-	return 1 == this->keystatebuf[KEY_INPUT_RETURN];
+	return 0 != this->keystatebuf[KEY_INPUT_RETURN];
 }
 bool keystate::space() const NOEXCEPT {
-	return 1 == this->keystatebuf[KEY_INPUT_SPACE];
+	return 0 != this->keystatebuf[KEY_INPUT_SPACE];
 }
 bool operator!=(const keystate& l, size_t r) {
 	return 0 == l[r];

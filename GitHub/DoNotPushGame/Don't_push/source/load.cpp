@@ -1,4 +1,4 @@
-#include "load.h"
+﻿#include "load.h"
 class make_DxGHandle_pair{
 public:
 	make_DxGHandle_pair(const std::string& path_) : path(path_) {}
