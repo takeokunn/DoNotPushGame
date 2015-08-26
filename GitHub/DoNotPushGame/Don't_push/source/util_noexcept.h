@@ -1,5 +1,5 @@
 ﻿#pragma once
-#if (defined(_MSC_VER) && _MSC_VER > 1800) ||(defined(__clang__) && __clang__ >= 3) || (defined(__GNUC__) && (__GNUC__ > 4  || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)))
+#if (defined(_MSC_VER) && _MSC_FULL_VER >= 180031101) ||(defined(__clang__) && __clang__ >= 3) || (defined(__GNUC__) && (__GNUC__ > 4  || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)))
 #define NOEXCEPT noexcept
 #else
 #define NOEXCEPT
