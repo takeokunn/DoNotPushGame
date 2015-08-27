@@ -18,6 +18,7 @@
     <ClCompile Include="source\DxSoundHandle.cpp" />
     <ClCompile Include="source\load.cpp" />
     <ClCompile Include="source\main.cpp" />
+    <ClCompile Include="source\title.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Don%27t_push\source\Dxkeystate.h" />
@@ -28,6 +29,7 @@
     <ClInclude Include="source\DxHandleException.h" />
     <ClInclude Include="source\DxSoundHandle.h" />
     <ClInclude Include="source\load.h" />
+    <ClInclude Include="source\title.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{57F766CD-EEC2-43FE-AB7C-8BFA9D1A2C56}</ProjectGuid>
