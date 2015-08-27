@@ -4,5 +4,5 @@
 #include "define.h"
 #include <unordered_map>
 #include <string>
-img_arr_t make_image_array(const std::string& path);
-sound_arr_t make_sound_array(const std::string& path);
+img_arr_t make_image_array();
+sound_arr_t make_sound_array();

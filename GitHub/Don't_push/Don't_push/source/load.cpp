@@ -9,9 +9,9 @@ public:
 private:
 	std::string path;
 };
-img_arr_t make_image_array(const std::string& path){
+img_arr_t make_image_array(){
 	img_arr_t rtn;
-	make_DxGHandle_pair img((path.back() == '\\') ? path : path + '\\');
+	make_DxGHandle_pair img("assets\\status_img\\");
 	rtn.insert(img("title"));
 	rtn.insert(img("game"));
 	rtn.insert(img("end"));
@@ -27,9 +27,9 @@ public:
 private:
 	std::string path;
 };
-sound_arr_t make_sound_array(const std::string& path) {
+sound_arr_t make_sound_array() {
 	sound_arr_t re;
-	make_DxSHandle_pair sound((path.back() == '\\') ? path : path + '\\');
+	make_DxSHandle_pair sound("assets\\music\\");
 	re.insert(sound("flower garden"));
 	re.insert(sound("title"));
 	return re;

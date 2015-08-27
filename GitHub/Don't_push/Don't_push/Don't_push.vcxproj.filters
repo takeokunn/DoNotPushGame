@@ -60,6 +60,12 @@
     <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\power_bar.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\fkying_mare.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\helicopter.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\DxGraphicHandle.cpp">
@@ -96,6 +102,12 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\power_bar.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\flying_mare.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\helicopter.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>

@@ -44,7 +44,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//処理-----------------------------------------------------------
 
 	try{
-		auto img_arr = make_image_array("assets\\status_img");
+		auto img_arr = make_image_array();
 		while (Status::EXIT != status_){
 			switch (status_)
 			{

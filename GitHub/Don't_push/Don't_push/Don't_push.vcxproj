@@ -306,7 +306,9 @@
     <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\DxHandleException.h" />
     <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\Dxkeystate.h" />
     <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\DxSoundHandle.h" />
+    <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\fkying_mare.h" />
     <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\game.h" />
+    <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\helicopter.h" />
     <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\load.h" />
     <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\object_to_fall.h" />
     <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\power_bar.h" />
@@ -321,7 +323,9 @@
     <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\DxGraphicHandle.cpp" />
     <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\Dxkeystate.cpp" />
     <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\DxSoundHandle.cpp" />
+    <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\flying_mare.cpp" />
     <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\game.cpp" />
+    <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\helicopter.cpp" />
     <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\load.cpp" />
     <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\main.cpp" />
     <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\object_to_fall.cpp" />
