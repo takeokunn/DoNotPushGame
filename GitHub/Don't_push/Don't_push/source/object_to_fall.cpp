@@ -10,6 +10,6 @@ INT2_t object_to_fall_c::xy_move(){
 
 bool object_to_fall_c::collision_detecter(const INT2_t& target, const DxGHandle& target_handle){
 	const auto self_center = this->handle_.GetRelativeGraphCenter() + this->self_;
-	const auto tareget_pic_size = target_handle.GetGraphSize();
-	return (target.first < self_center.first || self_center.first < tareget_pic_size.first);
+	const auto tareget_pic_size = target_handle.GetGraphSize() + target;
+	return (target.second < self_center.second && self_center.second < tareget_pic_size.second && target.first < self_center.first && self_center.first < tareget_pic_size.first);
 }
