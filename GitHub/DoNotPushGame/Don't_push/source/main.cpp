@@ -43,7 +43,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//変数定義------------------------------------------------------
 
 	Status status_ = Status::TITLE;
-	auto img_arr = make_image_array();
+	auto img_arr = make_image_array("assets\\status_img");
 
 
 	//処理-----------------------------------------------------------
