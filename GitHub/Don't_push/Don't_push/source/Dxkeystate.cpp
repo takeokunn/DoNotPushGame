@@ -42,13 +42,13 @@ bool keystate::esc() const NOEXCEPT {
 	return 0 != this->keystatebuf[KEY_INPUT_ESCAPE];
 }
 bool keystate::right() const NOEXCEPT {
-	return 0 != this->keystatebuf[KEY_INPUT_LEFT];
+	return 0 != this->keystatebuf[KEY_INPUT_RIGHT];
 }
 bool keystate::up() const NOEXCEPT {
 	return 0 != this->keystatebuf[KEY_INPUT_UP];
 }
 bool keystate::left() const NOEXCEPT {
-	return 0 != this->keystatebuf[KEY_INPUT_RIGHT];
+	return 0 != this->keystatebuf[KEY_INPUT_LEFT];
 }
 bool keystate::down() const NOEXCEPT {
 	return 0 != this->keystatebuf[KEY_INPUT_DOWN];
