@@ -309,6 +309,7 @@
     <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\game.h" />
     <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\load.h" />
     <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\object_to_fall.h" />
+    <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\power_bar.h" />
     <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\title.h" />
     <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\util_constexpr.h" />
     <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\util_INT2_t_calc.h" />
@@ -324,6 +325,7 @@
     <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\load.cpp" />
     <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\main.cpp" />
     <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\object_to_fall.cpp" />
+    <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\power_bar.cpp" />
     <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\title.cpp" />
     <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\util_INT2_t_calc.cpp" />
     <ClCompile Include="source\end.cpp" />
