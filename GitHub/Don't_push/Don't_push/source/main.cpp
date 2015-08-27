@@ -26,8 +26,8 @@ int init(){
 Status end(img_arr_t& img_arr){
 	img_arr["end"].DrawGraph(0, 0, false);
 	ScreenFlip();
-	while (CheckHitKey(KEY_INPUT_A) != 1);
-	return Status::EXIT;
+	while (CheckHitKey(KEY_INPUT_Z) != 1);
+	return Status::TITLE;
 }
 
 //main

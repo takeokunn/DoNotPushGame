@@ -11,24 +11,28 @@ Status continu(img_arr_t& img_arr) {
 
 	//関数
 	int select0_x = 200;	//文字の座標（左上）
-	int select0_y = 100;
+	int select0_y = 150;
 	int select1_x = 200;
-	int select1_y = 200;
+	int select1_y = 250;
 
 	int color[2];
-	color[0] = GetColor(255, 255, 255);		//選択している奴の色
-	color[1] = GetColor(0,0,0);				//選択していない奴の色
+	color[0] = GetColor(0,0,0);				//選択している奴の色
+	color[1] = GetColor(255,255,255);		//選択していない奴の色
 
 	int answer = 0;		//コンティニューするかどうか（0:YES　1:NO）
 
+	//メインループ
 	while (TRUE){
 		ClearDrawScreen();
 
 		//十字キー受付
 		keystate state;
 		state.update();
-		if (state.up() || state.down()){
-			answer = (answer + 1) % 2;
+		if (state.up() && answer == 1){
+			answer = 0;
+		}
+		else if (state.down() && answer == 0){
+			answer = 1;
 		}
 
 
@@ -38,10 +42,12 @@ Status continu(img_arr_t& img_arr) {
 		DrawStringToHandle(select0_x + ((answer+1)%2)*40, select0_y, "CONTINUE !!", color[answer], Font_1);				//CONTINUE
 		DrawStringToHandle(select1_x + answer*40		, select1_y, "RETIRE. . .", color[(answer+1)%2], Font_1);		//RETIRE
 
+		DrawBox(150, 155 + answer*100, 170, 175 + answer*100, color[0], TRUE);	//選択してるのが分かるようにするやつ
+
 
 		ScreenFlip();
 
-		if (CheckHitKey(KEY_INPUT_Z) == 1){		//Zキーで決定
+		if (CheckHitKey(KEY_INPUT_A) == 1){		//Aキーで決定
 			switch (answer){
 			case 0:
 				return Status::GAME;
