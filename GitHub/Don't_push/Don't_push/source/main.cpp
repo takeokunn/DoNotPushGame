@@ -63,6 +63,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			case Status::END:
 				status_ = end(img_arr);
 				break;
+			case Status::FLYING_MARE_ANIMATION:
+				break;
+			case Status::CAR_ANIMATION:
+				break;
+			case Status::HELICOPTER_ANIMATION:
+				break;
+			case Status::CONTINUE:
+				break;
 			case Status::EXIT:
 				break;
 			default:

@@ -10,6 +10,10 @@ enum class Status{
 	TITLE,
 	GAME,
 	END,
+	FLYING_MARE_ANIMATION,
+	CAR_ANIMATION,
+	HELICOPTER_ANIMATION,
+	CONTINUE,
 	EXIT
 };
 using img_arr_t = std::unordered_map < std::string, DxGHandle >;
