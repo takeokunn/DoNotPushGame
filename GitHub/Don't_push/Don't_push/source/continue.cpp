@@ -1,31 +1,31 @@
-#include "continue.h"
+ï»¿#include "continue.h"
 #include "Dxkeystate.h"
 #include "DxLib.h"
 Status continu(img_arr_t& img_arr) {
 
 	/////////////
 
-	//ƒtƒHƒ“ƒg
-	int Font_1;			//‘I‘ğˆ•\¦‚Ì•¶š
+	//ãƒ•ã‚©ãƒ³ãƒˆ
+	int Font_1;			//é¸æŠè‚¢è¡¨ç¤ºã®æ–‡å­—
 	Font_1 = CreateFontToHandle(NULL, 30, 1, DX_FONTTYPE_ANTIALIASING);
 
-	//ŠÖ”
-	int select0_x = 200;	//•¶š‚ÌÀ•Wi¶ãj
+	//é–¢æ•°
+	int select0_x = 200;	//æ–‡å­—ã®åº§æ¨™ï¼ˆå·¦ä¸Šï¼‰
 	int select0_y = 150;
 	int select1_x = 200;
 	int select1_y = 250;
 
 	int color[2];
-	color[0] = GetColor(0,0,0);				//‘I‘ğ‚µ‚Ä‚¢‚é“z‚ÌF
-	color[1] = GetColor(255,255,255);		//‘I‘ğ‚µ‚Ä‚¢‚È‚¢“z‚ÌF
+	color[0] = GetColor(0,0,0);				//é¸æŠã—ã¦ã„ã‚‹å¥´ã®è‰²
+	color[1] = GetColor(255,255,255);		//é¸æŠã—ã¦ã„ãªã„å¥´ã®è‰²
 
-	int answer = 0;		//ƒRƒ“ƒeƒBƒjƒ…[‚·‚é‚©‚Ç‚¤‚©i0:YES@1:NOj
+	int answer = 0;		//ã‚³ãƒ³ãƒ†ã‚£ãƒ‹ãƒ¥ãƒ¼ã™ã‚‹ã‹ã©ã†ã‹ï¼ˆ0:YESã€€1:NOï¼‰
 
-	//ƒƒCƒ“ƒ‹[ƒv
+	//ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒ—
 	while (TRUE){
 		ClearDrawScreen();
 
-		//\šƒL[ó•t
+		//åå­—ã‚­ãƒ¼å—ä»˜
 		keystate state;
 		state.update();
 		if (state.up() && answer == 1){
@@ -36,18 +36,18 @@ Status continu(img_arr_t& img_arr) {
 		}
 
 
-		//•`‰æ
-		DrawBox(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GetColor(100, 180, 250), TRUE);	//”wŒi
+		//æç”»
+		DrawBox(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GetColor(100, 180, 250), TRUE);	//èƒŒæ™¯
 
 		DrawStringToHandle(select0_x + ((answer+1)%2)*40, select0_y, "CONTINUE !!", color[answer], Font_1);				//CONTINUE
 		DrawStringToHandle(select1_x + answer*40		, select1_y, "RETIRE. . .", color[(answer+1)%2], Font_1);		//RETIRE
 
-		DrawBox(150, 155 + answer*100, 170, 175 + answer*100, color[0], TRUE);	//‘I‘ğ‚µ‚Ä‚é‚Ì‚ª•ª‚©‚é‚æ‚¤‚É‚·‚é‚â‚Â
+		DrawBox(150, 155 + answer*100, 170, 175 + answer*100, color[0], TRUE);	//é¸æŠã—ã¦ã‚‹ã®ãŒåˆ†ã‹ã‚‹ã‚ˆã†ã«ã™ã‚‹ã‚„ã¤
 
 
 		ScreenFlip();
 
-		if (CheckHitKey(KEY_INPUT_A) == 1){		//AƒL[‚ÅŒˆ’è
+		if (CheckHitKey(KEY_INPUT_A) == 1){		//Aã‚­ãƒ¼ã§æ±ºå®š
 			switch (answer){
 			case 0:
 				return Status::GAME;
@@ -57,7 +57,7 @@ Status continu(img_arr_t& img_arr) {
 		}
 	}
 
-	return Status::EXIT; //Šî–{‚±‚±‚É‚Í—ˆ‚È‚¢‚Í‚¸B—áŠOˆ—‚Å‹­§I—¹
+	return Status::EXIT; //åŸºæœ¬ã“ã“ã«ã¯æ¥ãªã„ã¯ãšã€‚ä¾‹å¤–å‡¦ç†ã§å¼·åˆ¶çµ‚äº†
 
 	///////////// by yuchu
 }

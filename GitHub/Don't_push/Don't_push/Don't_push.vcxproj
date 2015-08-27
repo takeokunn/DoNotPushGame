@@ -313,6 +313,7 @@
     <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\util_constexpr.h" />
     <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\util_INT2_t_calc.h" />
     <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\util_noexcept.h" />
+    <ClInclude Include="source\end.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\continue.cpp" />
@@ -325,6 +326,7 @@
     <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\object_to_fall.cpp" />
     <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\title.cpp" />
     <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\util_INT2_t_calc.cpp" />
+    <ClCompile Include="source\end.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
