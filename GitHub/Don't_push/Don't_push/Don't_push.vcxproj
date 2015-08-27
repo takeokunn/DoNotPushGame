@@ -166,6 +166,7 @@
     <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\game.h" />
     <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\load.h" />
     <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\title.h" />
+    <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\util_constexpr.h" />
     <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\util_noexcept.h" />
   </ItemGroup>
   <ItemGroup>
