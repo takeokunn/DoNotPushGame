@@ -32,6 +32,8 @@ Status end(img_arr_t& img_arr){
 //main
 #pragma warning (push)
 #pragma warning (disable: 4100)
+#pragma warning(disable: 4127)
+//C4127: 条件式が定数です。
 //warning C4100 : 'nCmdShow' : unreferenced formal parameter
 //warning C4100 : 'lpCmdLine' : unreferenced formal parameter
 //warning C4100 : 'hPrevInstance' : unreferenced formal parameter

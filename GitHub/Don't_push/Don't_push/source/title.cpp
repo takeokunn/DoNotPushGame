@@ -7,6 +7,8 @@ Status title(img_arr_t& img_arr) {
 
 	/////////////
 
+	int Font_title;
+	Font_title = CreateFontToHandle(NULL, 20, 5, DX_FONTTYPE_EDGE);
 
 
 	///////////// by yuchu
