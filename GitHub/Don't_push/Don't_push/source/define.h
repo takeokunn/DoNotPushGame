@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include <cstddef>
 #include "util_constexpr.h"
 #include "DxGraphicHandle.h"
 #include "DxSoundHandle.h"
