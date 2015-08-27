@@ -6,6 +6,7 @@
 #include "game.h"
 #include "title.h"
 #include "continue.h"
+#include "end.h"
 #include <exception>
 //初期化関数
 int init(){
@@ -21,14 +22,6 @@ int init(){
 	return 0;
 }
 
-
-//リザルト処理
-Status end(img_arr_t& img_arr){
-	img_arr["end"].DrawGraph(0, 0, false);
-	ScreenFlip();
-	while (CheckHitKey(KEY_INPUT_Z) != 1);
-	return Status::TITLE;
-}
 
 //main
 #pragma warning (push)

@@ -9,6 +9,7 @@ Status continu(img_arr_t& img_arr) {
 	int Font_1;			//選択肢表示の文字
 	Font_1 = CreateFontToHandle(NULL, 30, 1, DX_FONTTYPE_ANTIALIASING);
 
+
 	//関数
 	int select0_x = 200;	//文字の座標（左上）
 	int select0_y = 150;
@@ -44,10 +45,12 @@ Status continu(img_arr_t& img_arr) {
 
 		DrawBox(150, 155 + answer*100, 170, 175 + answer*100, color[0], TRUE);	//選択してるのが分かるようにするやつ
 
+		DrawStringToHandle(120, WINDOW_HEIGHT - (WINDOW_HEIGHT / 4), "- Cキーを押して決定だよ -", GetColor(0, 0, 0), Font_1);//Cキー押してね
+
 
 		ScreenFlip();
 
-		if (CheckHitKey(KEY_INPUT_A) == 1){		//Aキーで決定
+		if (CheckHitKey(KEY_INPUT_C) == 1){		//Cキーで決定
 			switch (answer){
 			case 0:
 				return Status::GAME;
