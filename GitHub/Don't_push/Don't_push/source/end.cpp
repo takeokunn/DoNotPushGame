@@ -1,6 +1,6 @@
 ﻿#include "end.h"
 #include "DxLib.h"
-Status end(img_arr_t& img_arr){
+Status end(img_arr_t& img_arr, sound_arr_t& sound) {
 
 	/////////////
 

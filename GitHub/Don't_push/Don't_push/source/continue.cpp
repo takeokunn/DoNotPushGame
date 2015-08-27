@@ -1,7 +1,7 @@
 ﻿#include "continue.h"
 #include "Dxkeystate.h"
 #include "DxLib.h"
-Status continu(img_arr_t& img_arr) {
+Status continu(img_arr_t& img_arr, sound_arr_t& sound) {
 
 	/////////////
 

@@ -51,13 +51,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			switch (status_)
 			{
 			case Status::TITLE:
-				status_ = title(img_arr);
+				status_ = title(img_arr, sound_arr);//title BGM流す。この中でBGM止める
 				break;
 			case Status::GAME:
-				status_ = game(status_img);
+				status_ = game(img_arr, sound_arr);//BGM流し始め
 				break;
 			case Status::END:
-				status_ = end(img_arr);
+				status_ = end(img_arr, sound_arr);//ここでGAMEで流れだした音楽を止める
 				break;
 			case Status::FLYING_MARE_ANIMATION:
 				break;
@@ -66,7 +66,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			case Status::HELICOPTER_ANIMATION:
 				break;
 			case Status::CONTINUE:
-				status_ = continu(img_arr);
+				status_ = continu(img_arr, sound_arr);//ここでGAMEで流れだした音楽を止める
 				break;
 			case Status::EXIT:
 				break;
