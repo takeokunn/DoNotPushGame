@@ -9,7 +9,7 @@ public:
 	object_to_fall_c(INT2_t p, int pixcel_per_frame, const DxGHandle& handle);
 	INT2_t xy_move();
 	bool collision_detecter(int target_x, int target_y);
-	bool collision_detecter(INT2_t target);
+	bool collision_detecter(const INT2_t&  target, const DxGHandle& target_handle);
 private:
 	INT2_t self_;
 	int pixcel_per_frame_;

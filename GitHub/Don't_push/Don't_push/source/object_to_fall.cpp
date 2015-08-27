@@ -8,7 +8,8 @@ INT2_t object_to_fall_c::xy_move(){
 	return INT2_t({this->self_.first, this->self_.second + this->pixcel_per_frame_});
 }
 
-bool object_to_fall_c::collision_detecter(INT2_t target){
-	const auto pix_size = this->handle_.GetGraphSize();
-	return false;
+bool object_to_fall_c::collision_detecter(const INT2_t& target, const DxGHandle& target_handle){
+	const auto self_center = this->handle_.GetRelativeGraphCenter() + this->self_;
+	const auto tareget_pic_size = target_handle.GetGraphSize();
+	return (target.first < self_center.first || self_center.first < tareget_pic_size.first);
 }

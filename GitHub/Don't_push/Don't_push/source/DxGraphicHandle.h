@@ -2,12 +2,12 @@
 #include <string>
 #include <utility>
 #include <array>
+#include "util_INT2_t_calc.h"
 #ifndef DISABLE_DxHANDLE_WRAP_USE_EXCEPTION
 #define DxHANDLE_WRAP_USE_EXCEPTION//throwする
 #endif
 #include "util_noexcept.h"
 
-typedef std::pair<int, int> INT2_t;
 class DxGHandle
 {
 public:

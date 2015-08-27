@@ -174,12 +174,11 @@ int DxGHandle::GetGraphSize(int * SizeXBuf, int * SizeYBuf) const DxHANDLE_NOEXC
 	return re;
 }
 
-std::pair<int, int> DxGHandle::GetGraphSize() const DxHANDLE_NOEXCEPT {
-	std::pair<int, int> re;
-	return (0 == this->GetGraphSize(&re.first, &re.second)) ? re : std::pair<int, int>();
+INT2_t DxGHandle::GetGraphSize() const DxHANDLE_NOEXCEPT {
+	INT2_t re;
+	return (0 == this->GetGraphSize(&re.first, &re.second)) ? re : INT2_t();
 }
 
 INT2_t DxGHandle::GetRelativeGraphCenter() const DxHANDLE_NOEXCEPT{
-	
-	return INT2_t();
+	return this->GetGraphSize() / 2;
 }
