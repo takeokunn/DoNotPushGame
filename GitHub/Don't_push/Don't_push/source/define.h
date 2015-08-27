@@ -1,5 +1,7 @@
 ﻿#pragma once
 #include "util_constexpr.h"
+#include "DxGraphicHandle.h"
+#include "DxSoundHandle.h"
 #include <unordered_map>
 #include <string>
 CONSTEXPR_OR_STATICCONST size_t WINDOW_WIDTH = 640;

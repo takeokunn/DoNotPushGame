@@ -1,5 +1,6 @@
 ﻿#include "title.h"
 #include "DxLib.h"
+#include "define.h"
 Status title(img_arr_t& img_arr) {
 	
 	/////////////
