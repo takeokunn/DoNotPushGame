@@ -1,6 +1,7 @@
 ﻿#include "load.h"
-constexpr size_t WINDOW_WIDTH = 640;
-constexpr size_t WINDOW_HEIGHT = 480;
+#include "util_constexpr.h"
+static CONSTEXPR_OR_STATICCONST size_t WINDOW_WIDTH = 640;
+static CONSTEXPR_OR_STATICCONST size_t WINDOW_HEIGHT = 480;
 //状態管理
 enum class Status{
 	TITLE,

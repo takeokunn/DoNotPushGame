@@ -1,4 +1,4 @@
-#include "DxSoundHandle.h"
+﻿#include "DxSoundHandle.h"
 #include "DxLib.h"
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
 #include "DxHandleException.h"

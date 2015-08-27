@@ -4,6 +4,7 @@
 #define DxHANDLE_WRAP_USE_EXCEPTION//throwする
 #endif
 #include "util_noexcept.h"
+#include "util_constexpr.h"
 
 class keystate
 {
@@ -24,7 +25,7 @@ public:
 	bool down() const NOEXCEPT;
 	bool enter() const NOEXCEPT;
 	bool space() const NOEXCEPT;
-	static constexpr size_t keybufsize = 256;
+	static CONSTEXPR_OR_CONST size_t keybufsize = 256;
 private:
 	std::array<int, keybufsize> keystatebuf = {};
 };
