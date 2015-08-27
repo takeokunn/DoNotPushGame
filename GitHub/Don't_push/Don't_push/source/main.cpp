@@ -5,6 +5,7 @@
 #include "Dxkeystate.h"
 #include "game.h"
 #include "title.h"
+#include "continue.h"
 #include <exception>
 //初期化関数
 int init(){
@@ -51,7 +52,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	try{
 		auto img_arr = make_image_array("assets\\status_img");
-		while (1){
+		while (Status::EXIT != status_){
 			switch (status_)
 			{
 			case Status::TITLE:
@@ -70,6 +71,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			case Status::HELICOPTER_ANIMATION:
 				break;
 			case Status::CONTINUE:
+				status_ = continu(img_arr);
 				break;
 			case Status::EXIT:
 				break;
