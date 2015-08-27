@@ -306,7 +306,7 @@
     <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\DxHandleException.h" />
     <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\Dxkeystate.h" />
     <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\DxSoundHandle.h" />
-    <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\fkying_mare.h" />
+    <ClInclude Include="source\flying_mare.h" />
     <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\game.h" />
     <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\helicopter.h" />
     <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\load.h" />
