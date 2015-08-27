@@ -9,10 +9,10 @@ public:
 private:
 	std::string path;
 };
-std::unordered_map<std::string, DxGHandle> make_image_array(){
+std::unordered_map<std::string, DxGHandle> make_image_array(const std::string& path){
 
 	std::unordered_map<std::string, DxGHandle> rtn;
-	make_DxGHandle_pair img("assets\\status_img\\");
+	make_DxGHandle_pair img((path.back() == '\\') ? path : path + '\\');
 	rtn.insert(img("title"));
 	rtn.insert(img("game"));
 	rtn.insert(img("end"));

@@ -3,8 +3,10 @@
 #include "define.h"
 #include "load.h"
 #include "Dxkeystate.h"
+#include "game.h"
+#include "title.h"
 #include <exception>
-//初期化関数s
+//初期化関数
 int init(){
 	SetMainWindowText("アプリケーション");
 	SetOutApplicationLogValidFlag(FALSE);
@@ -19,31 +21,12 @@ int init(){
 }
 
 
-//タイトル処理
-Status title(img_arr_t& img_arr){
-	ClearDrawScreen();
-	img_arr["title"].DrawGraph(0, 0, false);
-	ScreenFlip();
-	while (CheckHitKey(KEY_INPUT_Z) != 1);
-	return Status::GAME;
-}
-
-//GAME処理
-Status game(img_arr_t& img_arr){
-	ClearDrawScreen();
-	img_arr["game"].DrawGraph(0, 0, false);
-	ScreenFlip();
-	
-	while (CheckHitKey(KEY_INPUT_D) != 1);
-	return Status::END;
-}
-
 //リザルト処理
 Status end(img_arr_t& img_arr){
 	img_arr["end"].DrawGraph(0, 0, false);
 	ScreenFlip();
 	while (CheckHitKey(KEY_INPUT_A) != 1);
-	return Status::TITLE;
+	return Status::EXIT;
 }
 
 //main
@@ -60,12 +43,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//変数定義------------------------------------------------------
 
 	Status status_ = Status::TITLE;
-	auto img_arr = make_image_array();
 
 
 	//処理-----------------------------------------------------------
 
 	try{
+		auto img_arr = make_image_array("assets\\status_img");
 		while (1){
 			switch (status_)
 			{
@@ -77,6 +60,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				break;
 			case Status::END:
 				status_ = end(img_arr);
+				break;
+			case Status::EXIT:
 				break;
 			default:
 				DxLib_End();
