@@ -38,12 +38,12 @@ Status continu(img_arr_t& img_arr) {
 
 
 		//描画
-		DrawBox(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GetColor(100, 180, 250), TRUE);	//背景
+		DrawBox(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GetColor(180, 180, 180), TRUE);	//背景
 
 		DrawStringToHandle(select0_x + ((answer+1)%2)*40, select0_y, "CONTINUE !!", color[answer], Font_1);				//CONTINUE
 		DrawStringToHandle(select1_x + answer*40		, select1_y, "RETIRE. . .", color[(answer+1)%2], Font_1);		//RETIRE
 
-		DrawBox(150, 155 + answer*100, 170, 175 + answer*100, color[0], TRUE);	//選択してるのが分かるようにするやつ
+		DrawBox(180, 155 + answer*100, 200, 175 + answer*100, color[0], TRUE);	//選択してるのが分かるようにするやつ
 
 		DrawStringToHandle(120, WINDOW_HEIGHT - (WINDOW_HEIGHT / 4), "- Cキーを押して決定だよ -", GetColor(0, 0, 0), Font_1);//Cキー押してね
 
