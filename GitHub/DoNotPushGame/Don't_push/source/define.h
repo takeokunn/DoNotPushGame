@@ -5,6 +5,7 @@ constexpr size_t WINDOW_HEIGHT = 480;
 enum class Status{
 	TITLE,
 	GAME,
-	END
+	END,
+	EXIT
 };
 using img_arr_t = std::unordered_map < std::string, DxGHandle >;
