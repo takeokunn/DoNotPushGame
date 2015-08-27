@@ -39,6 +39,7 @@ public:
 	DxGHandle DerivationGraph(INT2_t Src, INT2_t coord) const DxHANDLE_NOEXCEPT ;
 	int GetGraphSize(int *SizeXBuf, int *SizeYBuf) const DxHANDLE_NOEXCEPT ;
 	INT2_t GetGraphSize() const DxHANDLE_NOEXCEPT ;
+	INT2_t GetRelativeGraphCenter() const DxHANDLE_NOEXCEPT;
 	DxGHandle_t get_raw() const NOEXCEPT { return this->GrHandle; }
 private:
 	DxGHandle_t GrHandle;

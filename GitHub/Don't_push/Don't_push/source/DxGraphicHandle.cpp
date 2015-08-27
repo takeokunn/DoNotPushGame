@@ -178,3 +178,8 @@ std::pair<int, int> DxGHandle::GetGraphSize() const DxHANDLE_NOEXCEPT {
 	std::pair<int, int> re;
 	return (0 == this->GetGraphSize(&re.first, &re.second)) ? re : std::pair<int, int>();
 }
+
+INT2_t DxGHandle::GetRelativeGraphCenter() const DxHANDLE_NOEXCEPT{
+	
+	return INT2_t();
+}
