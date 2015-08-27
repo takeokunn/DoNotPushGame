@@ -83,5 +83,8 @@
     <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\continue.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\util_INT2_t_calc.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

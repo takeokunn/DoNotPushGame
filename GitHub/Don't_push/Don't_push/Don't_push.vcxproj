@@ -324,6 +324,7 @@
     <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\main.cpp" />
     <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\object_to_fall.cpp" />
     <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\title.cpp" />
+    <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\util_INT2_t_calc.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

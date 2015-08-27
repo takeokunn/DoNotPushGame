@@ -10,10 +10,8 @@ Status title(img_arr_t& img_arr) {
 	int Font_1;			//「Zキーを押してね」の奴
 	Font_title = CreateFontToHandle(NULL, 70, 5, DX_FONTTYPE_EDGE);
 	Font_1 = CreateFontToHandle(NULL, 30, 1, DX_FONTTYPE_ANTIALIASING);
-
-	while (TRUE){
-		ClearDrawScreen();
-
+	ClearDrawScreen();
+	do{
 		//描画
 		DrawBox(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GetColor(100, 180, 250), TRUE);	//背景
 
@@ -22,11 +20,8 @@ Status title(img_arr_t& img_arr) {
 		DrawStringToHandle(180, WINDOW_HEIGHT - (WINDOW_HEIGHT / 3), "- Zキーを押してね -", GetColor(0, 0, 0), Font_1);//Zキー押してね
 
 		ScreenFlip();
-
-		if (CheckHitKey(KEY_INPUT_Z) == 1){		//Zキーでブレイク
-			break;
-		}
-	}
+		ClearDrawScreen();
+	} while (1 != CheckHitKey(KEY_INPUT_Z));
 
 	///////////// by yuchu
 
