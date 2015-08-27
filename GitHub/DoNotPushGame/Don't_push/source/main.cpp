@@ -3,6 +3,8 @@
 #include "define.h"
 #include "load.h"
 #include "Dxkeystate.h"
+#include "game.h"
+#include "title.h"
 #include <exception>
 //初期化関数s
 int init(){
@@ -18,25 +20,6 @@ int init(){
 	return 0;
 }
 
-
-//タイトル処理
-Status title(img_arr_t& img_arr){
-	ClearDrawScreen();
-	img_arr["title"].DrawGraph(0, 0, false);
-	ScreenFlip();
-	while (CheckHitKey(KEY_INPUT_Z) != 1);
-	return Status::GAME;
-}
-
-//GAME処理
-Status game(img_arr_t& img_arr){
-	ClearDrawScreen();
-	img_arr["game"].DrawGraph(0, 0, false);
-	ScreenFlip();
-	
-	while (CheckHitKey(KEY_INPUT_D) != 1);
-	return Status::END;
-}
 
 //リザルト処理
 Status end(img_arr_t& img_arr){
