@@ -27,7 +27,7 @@ public:
 	bool space() const NOEXCEPT;
 	static CONSTEXPR_OR_CONST size_t keybufsize = 256;
 private:
-	std::array<int, keybufsize> keystatebuf = {};
+	std::array<int, 256> keystatebuf = {};
 };
 bool operator!=(const keystate& l, size_t r);
 inline bool operator!=(size_t l, const keystate& r) {
