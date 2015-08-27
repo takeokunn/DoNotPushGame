@@ -45,6 +45,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	try{
 		auto img_arr = make_image_array();
+		auto status_img = make_status_image_array();
+		auto sound_arr = make_sound_array();
 		while (Status::EXIT != status_){
 			switch (status_)
 			{
@@ -52,7 +54,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				status_ = title(img_arr);
 				break;
 			case Status::GAME:
-				status_ = game(img_arr);
+				status_ = game(status_img);
 				break;
 			case Status::END:
 				status_ = end(img_arr);
