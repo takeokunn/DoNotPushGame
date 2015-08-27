@@ -51,6 +51,9 @@
     <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\util_INT2_t_calc.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\continue.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\DxGraphicHandle.cpp">
@@ -75,6 +78,9 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\object_to_fall.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\continue.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>

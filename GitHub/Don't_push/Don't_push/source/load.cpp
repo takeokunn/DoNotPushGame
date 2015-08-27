@@ -9,8 +9,8 @@ public:
 private:
 	std::string path;
 };
-std::unordered_map<std::string, DxGHandle> make_image_array(const std::string& path){
-	std::unordered_map<std::string, DxGHandle> rtn;
+img_arr_t make_image_array(const std::string& path){
+	img_arr_t rtn;
 	make_DxGHandle_pair img((path.back() == '\\') ? path : path + '\\');
 	rtn.insert(img("title"));
 	rtn.insert(img("game"));
@@ -27,8 +27,8 @@ public:
 private:
 	std::string path;
 };
-std::unordered_map<std::string, DxSHandle> make_sound_array(const std::string& path) {
-	std::unordered_map<std::string, DxSHandle> re;
+sound_arr_t make_sound_array(const std::string& path) {
+	sound_arr_t re;
 	make_DxSHandle_pair sound((path.back() == '\\') ? path : path + '\\');
 	re.insert(sound("flower garden"));
 	re.insert(sound("title"));

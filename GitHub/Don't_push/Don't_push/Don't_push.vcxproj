@@ -300,6 +300,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\continue.h" />
     <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\define.h" />
     <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\DxGraphicHandle.h" />
     <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\DxHandleException.h" />
@@ -314,6 +315,7 @@
     <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\util_noexcept.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\continue.cpp" />
     <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\DxGraphicHandle.cpp" />
     <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\Dxkeystate.cpp" />
     <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\DxSoundHandle.cpp" />

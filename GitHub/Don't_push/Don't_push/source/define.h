@@ -1,6 +1,7 @@
 ﻿#pragma once
-#include "load.h"
 #include "util_constexpr.h"
+#include <unordered_map>
+#include <string>
 CONSTEXPR_OR_STATICCONST size_t WINDOW_WIDTH = 640;
 CONSTEXPR_OR_STATICCONST size_t WINDOW_HEIGHT = 480;
 CONSTEXPR_OR_STATICCONST int FIRST_CHARA_X = WINDOW_WIDTH / 2;
@@ -17,3 +18,4 @@ enum class Status{
 	EXIT
 };
 using img_arr_t = std::unordered_map < std::string, DxGHandle >;
+using sound_arr_t = std::unordered_map<std::string, DxSHandle>;
