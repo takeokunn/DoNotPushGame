@@ -9,13 +9,29 @@ public:
 private:
 	std::string path;
 };
-img_arr_t make_image_array(){
+img_arr_t make_status_image_array(){
 	img_arr_t rtn;
 	make_DxGHandle_pair img("assets\\status_img\\");
 	rtn.insert(img("title"));
 	rtn.insert(img("game"));
 	rtn.insert(img("end"));
 	return rtn;
+}
+img_arr_t make_image_array() {
+	img_arr_t re;
+	make_DxGHandle_pair img("assets\\img\\");
+	re.insert(img("bouninngennA"));
+	re.insert(img("bouninngennA_fall"));
+	re.insert(img("bouninngennB"));
+	re.insert(img("bouninngennB_fall"));
+	re.insert(img("gake"));
+	re.insert(img("herikoputa-"));
+	re.insert(img("hunn"));
+	re.insert(img("kunai"));
+	re.insert(img("kuruma"));
+	re.insert(img("seoinage"));
+	re.insert(img("tori"));
+	return re;
 }
 class make_DxSHandle_pair {
 public:
