@@ -2,6 +2,8 @@
 #include "Dxkeystate.h"
 #include "DxLib.h"
 #include "define.h"
+#include "power_bar.h"
+
 int move_x(int current_x, keystate& state){
 	CONSTEXPR_OR_CONST int CHARACTER_MOVE_SPEED = 4;
 	int re = current_x;
