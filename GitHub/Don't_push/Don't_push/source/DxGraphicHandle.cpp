@@ -196,7 +196,7 @@ namespace detail {
 	struct RGB_t {
 		RGB_t() = default;
 		CONSTEXPR_FUNCTION RGB_t(uint8_t i_r, uint8_t i_g, uint8_t i_b) : r(i_r), g(i_g), b(i_b){}
-		explicit CONSTEXPR_FUNCTION RGB_t(unsigned int X8R8G8B8) : RGB_t(DxGetRValue(X8R8G8B8), DxGetGValue(X8R8G8B8), DxGetBValue(X8R8G8B8)) {}//C++11:delegating constructor
+		explicit CONSTEXPR_FUNCTION RGB_t(unsigned int X8R8G8B8) : r(DxGetRValue(X8R8G8B8)), g(DxGetGValue(X8R8G8B8)), b(DxGetBValue(X8R8G8B8)) {}
 		uint8_t r;
 		uint8_t g;
 		uint8_t b;
@@ -210,7 +210,7 @@ namespace detail {
 	struct YPbPr {//ITU-R BT.709 cf.)http://koujinz.cocolog-nifty.com/blog/2009/03/rgbycbcr-a4a5.html
 		YPbPr() = default;
 		CONSTEXPR_FUNCTION YPbPr(uint8_t i_y, uint8_t i_pb, uint8_t i_pr) : y(i_y), pb(i_pb), pr(i_pr) {}
-		explicit CONSTEXPR_FUNCTION YPbPr(uint8_t i_y) : YPbPr(i_y, 0, 0){}//C++11:delegating constructor
+		explicit CONSTEXPR_FUNCTION YPbPr(uint8_t i_y) : y(i_y), pb(0), pr(0) {}
 		uint8_t y, pb, pr;
 	};
 	CONSTEXPR_FUNCTION YPbPr to_YPbPr(RGB_t in) {
