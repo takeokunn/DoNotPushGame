@@ -1,14 +1,21 @@
 ﻿#include "DxGraphicHandle.h"
 #include "DxLib.h"
+#include "util_constexpr.h"
+#undef max
+#undef min
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
 #include "DxHandleException.h"
 #endif
-DxGHandle::DxGHandle(const std::string & FileName) DxHANDLE_NOEXCEPT {
-	this->GrHandle = LoadGraph(FileName.c_str());
+#include <algorithm>
+
+DxGHandle::DxGHandle(const char * FileName) DxHANDLE_NOEXCEPT {
+	this->GrHandle = LoadGraph(FileName);
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
 	if (-1 == this->GrHandle) throw DxGHandle_runtime_error("画像の読み込みに失敗しました");
 #endif
 }
+
+DxGHandle::DxGHandle(const std::string & FileName) DxHANDLE_NOEXCEPT : DxGHandle(FileName.c_str()){}//C++11:delegating constructor
 
 DxGHandle::DxGHandle(int SizeX, int SizeY) DxHANDLE_NOEXCEPT {
 	this->GrHandle = MakeGraph(SizeX, SizeY);
@@ -181,4 +188,65 @@ INT2_t DxGHandle::GetGraphSize() const DxHANDLE_NOEXCEPT {
 
 INT2_t DxGHandle::GetRelativeGraphCenter() const DxHANDLE_NOEXCEPT{
 	return this->GetGraphSize() / 2;
+}
+namespace detail {
+	CONSTEXPR_FUNCTION uint8_t DxGetRValue(unsigned int X8R8G8B8) { return static_cast<uint8_t>((0x00FF0000 & X8R8G8B8) >> 16); }
+	CONSTEXPR_FUNCTION uint8_t DxGetGValue(unsigned int X8R8G8B8) { return static_cast<uint8_t>((0x0000FF00 & X8R8G8B8) >> 8); }
+	CONSTEXPR_FUNCTION uint8_t DxGetBValue(unsigned int X8R8G8B8) { return static_cast<uint8_t>(0x000000FF & X8R8G8B8); }
+	struct RGB_t {
+		RGB_t() = default;
+		CONSTEXPR_FUNCTION RGB_t(uint8_t i_r, uint8_t i_g, uint8_t i_b) : r(i_r), g(i_g), b(i_b){}
+		explicit CONSTEXPR_FUNCTION RGB_t(unsigned int X8R8G8B8) : RGB_t(DxGetRValue(X8R8G8B8), DxGetGValue(X8R8G8B8), DxGetBValue(X8R8G8B8)) {}//C++11:delegating constructor
+		uint8_t r;
+		uint8_t g;
+		uint8_t b;
+	};
+	RGB_t& operator+=(RGB_t& l, const RGB_t& r) {
+		l.r += r.r;
+		l.g += r.g;
+		l.b += r.b;
+		return l;
+	}
+	struct YPbPr {//ITU-R BT.709 cf.)http://koujinz.cocolog-nifty.com/blog/2009/03/rgbycbcr-a4a5.html
+		YPbPr() = default;
+		CONSTEXPR_FUNCTION YPbPr(uint8_t i_y, uint8_t i_pb, uint8_t i_pr) : y(i_y), pb(i_pb), pr(i_pr) {}
+		explicit CONSTEXPR_FUNCTION YPbPr(uint8_t i_y) : YPbPr(i_y, 0, 0){}//C++11:delegating constructor
+		uint8_t y, pb, pr;
+	};
+	CONSTEXPR_FUNCTION YPbPr to_YPbPr(RGB_t in) {
+		return YPbPr(static_cast<uint8_t>(0.2126 * in.r + 0.7152 * in.g + 0.0722 * in.b), static_cast<uint8_t>(-0.1146 * in.r - 0.3854 * in.g + 0.5 * in.b), static_cast<uint8_t>(0.5 * in.r - 0.4542 * in.g - 0.0458 * in.b));
+	}
+	CONSTEXPR_FUNCTION RGB_t to_RGB_t(YPbPr in) {
+		return RGB_t(static_cast<uint8_t>(in.y + 1.5748 * in.pr), static_cast<uint8_t>(in.y - 0.1873 * in.pb - 0.4681 * in.pr), static_cast<uint8_t>(in.y + 1.8556 * in.pb));
+	}
+}
+CXX14_CONSTEXPR std::array<detail::RGB_t, 256> make_y_gradation_rgb_arr_helper() {
+	std::array<detail::RGB_t, 256> data_arr;
+	static_assert(sizeof(detail::RGB_t) == 3, "sizeof struct 'detail::COLORTYPE' is not equal with 3.");
+	for (uint8_t i = 0; i < data_arr.size(); ++i) data_arr[i] = detail::to_RGB_t(detail::YPbPr(i));
+	return data_arr;
+}
+std::array<detail::RGB_t, 256> make_y_gradation_rgb_arr(unsigned int base_color, bool trans_flag) {
+	auto base_ypbpr = detail::to_YPbPr(detail::RGB_t(base_color));
+	base_ypbpr.y = 0;
+	const auto base_rbg = detail::to_RGB_t(base_ypbpr);
+	auto re = make_y_gradation_rgb_arr_helper();
+	if (trans_flag) std::reverse(re.begin(), re.end());
+	for (auto& i : re) i += base_rbg;
+	return re;
+}
+DxGHandle make_gradation_graph_handle(unsigned int base_color, bool trans_flag){
+	//http://hpcgi2.nifty.com/natupaji/bbs/patio.cgi?mode=view&no=1837
+	//http://hpcgi2.nifty.com/natupaji/bbs/patio.cgi?mode=view&no=3365
+	//http://eternalwindows.jp/graphics/bitmap/bitmap10.html
+	//http://hpcgi2.nifty.com/natupaji/bbs/patio.cgi?mode=view&no=1974
+	auto y_gradation_rgb_arr = make_y_gradation_rgb_arr(base_color, trans_flag);
+	BASEIMAGE tmp;
+	CreateFullColorData(&tmp.ColorData);
+	tmp.MipMapCount = 0;
+	tmp.Height = 1;
+	tmp.Width = y_gradation_rgb_arr.size();
+	tmp.Pitch = tmp.Width * tmp.ColorData.PixelByte;
+	tmp.GraphData = y_gradation_rgb_arr.data();
+	return DxGHandle(CreateGraphFromBaseImage(&tmp));
 }

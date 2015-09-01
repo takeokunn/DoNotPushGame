@@ -17,7 +17,8 @@ class DxSHandle {
 public:
 	typedef int DxSHandle_t;
 	DxSHandle() NOEXCEPT : SHandle(-1) {}
-	DxSHandle(const std::string& FileName) DxHANDLE_NOEXCEPT;
+	explicit DxSHandle(const std::string& FileName) DxHANDLE_NOEXCEPT;
+	explicit DxSHandle(const char* FileName) DxHANDLE_NOEXCEPT;
 	explicit DxSHandle(DxSHandle_t SHandle) DxHANDLE_NOEXCEPT;
 	DxSHandle(const DxSHandle& o) NOEXCEPT : SHandle(o.SHandle) {}
 	explicit DxSHandle(DxSHandle&& o) NOEXCEPT : SHandle(o.SHandle) {}

@@ -1,4 +1,4 @@
-#include "power_bar.h"
+﻿#include "power_bar.h"
 #include "DxLib.h"
 #include "DxHandleException.h"
 
@@ -10,7 +10,7 @@ power_bar_c::power_bar_c(const power_bar_c & o) NOEXCEPT : base_point_(o.base_po
 
 void power_bar_c::update() NOEXCEPT {
 	this->draw_pixcel_num_ += this->pixcel_per_frame_;
-	if (this->whole_bar_size_.first < this->draw_pixcel_num_) this->draw_pixcel_num_ = 0.0;
+	if (this->whole_bar_size_.first < this->draw_pixcel_num_) this->draw_pixcel_num_ = 0.0;//バーが一杯になったら0に戻す
 }
 
 int power_bar_c::draw() const DxHANDLE_NOEXCEPT {

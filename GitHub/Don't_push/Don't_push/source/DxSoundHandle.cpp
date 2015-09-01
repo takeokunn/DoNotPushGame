@@ -14,6 +14,8 @@ DxSHandle::DxSHandle(const std::string & FileName) DxHANDLE_NOEXCEPT {
 #endif
 }
 
+DxSHandle::DxSHandle(const char * FileName) : DxSHandle(std::string(FileName)) DxHANDLE_NOEXCEPT {}
+
 DxSHandle::DxSHandle(DxSHandle_t SHandle) DxHANDLE_NOEXCEPT {
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
 	if (-1 == SHandle) throw DxGHandle_runtime_error("音声ハンドルの作成に失敗しました");
