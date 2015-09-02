@@ -17,7 +17,8 @@ public:
 private:
 	INT2_t base_point_;
 	INT2_t whole_bar_size_;
-	double pixcel_per_frame_;
-	double draw_pixcel_num_;
+	size_t frame_num_to_fill_;
+	size_t spent_frame_;
+	int draw_pixcel_num_;
 	unsigned int color_;
 };

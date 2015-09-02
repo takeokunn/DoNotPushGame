@@ -7,9 +7,6 @@
 #include "DxHandleException.h"
 #endif
 #include <algorithm>
-#include <vector>
-#include <numeric>
-#include <cmath>
 
 DxGHandle::DxGHandle(const char * FileName) DxHANDLE_NOEXCEPT {
 	this->GrHandle = LoadGraph(FileName);
@@ -243,7 +240,7 @@ std::array<detail::RGB_t, 256> make_y_gradation_rgb_arr(unsigned int base_color,
 	return re;
 }
 
-DxGHandle make_gradation_graph_handle(unsigned int base_color, bool trans_flag){
+DxGHandle make_gradation_graph_handle(unsigned int base_color, bool trans_flag) NOEXCEPT {
 	//http://hpcgi2.nifty.com/natupaji/bbs/patio.cgi?mode=view&no=1837
 	//http://hpcgi2.nifty.com/natupaji/bbs/patio.cgi?mode=view&no=3365
 	//http://eternalwindows.jp/graphics/bitmap/bitmap10.html
@@ -365,7 +362,7 @@ uint8_t calc_threshold_algolithm_otu(const DxGHandle & handle) {
 	if (baseimage.ColorData.PixelByte != 4) throw std::runtime_error("to_BASEIMAGE関数が不正な構造体を作成しました。");
 
 	hist_arr_t histgram = { 0 };//初期化
-	for (size_t i = 0; i < baseimage.Height * baseimage.Width; ++i)
+	for (int i = 0; i < baseimage.Height * baseimage.Width; ++i)
 		++histgram[to_YPbPr(RGB_t(static_cast<uint32_t*>(baseimage.GraphData)[i])).y];//投票
 	ReleaseBaseImage(&baseimage);
 
@@ -379,9 +376,9 @@ uint8_t calc_threshold_algolithm_otu(const DxGHandle & handle) {
 	double max_dispersion = 0.0;// 最大分散
 	uint8_t threshold = 0;//   求める閾値
 	for (size_t i = 0; i < histgram.size(); ++i) {
-		const uint8_t n1 = sumN[i];// 画素数
+		const auto   n1 = sumN[i];// 画素数
 		const double m1 = sumM[i];// 濃度
-		const uint8_t n2 = n0 - n1;// 画素数
+		const auto   n2 = n0 - n1;// 画素数
 		const double m2 = m0 - m1;// 濃度
 
 		const double val1 = ((n1) ? m1 / n1 : 0) - m0;

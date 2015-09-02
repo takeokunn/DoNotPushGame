@@ -84,7 +84,7 @@ enum class filter_type {
 
 template<filter_type f_type> class filter {
 };
-class filter<filter_type::mono> {
+template<> class filter<filter_type::mono> {
 public:
 	explicit filter(DxGHandle& handle) : handle_(handle) {}
 	int operator()(int16_t Cb, int16_t Cr) {
@@ -93,7 +93,7 @@ public:
 private:
 	DxGHandle& handle_;
 };
-class filter<filter_type::gaussian> {
+template<> class filter<filter_type::gaussian> {
 public:
 	explicit filter(DxGHandle& handle) : handle_(handle) {}
 	int operator()(uint16_t PixelWidth, int Param) {
@@ -102,7 +102,7 @@ public:
 private:
 	DxGHandle& handle_;
 };
-class filter<filter_type::down_scale> {
+template<> class filter<filter_type::down_scale> {
 public:
 	explicit filter(DxGHandle& handle) : handle_(handle) {}
 	int operator()(uint8_t DivNum) {
@@ -111,7 +111,7 @@ public:
 private:
 	DxGHandle& handle_;
 };
-class filter<filter_type::bright_clip> {
+template<> class filter<filter_type::bright_clip> {
 public:
 	explicit filter(DxGHandle& handle) : handle_(handle) {}
 	int operator()(bright_clip_mode clipmode, uint8_t clip_pram, unsigned int fillcolor, uint8_t fillalpha) {
@@ -120,7 +120,7 @@ public:
 private:
 	DxGHandle& handle_;
 };
-class filter<filter_type::HSB> {
+template<> class filter<filter_type::HSB> {
 public:
 	explicit filter(DxGHandle& handle) : handle_(handle) {}
 	int operator()(bool HueType, int16_t Hue, int Saturation, int16_t Bright) {
@@ -129,7 +129,7 @@ public:
 private:
 	DxGHandle& handle_;
 };
-class filter<filter_type::invert> {
+template<> class filter<filter_type::invert> {
 public:
 	explicit filter(DxGHandle& handle) : handle_(handle) {}
 	int operator()() {
@@ -138,7 +138,7 @@ public:
 private:
 	DxGHandle& handle_;
 };
-class filter<filter_type::level> {
+template<> class filter<filter_type::level> {
 public:
 	explicit filter(DxGHandle& handle) : handle_(handle) {}
 	int operator()(uint8_t min, uint8_t max, int Gamma, uint8_t Aftermin, uint8_t Aftermax) {
@@ -147,7 +147,7 @@ public:
 private:
 	DxGHandle& handle_;
 };
-class filter<filter_type::two_color> {
+template<> class filter<filter_type::two_color> {
 public:
 	explicit filter(DxGHandle& handle) : handle_(handle) {}
 	int operator()(uint8_t threshold, unsigned int LowColor, uint8_t LowAlpha, unsigned int HighColor, uint8_t HighAlpha) {
@@ -160,7 +160,7 @@ private:
 	DxGHandle& handle_;
 };
 
-class filter<filter_type::gradient_map> {
+template<> class filter<filter_type::gradient_map> {
 public:
 	explicit filter(DxGHandle& handle) : handle_(handle) {}
 	int operator()(const DxGHandle& MapGrHandle, bool Reverse_flag = false) {
@@ -174,7 +174,7 @@ private:
 };
 
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
-class filter<filter_type::two_color_algolithm_otu> {
+template<> class filter<filter_type::two_color_algolithm_otu> {
 public:
 	explicit filter(DxGHandle& handle) : handle_(handle) {}
 	int operator()(unsigned int LowColor, uint8_t LowAlpha, unsigned int HighColor, uint8_t HighAlpha) {
