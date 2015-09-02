@@ -10,6 +10,18 @@ enum class bright_clip_mode : int {
 	LESS,
 	GREATER
 };
+enum class filter_type {
+	mono,
+	gaussian,
+	down_scale,
+	bright_clip,
+	HSB,
+	invert,
+	level,
+	two_color,
+	gradient_map
+};
+
 class DxGHandle
 {
 public:
@@ -43,17 +55,106 @@ public:
 	int GetGraphSize(int *SizeXBuf, int *SizeYBuf) const DxHANDLE_NOEXCEPT ;
 	INT2_t GetGraphSize() const DxHANDLE_NOEXCEPT ;
 	INT2_t GetRelativeGraphCenter() const DxHANDLE_NOEXCEPT;
-	int filter_mono(int16_t Cr, int16_t Cb);
-	int filter_gaussian(uint16_t PixelWidth, int Param);
-	int filter_down_scale(uint8_t DivNum);
-	int filter_bright_clip(bright_clip_mode clipmode, uint8_t clip_pram, unsigned int fillcolor, uint8_t fillalpha);
-	int filter_HSB(bool HueType, int16_t Hue, int Saturation, int16_t Bright);
-	int filter_invert();
-	int filter_level(uint8_t min, uint8_t max, int Gamma, uint8_t Aftermin, uint8_t Aftermax);
-	int filter_two_color(uint8_t threshold, unsigned int LowColor, uint8_t LowAlpha, unsigned int HighColor, uint8_t HighAlpha);
-	//int filter_two_color_algolithm_otu(unsigned int LowColor, unsigned int HighColor);
+	int filter_mono(int16_t Cb, int16_t Cr)DxHANDLE_NOEXCEPT;
+	int filter_gaussian(uint16_t PixelWidth, int Param)DxHANDLE_NOEXCEPT;
+	int filter_down_scale(uint8_t DivNum)DxHANDLE_NOEXCEPT;
+	int filter_bright_clip(bright_clip_mode clipmode, uint8_t clip_pram, unsigned int fillcolor, uint8_t fillalpha)DxHANDLE_NOEXCEPT;
+	int filter_HSB(bool HueType, int16_t Hue, int Saturation, int16_t Bright)DxHANDLE_NOEXCEPT;
+	int filter_invert()DxHANDLE_NOEXCEPT;
+	int filter_level(uint8_t min, uint8_t max, int Gamma, uint8_t Aftermin, uint8_t Aftermax)DxHANDLE_NOEXCEPT;
+	int filter_two_color(uint8_t threshold, unsigned int LowColor, uint8_t LowAlpha, unsigned int HighColor, uint8_t HighAlpha)DxHANDLE_NOEXCEPT;
+	//int filter_two_color_algolithm_otu(unsigned int LowColor, unsigned int HighColor)DxHANDLE_NOEXCEPT;
+	int filter_gradient_map(const DxGHandle& MapGrHandle, bool Reverse_flag = false)DxHANDLE_NOEXCEPT;
+	int filter_gradient_map(unsigned int base_color, bool Reverse_flag = false)DxHANDLE_NOEXCEPT;
 	DxGHandle_t get_raw() const NOEXCEPT { return this->GrHandle; }
 private:
 	DxGHandle_t GrHandle;
 };
+
 DxGHandle make_gradation_graph_handle(unsigned int base_color, bool trans_flag = false);
+template<filter_type f_type> class filter {
+};
+class filter<filter_type::mono> {
+public:
+	explicit filter(DxGHandle& handle) : handle_(handle) {}
+	int operator()(int16_t Cb, int16_t Cr) {
+		return this->handle_.filter_mono(Cb, Cr);
+	}
+private:
+	DxGHandle& handle_;
+};
+class filter<filter_type::gaussian> {
+public:
+	explicit filter(DxGHandle& handle) : handle_(handle) {}
+	int operator()(uint16_t PixelWidth, int Param) {
+		return this->handle_.filter_gaussian(PixelWidth, Param);
+	}
+private:
+	DxGHandle& handle_;
+};
+class filter<filter_type::down_scale> {
+public:
+	explicit filter(DxGHandle& handle) : handle_(handle) {}
+	int operator()(uint8_t DivNum) {
+		return this->handle_.filter_down_scale(DivNum);
+	}
+private:
+	DxGHandle& handle_;
+};
+class filter<filter_type::bright_clip> {
+public:
+	explicit filter(DxGHandle& handle) : handle_(handle) {}
+	int operator()(bright_clip_mode clipmode, uint8_t clip_pram, unsigned int fillcolor, uint8_t fillalpha) {
+		return this->handle_.filter_bright_clip(clipmode, clip_pram, fillcolor, fillalpha);
+	}
+private:
+	DxGHandle& handle_;
+};
+class filter<filter_type::HSB> {
+public:
+	explicit filter(DxGHandle& handle) : handle_(handle) {}
+	int operator()(bool HueType, int16_t Hue, int Saturation, int16_t Bright) {
+		return this->handle_.filter_HSB(HueType, Hue, Saturation, Bright);
+	}
+private:
+	DxGHandle& handle_;
+};
+class filter<filter_type::invert> {
+public:
+	explicit filter(DxGHandle& handle) : handle_(handle) {}
+	int operator()() {
+		return this->handle_.filter_invert();
+	}
+private:
+	DxGHandle& handle_;
+};
+class filter<filter_type::level> {
+public:
+	explicit filter(DxGHandle& handle) : handle_(handle) {}
+	int operator()(uint8_t min, uint8_t max, int Gamma, uint8_t Aftermin, uint8_t Aftermax) {
+		return this->handle_.filter_level(min, max, Gamma, Aftermin, Aftermax);
+	}
+private:
+	DxGHandle& handle_;
+};
+class filter<filter_type::two_color> {
+public:
+	explicit filter(DxGHandle& handle) : handle_(handle) {}
+	int operator()(uint8_t threshold, unsigned int LowColor, uint8_t LowAlpha, unsigned int HighColor, uint8_t HighAlpha) {
+		return this->handle_.filter_two_color(threshold, LowColor, LowAlpha, HighColor, HighAlpha);
+	}
+private:
+	DxGHandle& handle_;
+};
+class filter<filter_type::gradient_map> {
+public:
+	explicit filter(DxGHandle& handle) : handle_(handle) {}
+	int operator()(const DxGHandle& MapGrHandle, bool Reverse_flag = false) {
+		return this->handle_.filter_gradient_map(MapGrHandle, Reverse_flag);
+	}
+	int operator()(unsigned int base_color, bool Reverse_flag = false) {
+		return this->handle_.filter_gradient_map(base_color, Reverse_flag);
+	}
+private:
+	DxGHandle& handle_;
+};

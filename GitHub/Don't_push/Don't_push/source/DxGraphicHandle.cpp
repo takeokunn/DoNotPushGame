@@ -250,3 +250,79 @@ DxGHandle make_gradation_graph_handle(unsigned int base_color, bool trans_flag){
 	tmp.GraphData = y_gradation_rgb_arr.data();
 	return DxGHandle(CreateGraphFromBaseImage(&tmp));
 }
+
+int DxGHandle::filter_mono(int16_t Cb, int16_t Cr) DxHANDLE_NOEXCEPT {
+	const auto re = GraphFilter(this->GrHandle, DX_GRAPH_FILTER_MONO, Cb, Cr);
+#ifdef DxHANDLE_WRAP_USE_EXCEPTION
+	if (-1 == re) throw DxGHandle_runtime_error("モノトーンフィルタに失敗しました");
+#endif
+	return re;
+}
+
+int DxGHandle::filter_gaussian(uint16_t PixelWidth, int Param) DxHANDLE_NOEXCEPT {
+	const auto re = GraphFilter(this->GrHandle, DX_GRAPH_FILTER_GAUSS, PixelWidth, Param);
+#ifdef DxHANDLE_WRAP_USE_EXCEPTION
+	if (-1 == re) throw DxGHandle_runtime_error("ガウシアンフィルタに失敗しました");
+#endif
+	return re;
+}
+
+int DxGHandle::filter_down_scale(uint8_t DivNum) DxHANDLE_NOEXCEPT {
+	const auto re = GraphFilter(this->GrHandle, DX_GRAPH_FILTER_DOWN_SCALE, DivNum);
+#ifdef DxHANDLE_WRAP_USE_EXCEPTION
+	if (-1 == re) throw DxGHandle_runtime_error("縮小フィルタに失敗しました");
+#endif
+	return re;
+}
+
+int DxGHandle::filter_bright_clip(bright_clip_mode clipmode, uint8_t clip_pram, unsigned int fillcolor, uint8_t fillalpha) DxHANDLE_NOEXCEPT {
+	const auto re = GraphFilter(this->GrHandle, DX_GRAPH_FILTER_BRIGHT_CLIP, clipmode, clip_pram, fillcolor, fillalpha);
+#ifdef DxHANDLE_WRAP_USE_EXCEPTION
+	if (-1 == re) throw DxGHandle_runtime_error("明るさクリップフィルタに失敗しました");
+#endif
+	return re;
+}
+
+int DxGHandle::filter_HSB(bool HueType, int16_t Hue, int Saturation, int16_t Bright) DxHANDLE_NOEXCEPT {
+	const auto re = GraphFilter(this->GrHandle, DX_GRAPH_FILTER_HSB, HueType, Hue, Saturation, Bright);
+#ifdef DxHANDLE_WRAP_USE_EXCEPTION
+	if (-1 == re) throw DxGHandle_runtime_error("色相・彩度・明度フィルタに失敗しました");
+#endif
+	return re;
+}
+
+int DxGHandle::filter_invert() DxHANDLE_NOEXCEPT {
+	const auto re = GraphFilter(this->GrHandle, DX_GRAPH_FILTER_INVERT);
+#ifdef DxHANDLE_WRAP_USE_EXCEPTION
+	if (-1 == re) throw DxGHandle_runtime_error("階調の反転フィルタに失敗しました");
+#endif
+	return re;
+}
+
+int DxGHandle::filter_level(uint8_t min, uint8_t max, int Gamma, uint8_t Aftermin, uint8_t Aftermax) DxHANDLE_NOEXCEPT {
+	const auto re = GraphFilter(this->GrHandle, DX_GRAPH_FILTER_LEVEL, min, max, Gamma, Aftermin, Aftermax);
+#ifdef DxHANDLE_WRAP_USE_EXCEPTION
+	if (-1 == re) throw DxGHandle_runtime_error("レベル補正フィルタに失敗しました");
+#endif
+	return re;
+}
+
+int DxGHandle::filter_two_color(uint8_t threshold, unsigned int LowColor, uint8_t LowAlpha, unsigned int HighColor, uint8_t HighAlpha) DxHANDLE_NOEXCEPT {
+	const auto re = GraphFilter(this->GrHandle, DX_GRAPH_FILTER_LEVEL, threshold, LowColor, LowAlpha, HighColor, HighAlpha);
+#ifdef DxHANDLE_WRAP_USE_EXCEPTION
+	if (-1 == re) throw DxGHandle_runtime_error("２階調化フィルタに失敗しました");
+#endif
+	return re;
+}
+
+int DxGHandle::filter_gradient_map(const DxGHandle & MapGrHandle, bool Reverse_flag) DxHANDLE_NOEXCEPT {
+	const auto re = GraphFilter(this->GrHandle, DX_GRAPH_FILTER_LEVEL, MapGrHandle.GrHandle, Reverse_flag);
+#ifdef DxHANDLE_WRAP_USE_EXCEPTION
+	if (-1 == re) throw DxGHandle_runtime_error("レベル補正フィルタに失敗しました");
+#endif
+	return re;
+}
+
+int DxGHandle::filter_gradient_map(unsigned int base_color, bool Reverse_flag) DxHANDLE_NOEXCEPT {
+	return this->filter_gradient_map(make_gradation_graph_handle(base_color), Reverse_flag);
+}

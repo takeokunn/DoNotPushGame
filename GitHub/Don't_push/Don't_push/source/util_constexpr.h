@@ -21,3 +21,4 @@
 #else
 #define CXX14_CONSTEXPR
 #endif
+//note:VIsual Studio 2015 RTM does not support "delegating constexpr constructors".
