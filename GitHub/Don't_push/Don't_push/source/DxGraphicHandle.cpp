@@ -7,6 +7,9 @@
 #include "DxHandleException.h"
 #endif
 #include <algorithm>
+#include <vector>
+#include <numeric>
+#include <cmath>
 
 DxGHandle::DxGHandle(const char * FileName) DxHANDLE_NOEXCEPT {
 	this->GrHandle = LoadGraph(FileName);
@@ -213,20 +216,24 @@ namespace detail {
 		explicit CONSTEXPR_FUNCTION YPbPr(uint8_t i_y) : y(i_y), pb(0), pr(0) {}
 		uint8_t y, pb, pr;
 	};
-	CONSTEXPR_FUNCTION YPbPr to_YPbPr(RGB_t in) {
+	CONSTEXPR_FUNCTION YPbPr to_YPbPr(RGB_t in) NOEXCEPT {
 		return YPbPr(static_cast<uint8_t>(0.2126 * in.r + 0.7152 * in.g + 0.0722 * in.b), static_cast<uint8_t>(-0.1146 * in.r - 0.3854 * in.g + 0.5 * in.b), static_cast<uint8_t>(0.5 * in.r - 0.4542 * in.g - 0.0458 * in.b));
 	}
-	CONSTEXPR_FUNCTION RGB_t to_RGB_t(YPbPr in) {
+	CONSTEXPR_FUNCTION RGB_t to_RGB_t(YPbPr in) NOEXCEPT {
 		return RGB_t(static_cast<uint8_t>(in.y + 1.5748 * in.pr), static_cast<uint8_t>(in.y - 0.1873 * in.pb - 0.4681 * in.pr), static_cast<uint8_t>(in.y + 1.8556 * in.pb));
 	}
+	double num_distance(double a, double b) {
+		const auto tmp = std::minmax(a, b);
+		return tmp.second - tmp.first;
+	}
 }
-CXX14_CONSTEXPR std::array<detail::RGB_t, 256> make_y_gradation_rgb_arr_helper() {
+CXX14_CONSTEXPR std::array<detail::RGB_t, 256> make_y_gradation_rgb_arr_helper() NOEXCEPT {
 	std::array<detail::RGB_t, 256> data_arr;
 	static_assert(sizeof(detail::RGB_t) == 3, "sizeof struct 'detail::COLORTYPE' is not equal with 3.");
 	for (uint8_t i = 0; i < data_arr.size(); ++i) data_arr[i] = detail::to_RGB_t(detail::YPbPr(i));
 	return data_arr;
 }
-std::array<detail::RGB_t, 256> make_y_gradation_rgb_arr(unsigned int base_color, bool trans_flag) {
+std::array<detail::RGB_t, 256> make_y_gradation_rgb_arr(unsigned int base_color, bool trans_flag) NOEXCEPT {
 	auto base_ypbpr = detail::to_YPbPr(detail::RGB_t(base_color));
 	base_ypbpr.y = 0;
 	const auto base_rbg = detail::to_RGB_t(base_ypbpr);
@@ -235,6 +242,7 @@ std::array<detail::RGB_t, 256> make_y_gradation_rgb_arr(unsigned int base_color,
 	for (auto& i : re) i += base_rbg;
 	return re;
 }
+
 DxGHandle make_gradation_graph_handle(unsigned int base_color, bool trans_flag){
 	//http://hpcgi2.nifty.com/natupaji/bbs/patio.cgi?mode=view&no=1837
 	//http://hpcgi2.nifty.com/natupaji/bbs/patio.cgi?mode=view&no=3365
@@ -315,6 +323,10 @@ int DxGHandle::filter_two_color(uint8_t threshold, unsigned int LowColor, uint8_
 	return re;
 }
 
+int DxGHandle::filter_two_color(uint8_t threshold, unsigned int LowColor, unsigned int HighColor) DxHANDLE_NOEXCEPT {
+	return this->filter_two_color(threshold, LowColor, 255, HighColor, 255);
+}
+
 int DxGHandle::filter_gradient_map(const DxGHandle & MapGrHandle, bool Reverse_flag) DxHANDLE_NOEXCEPT {
 	const auto re = GraphFilter(this->GrHandle, DX_GRAPH_FILTER_LEVEL, MapGrHandle.GrHandle, Reverse_flag);
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
@@ -326,3 +338,67 @@ int DxGHandle::filter_gradient_map(const DxGHandle & MapGrHandle, bool Reverse_f
 int DxGHandle::filter_gradient_map(unsigned int base_color, bool Reverse_flag) DxHANDLE_NOEXCEPT {
 	return this->filter_gradient_map(make_gradation_graph_handle(base_color), Reverse_flag);
 }
+#ifdef DxHANDLE_WRAP_USE_EXCEPTION
+BASEIMAGE to_BASEIMAGE(const DxGHandle & handle) {//YOU MUST CALL ReleaseBaseImage to free memory.
+	const auto size = handle.GetGraphSize();
+	const auto tmp_screen = DxLib::MakeScreen(size.first, size.second, TRUE);
+	auto err = DxLib::SetDrawScreen(tmp_screen);
+	if (-1 == err) std::runtime_error("DxLib::SetDrawScreen関数でエラーが発生しました");
+	err = DxLib::SetDrawBlendMode(DX_BLENDMODE_SRCCOLOR, 255);// 透明部分もそのまま描画先に描き込むブレンドモードにセット
+	if (-1 == err) std::runtime_error("DxLib::SetDrawBlendMode関数でエラーが発生しました");
+	handle.DrawGraph(0, 0, true);//透明度を有効に
+	BASEIMAGE BaseImage;
+	err = DxLib::CreateARGB8ColorBaseImage(size.first, size.second, &BaseImage);//画像サイズと同じサイズの BASEIMAGE を作成
+	if (-1 == err) std::runtime_error("DxLib::CreateARGB8ColorBaseImage関数でエラーが発生しました");
+	err = DxLib::GetDrawScreenBaseImage(0, 0, size.first, size.second, &BaseImage);//描画先から画像を取り込む
+	if (-1 == err) std::runtime_error("DxLib::GetDrawScreenBaseImage関数でエラーが発生しました");
+	err = DxLib::DeleteGraph(tmp_screen);
+	if (-1 == err) std::runtime_error("DxLib::DeleteGraph関数でエラーが発生しました");
+	return BaseImage;
+}
+using hist_arr_t = std::array<uint32_t, 256>;
+uint8_t calc_threshold_algolithm_otu(const DxGHandle & handle) {
+	//http://web.archive.org/web/20120625061358/http://cct2.toba-cmt.ac.jp/~5509/report/ps-1/otsu_bin.html
+	//http://aquioux.net/blog/coding/as/automatic-calculation-of-threshold-by-discriminant-analysis-method-again-2/
+	using namespace detail;
+	BASEIMAGE baseimage = to_BASEIMAGE(handle);
+	if (baseimage.ColorData.PixelByte != 4) throw std::runtime_error("to_BASEIMAGE関数が不正な構造体を作成しました。");
+
+	hist_arr_t histgram = { 0 };//初期化
+	for (size_t i = 0; i < baseimage.Height * baseimage.Width; ++i)
+		++histgram[to_YPbPr(RGB_t(static_cast<uint32_t*>(baseimage.GraphData)[i])).y];//投票
+	ReleaseBaseImage(&baseimage);
+
+	hist_arr_t sumN, sumM;
+	for (size_t i = 0; i < histgram.size(); ++i) {
+		sumN[i] = sumN[i ? i - 1 : 0] + histgram[i];
+		sumM[i] = sumM[i ? i - 1 : 0] + histgram[i] * i;
+	}
+	const auto n0 = sumN.back();// 画素数
+	const auto m0 = sumM.back();// 濃度
+	double max_dispersion = 0.0;// 最大分散
+	uint8_t threshold = 0;//   求める閾値
+	for (size_t i = 0; i < histgram.size(); ++i) {
+		const uint8_t n1 = sumN[i];// 画素数
+		const double m1 = sumM[i];// 濃度
+		const uint8_t n2 = n0 - n1;// 画素数
+		const double m2 = m0 - m1;// 濃度
+
+		const double val1 = ((n1) ? m1 / n1 : 0) - m0;
+		const double val2 = ((n2) ? m2 / n2 : 0) - m0;
+		const double dispersion = (n1 * val1 * val1 + n2 * val2 * val2) / n0;
+		if (max_dispersion < dispersion) {
+			max_dispersion = dispersion;
+			threshold = static_cast<uint8_t>(i);
+		}
+	}
+	return threshold;
+}
+int DxGHandle::filter_two_color_algolithm_otu(unsigned int LowColor, uint8_t LowAlpha, unsigned int HighColor, uint8_t HighAlpha) DxHANDLE_NOEXCEPT{
+	return this->filter_two_color(calc_threshold_algolithm_otu(*this), LowColor, LowAlpha, HighColor, HighAlpha);
+}
+int DxGHandle::filter_two_color_algolithm_otu(unsigned int LowColor, unsigned int HighColor) DxHANDLE_NOEXCEPT {
+	return this->filter_two_color_algolithm_otu(LowColor, 255, HighColor, 255);
+}
+#endif
+

@@ -10,18 +10,6 @@ enum class bright_clip_mode : int {
 	LESS,
 	GREATER
 };
-enum class filter_type {
-	mono,
-	gaussian,
-	down_scale,
-	bright_clip,
-	HSB,
-	invert,
-	level,
-	two_color,
-	gradient_map
-};
-
 class DxGHandle
 {
 public:
@@ -63,15 +51,37 @@ public:
 	int filter_invert()DxHANDLE_NOEXCEPT;
 	int filter_level(uint8_t min, uint8_t max, int Gamma, uint8_t Aftermin, uint8_t Aftermax)DxHANDLE_NOEXCEPT;
 	int filter_two_color(uint8_t threshold, unsigned int LowColor, uint8_t LowAlpha, unsigned int HighColor, uint8_t HighAlpha)DxHANDLE_NOEXCEPT;
-	//int filter_two_color_algolithm_otu(unsigned int LowColor, unsigned int HighColor)DxHANDLE_NOEXCEPT;
+	int filter_two_color(uint8_t threshold, unsigned int LowColor, unsigned int HighColor) DxHANDLE_NOEXCEPT;
+#ifdef DxHANDLE_WRAP_USE_EXCEPTION
+	int filter_two_color_algolithm_otu(unsigned int LowColor, uint8_t LowAlpha, unsigned int HighColor, uint8_t HighAlpha) DxHANDLE_NOEXCEPT;
+	int filter_two_color_algolithm_otu(unsigned int LowColor, unsigned int HighColor) DxHANDLE_NOEXCEPT;
+#endif
 	int filter_gradient_map(const DxGHandle& MapGrHandle, bool Reverse_flag = false)DxHANDLE_NOEXCEPT;
 	int filter_gradient_map(unsigned int base_color, bool Reverse_flag = false)DxHANDLE_NOEXCEPT;
 	DxGHandle_t get_raw() const NOEXCEPT { return this->GrHandle; }
 private:
 	DxGHandle_t GrHandle;
 };
+#ifdef DxHANDLE_WRAP_USE_EXCEPTION
+uint8_t calc_threshold_algolithm_otu(const DxGHandle& handle);
+#endif
+DxGHandle make_gradation_graph_handle(unsigned int base_color, bool trans_flag = false) NOEXCEPT;
 
-DxGHandle make_gradation_graph_handle(unsigned int base_color, bool trans_flag = false);
+enum class filter_type {
+	mono,
+	gaussian,
+	down_scale,
+	bright_clip,
+	HSB,
+	invert,
+	level,
+	gradient_map,
+	two_color,
+#ifdef DxHANDLE_WRAP_USE_EXCEPTION
+	two_color_algolithm_otu,
+#endif
+};
+
 template<filter_type f_type> class filter {
 };
 class filter<filter_type::mono> {
@@ -143,9 +153,13 @@ public:
 	int operator()(uint8_t threshold, unsigned int LowColor, uint8_t LowAlpha, unsigned int HighColor, uint8_t HighAlpha) {
 		return this->handle_.filter_two_color(threshold, LowColor, LowAlpha, HighColor, HighAlpha);
 	}
+	int operator()(uint8_t threshold, unsigned int LowColor, unsigned int HighColor) {
+		return this->handle_.filter_two_color(threshold, LowColor, HighColor);
+	}
 private:
 	DxGHandle& handle_;
 };
+
 class filter<filter_type::gradient_map> {
 public:
 	explicit filter(DxGHandle& handle) : handle_(handle) {}
@@ -158,3 +172,18 @@ public:
 private:
 	DxGHandle& handle_;
 };
+
+#ifdef DxHANDLE_WRAP_USE_EXCEPTION
+class filter<filter_type::two_color_algolithm_otu> {
+public:
+	explicit filter(DxGHandle& handle) : handle_(handle) {}
+	int operator()(unsigned int LowColor, uint8_t LowAlpha, unsigned int HighColor, uint8_t HighAlpha) {
+		return this->handle_.filter_two_color_algolithm_otu(LowColor, LowAlpha, HighColor, HighAlpha);
+	}
+	int operator()(unsigned int LowColor, unsigned int HighColor) {
+		return this->handle_.filter_two_color_algolithm_otu(LowColor, HighColor);
+	}
+private:
+	DxGHandle& handle_;
+};
+#endif
