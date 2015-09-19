@@ -2,14 +2,10 @@
 #include "DxLib.h"
 #include "define.h"
 Status title(img_arr_t& img_arr, sound_arr_t& sound) {
-	
-	/////////////
-
+	sound["title"].play(DxSoundMode::LOOP);
 	//フォントの定義
-	int Font_title;		//タイトルロゴ
-	int Font_1;			//「Zキーを押してね」の奴
-	Font_title = CreateFontToHandle(NULL, 70, 5, DX_FONTTYPE_EDGE);
-	Font_1 = CreateFontToHandle(NULL, 30, 1, DX_FONTTYPE_ANTIALIASING);
+	const int Font_title = CreateFontToHandle(nullptr, 70, 5, DX_FONTTYPE_EDGE);		  //タイトルロゴ
+	const int Font_1     = CreateFontToHandle(nullptr, 30, 1, DX_FONTTYPE_ANTIALIASING);//「Zキーを押してね」の奴
 	ClearDrawScreen();
 	do{
 		//描画
@@ -23,8 +19,7 @@ Status title(img_arr_t& img_arr, sound_arr_t& sound) {
 		ClearDrawScreen();
 	} while (1 != CheckHitKey(KEY_INPUT_Z));
 
-	///////////// by yuchu
-
+	sound["title"].stop();
 	return Status::GAME;
 
 }
