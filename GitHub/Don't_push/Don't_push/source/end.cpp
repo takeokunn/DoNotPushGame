@@ -19,7 +19,7 @@ Status end(img_arr_t& img_arr, sound_arr_t& sound) {
 
 		ScreenFlip();
 		ClearDrawScreen();
-	} while (1 != CheckHitKey(KEY_INPUT_X));
+	} while (1 != CheckHitKey(KEY_INPUT_X) && -1 != ProcessMessage());
 
 	///////////// by yuchu
 

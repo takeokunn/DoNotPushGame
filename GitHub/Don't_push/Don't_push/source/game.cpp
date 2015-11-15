@@ -12,23 +12,19 @@ int move_x(int current_x, keystate& state){
 	if (state.right()) re += CHARACTER_MOVE_SPEED;
 	return re;
 }
-#pragma warning(push)
-#pragma warning(disable: 4127)
-//C4127: 条件式が定数です。
 Status game(img_arr_t& img_arr, sound_arr_t& sound){
 	ClearDrawScreen();
 	img_arr["game"].DrawGraph(0, 0, false);
 	ScreenFlip();
 	keystate state;
 	int x = FIRST_CHARA_X;
-	while (1){
+	while (-1 != ProcessMessage()){
 		x = move_x(x, state);
 		img_arr["game"].DrawGraph(x, 0, false);
 		ScreenFlip();
 		ClearDrawScreen();
 	}
 
-	while (CheckHitKey(KEY_INPUT_D) != 1);
+	while (CheckHitKey(KEY_INPUT_D) != 1 && -1 != ProcessMessage());
 	return Status::END;
 }
-#pragma warning(pop)

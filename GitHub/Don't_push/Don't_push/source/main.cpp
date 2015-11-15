@@ -23,16 +23,7 @@ int init(){
 }
 
 
-//main
-#pragma warning (push)
-#pragma warning (disable: 4100)
-#pragma warning(disable: 4127)
-//C4127: 条件式が定数です。
-//warning C4100 : 'nCmdShow' : unreferenced formal parameter
-//warning C4100 : 'lpCmdLine' : unreferenced formal parameter
-//warning C4100 : 'hPrevInstance' : unreferenced formal parameter
-//warning C4100 : 'hInstance' : unreferenced formal parameter
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
 	init();
 
@@ -47,7 +38,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		auto img_arr = make_image_array();
 		auto status_img = make_status_image_array();
 		auto sound_arr = make_sound_array();
-		while (Status::EXIT != status_){
+		while (Status::EXIT != status_ && -1 != ProcessMessage()){
 			switch (status_)
 			{
 			case Status::TITLE:
@@ -89,5 +80,3 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	return 0;   
 }
-#pragma warning (pop)
-///

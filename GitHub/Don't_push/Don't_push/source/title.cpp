@@ -17,7 +17,7 @@ Status title(img_arr_t& img_arr, sound_arr_t& sound) {
 
 		ScreenFlip();
 		ClearDrawScreen();
-	} while (1 != CheckHitKey(KEY_INPUT_Z));
+	} while (1 != CheckHitKey(KEY_INPUT_Z) && -1 != ProcessMessage());
 
 	sound["title"].stop();
 	return Status::GAME;

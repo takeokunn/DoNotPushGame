@@ -23,7 +23,7 @@ Status continu(img_arr_t& img_arr, sound_arr_t& sound) {
 	int answer = 0;		//コンティニューするかどうか（0:YES　1:NO）
 
 	//メインループ
-	while (TRUE){
+	while (-1 != ProcessMessage()){
 		ClearDrawScreen();
 
 		//十字キー受付

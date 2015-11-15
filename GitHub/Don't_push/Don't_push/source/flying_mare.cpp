@@ -7,7 +7,7 @@ Status fly_anime(img_arr_t& img_arr) {
 
 	int img;
 	img = LoadGraph("../Don't_push/assets/img/seoinage.png");
-	while (TRUE){
+	while (-1 != ProcessMessage()){
 		ClearDrawScreen();
 		DrawGraph(100, 100, img, TRUE);
 
