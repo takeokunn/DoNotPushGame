@@ -3,13 +3,9 @@
 #include "define.h"
 
 Status fly_anime(img_arr_t& img_arr) {
-
-
-	int img;
-	img = LoadGraph("../Don't_push/assets/img/seoinage.png");
 	while (-1 != ProcessMessage()){
 		ClearDrawScreen();
-		DrawGraph(100, 100, img, TRUE);
+		img_arr["seoinage"].DrawGraph(100, 100, true);
 
 		if (CheckHitKey(KEY_INPUT_Z) == 1){
 			return Status::TITLE;
