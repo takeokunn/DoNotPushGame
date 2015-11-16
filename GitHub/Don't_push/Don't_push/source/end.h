@@ -1,3 +1,3 @@
 ﻿#pragma once
 #include "define.h"
-Status end(img_arr_t& img_arr, sound_arr_t& sound);
+Status end(const img_arr_t& img_arr, const sound_arr_t& sound);

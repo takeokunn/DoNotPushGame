@@ -35,20 +35,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	//処理-----------------------------------------------------------
 
 	try{
-		auto img_arr = make_image_array();
-		auto status_img = make_status_image_array();
-		auto sound_arr = make_sound_array();
+		game_c game({ WINDOW_WIDTH / 2 , 0 });
 		while (Status::EXIT != status_ && -1 != ProcessMessage()){
 			switch (status_)
 			{
 			case Status::TITLE:
-				status_ = title(img_arr, sound_arr);//title BGM流す。この中でBGM止める
+				status_ = title(game.get_img(), game.get_sound());//title BGM流す。この中でBGM止める
 				break;
 			case Status::GAME:
-				status_ = game(img_arr, sound_arr);//BGM流し始め
+				status_ = game.game_main();//BGM流し始め
 				break;
 			case Status::END:
-				status_ = end(img_arr, sound_arr);//ここでGAMEで流れだした音楽を止める
+				status_ = end(game.get_img(), game.get_sound());//ここでGAMEで流れだした音楽を止める
 				break;
 			case Status::FLYING_MARE_ANIMATION:
 				break;
@@ -57,7 +55,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 			case Status::HELICOPTER_ANIMATION:
 				break;
 			case Status::CONTINUE:
-				status_ = continu(img_arr, sound_arr);//ここでGAMEで流れだした音楽を止める
+				status_ = continu(game.get_img(), game.get_sound());//ここでGAMEで流れだした音楽を止める
 				break;
 			case Status::EXIT:
 				break;
