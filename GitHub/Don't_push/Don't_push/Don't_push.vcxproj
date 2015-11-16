@@ -155,7 +155,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\lib\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\lib\Sprout;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\yumetodo\Documents\git\DxLibEx;C:\lib\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\lib\Sprout;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -172,7 +172,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\lib\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\lib\Sprout;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\yumetodo\Documents\git\DxLibEx;C:\lib\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\lib\Sprout;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -189,7 +189,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\lib\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\lib\Sprout;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\yumetodo\Documents\git\DxLibEx;C:\lib\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\lib\Sprout;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -206,7 +206,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\lib\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\lib\Sprout;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\yumetodo\Documents\git\DxLibEx;C:\lib\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\lib\Sprout;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -225,7 +225,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\lib\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\lib\Sprout;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\yumetodo\Documents\git\DxLibEx;C:\lib\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\lib\Sprout;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -246,7 +246,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\lib\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\lib\Sprout;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\yumetodo\Documents\git\DxLibEx;C:\lib\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\lib\Sprout;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -267,7 +267,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\lib\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\lib\Sprout;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\yumetodo\Documents\git\DxLibEx;C:\lib\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\lib\Sprout;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -288,7 +288,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\lib\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\lib\Sprout;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\yumetodo\Documents\git\DxLibEx;C:\lib\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\lib\Sprout;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -315,7 +315,6 @@
     <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\power_bar.h" />
     <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\title.h" />
     <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\util_constexpr.h" />
-    <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\util_INT2_t_calc.h" />
     <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\util_noexcept.h" />
     <ClInclude Include="source\end.h" />
   </ItemGroup>
@@ -332,7 +331,6 @@
     <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\object_to_fall.cpp" />
     <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\power_bar.cpp" />
     <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\title.cpp" />
-    <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\util_INT2_t_calc.cpp" />
     <ClCompile Include="source\end.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

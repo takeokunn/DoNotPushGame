@@ -1,6 +1,6 @@
 ﻿#pragma once
-#include "util_INT2_t_calc.h"
 #include "define.h"
+#include <dxlibex/basic_types.hpp>
 #ifndef DISABLE_DxHANDLE_WRAP_USE_EXCEPTION
 #define DxHANDLE_WRAP_USE_EXCEPTION//throwする
 #endif
@@ -15,7 +15,7 @@ public:
 	///<param name="whole_bar_size_">バーの大きさ(最大)</param>
 	///<param name="frame_num_to_fill">バーの長さが最大になるまでに必要なframe数</param>
 	///<param name="color">バーの色</param>
-	power_bar_c(INT2_t base_point, INT2_t whole_bar_size, size_t frame_num_to_fill, unsigned int color) NOEXCEPT;
+	power_bar_c(dxle::pointi base_point, dxle::pointi whole_bar_size, size_t frame_num_to_fill, unsigned int color) NOEXCEPT;
 	explicit power_bar_c(const power_bar_c& o) NOEXCEPT;
 	///<summary>状態を更新します。描画ループで毎回呼び出してください</summary>
 	void update() NOEXCEPT;
@@ -26,9 +26,9 @@ public:
 	double get_percent() const NOEXCEPT;
 private:
 	///<summary>バーの左上の座標</summary>
-	INT2_t base_point_;
+	dxle::pointi base_point_;
 	///<summary>バーの大きさ(最大)</summary>
-	INT2_t whole_bar_size_;
+	dxle::pointi whole_bar_size_;
 	///<summary>バーの長さが最大になるまでに必要なframe数</summary>
 	size_t frame_num_to_fill_;
 	///<summary>バーの長さが0の時からのframe数</summary>

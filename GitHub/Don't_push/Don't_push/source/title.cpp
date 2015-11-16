@@ -1,8 +1,8 @@
 ﻿#include "title.h"
 #include "DxLib.h"
 #include "define.h"
-Status title(const img_arr_t& img_arr, const sound_arr_t& sound) {
-	sound["title"].play(DxSoundMode::LOOP);//p0052r0のscope_exitがほしい
+Status title(const img_arr_t&, const sound_arr_t& sound) {
+	sound.at("title").play(DxSoundMode::LOOP);//p0052r0のscope_exitがほしい
 	//フォントの定義
 	const int Font_title = CreateFontToHandle(nullptr, 70, 5, DX_FONTTYPE_EDGE);        //タイトルロゴ
 	const int Font_1     = CreateFontToHandle(nullptr, 30, 1, DX_FONTTYPE_ANTIALIASING);//「Zキーを押してね」の奴
@@ -19,6 +19,6 @@ Status title(const img_arr_t& img_arr, const sound_arr_t& sound) {
 		ClearDrawScreen();
 	} while (1 != CheckHitKey(KEY_INPUT_Z) && -1 != ProcessMessage());
 
-	sound["title"].stop();
+	sound.at("title").stop();
 	return Status::GAME;
 }

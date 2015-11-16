@@ -1,6 +1,7 @@
 #pragma once
 #include "define.h"
 #include "DxGraphicHandle.h"
+#include <dxlibex/basic_types.hpp>
 class object_to_fall_c
 {
 public:

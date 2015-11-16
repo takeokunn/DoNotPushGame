@@ -1,6 +1,6 @@
 ﻿#include "end.h"
 #include "DxLib.h"
-Status end(const img_arr_t& img_arr, const sound_arr_t& sound) {
+Status end(const img_arr_t&, const sound_arr_t& sound) {
 	for (auto& s : sound) s.second.stop();//BGM全部停止
 	//フォントの定義
 	const int Font_title = CreateFontToHandle(nullptr, 100, 5, DX_FONTTYPE_EDGE);//タイトルロゴ
