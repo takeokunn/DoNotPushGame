@@ -1,7 +1,7 @@
 # Do Not Push Game ～押すなよ！絶対！～
 
-日本は言霊の強い、不思議な国。
-ならば言霊で遊ぼうやないか！
+日本は言霊の力強い、不思議な国。  
+ならば言霊で遊ぼうやないか！  
 押すなよ！絶対！
 
 ![Presentation1](GitHub/Don't_push/Don't_push/assets/img/Presentation1.png)
