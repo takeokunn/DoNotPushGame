@@ -2,9 +2,9 @@
 #include "DxLib.h"
 #include "define.h"
 Status title(img_arr_t& img_arr, sound_arr_t& sound) {
-	sound["title"].play(DxSoundMode::LOOP);
+	sound["title"].play(DxSoundMode::LOOP);//p0052r0のscope_exitがほしい
 	//フォントの定義
-	const int Font_title = CreateFontToHandle(nullptr, 70, 5, DX_FONTTYPE_EDGE);		  //タイトルロゴ
+	const int Font_title = CreateFontToHandle(nullptr, 70, 5, DX_FONTTYPE_EDGE);        //タイトルロゴ
 	const int Font_1     = CreateFontToHandle(nullptr, 30, 1, DX_FONTTYPE_ANTIALIASING);//「Zキーを押してね」の奴
 	ClearDrawScreen();
 	do{
@@ -21,5 +21,4 @@ Status title(img_arr_t& img_arr, sound_arr_t& sound) {
 
 	sound["title"].stop();
 	return Status::GAME;
-
 }

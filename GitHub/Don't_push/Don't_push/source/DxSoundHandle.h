@@ -56,7 +56,7 @@ public:
 	///<param name="Volume">左右の音量の比率(-255 ～ 255 ＋は左の音量を下げ、－は右の音量を下げる)(0-255)</param>
 	///<exception cref="DxSHandle_runtime_error">DxSHandle_runtime_error</exception>
 	int ChangeNextPlayPan(int16_t Pan) DxHANDLE_NOEXCEPT;
-	///<summary>音楽の再生を終了します</summary>
+	///<summary>音楽の再生を終了します。すでに終了している場合は何もしません</summary>
 	///<exception cref="DxSHandle_runtime_error">DxSHandle_runtime_error</exception>
 	int stop() DxHANDLE_NOEXCEPT;
 	///<summary>音楽が再生中か調べます</summary>

@@ -1,14 +1,10 @@
 ﻿#include "end.h"
 #include "DxLib.h"
 Status end(img_arr_t& img_arr, sound_arr_t& sound) {
-
-	/////////////
-
+	for (auto& s : sound) s.second.stop();//BGM全部停止
 	//フォントの定義
-	int Font_title;		//タイトルロゴ
-	int Font_1;			//「Xキーを押してね」の奴
-	Font_title = CreateFontToHandle(NULL, 100, 5, DX_FONTTYPE_EDGE);
-	Font_1 = CreateFontToHandle(NULL, 30, 1, DX_FONTTYPE_ANTIALIASING);
+	const int Font_title = CreateFontToHandle(nullptr, 100, 5, DX_FONTTYPE_EDGE);//タイトルロゴ
+	const int Font_1 = CreateFontToHandle(nullptr, 30, 1, DX_FONTTYPE_ANTIALIASING);//「Xキーを押してね」の奴
 	ClearDrawScreen();
 	do{
 		//描画
@@ -21,8 +17,5 @@ Status end(img_arr_t& img_arr, sound_arr_t& sound) {
 		ClearDrawScreen();
 	} while (1 != CheckHitKey(KEY_INPUT_X) && -1 != ProcessMessage());
 
-	///////////// by yuchu
-
-	return Status::TITLE;
-	
+	return Status::TITLE;	
 }
