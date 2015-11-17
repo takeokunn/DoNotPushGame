@@ -4,13 +4,14 @@
 #ifdef max
 #undef max
 #endif
-void keystate::update() NOEXCEPT {
+bool keystate::update() NOEXCEPT {
 	char buf[keybufsize];
-	GetHitKeyStateAll(buf);
+	auto re = GetHitKeyStateAll(buf);
 	for (size_t i = 0; i < keybufsize; ++i) {
 		if (buf[i] && std::numeric_limits<int>::max() != this->keystatebuf[i]) ++this->keystatebuf[i];
 		else this->keystatebuf[i] = 0;
 	}
+	return 0 == re;
 }
 
 int keystate::operator[](size_t n) const NOEXCEPT {

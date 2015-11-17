@@ -15,13 +15,13 @@ int move_x(int current_x, keystate& state){
 
 Status game_c::game_main(){
 	ClearDrawScreen();
-	this->m_img_["game"].DrawGraph(0, 0, false);
+	this->m_img_["gake"].DrawGraph(0, 0, false);
 	ScreenFlip();
 	keystate state;
 	int x = FIRST_CHARA_X;
-	while (-1 != ProcessMessage()) {
+	while (CheckHitKey(KEY_INPUT_D) != 1 && -1 != ProcessMessage()) {
 		x = move_x(x, state);
-		this->m_img_["game"].DrawGraph(x, 0, false);
+		this->m_img_["gake"].DrawGraph(x, 0, false);
 		ScreenFlip();
 		ClearDrawScreen();
 	}

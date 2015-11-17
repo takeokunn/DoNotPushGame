@@ -5,6 +5,7 @@
 #include "DxSoundHandle.h"
 #include <unordered_map>
 #include <string>
+#include <stdexcept>
 CONSTEXPR_OR_STATICCONST size_t WINDOW_WIDTH = 640;
 CONSTEXPR_OR_STATICCONST size_t WINDOW_HEIGHT = 480;
 CONSTEXPR_OR_STATICCONST int FIRST_CHARA_X = WINDOW_WIDTH / 2;
@@ -20,5 +21,13 @@ enum class Status{
 	CONTINUE,
 	EXIT
 };
-using img_arr_t = std::unordered_map < std::string, DxGHandle >;
+using img_arr_t   = std::unordered_map<std::string, DxGHandle>;
 using sound_arr_t = std::unordered_map<std::string, DxSHandle>;
+
+class normal_exit : public std::runtime_error {
+public:
+	normal_exit() : std::runtime_error("normal_exit"){}
+	explicit normal_exit(const std::string& what_arg) : std::runtime_error("normal_exit : " + what_arg) {}
+	explicit normal_exit(const char* what_arg) : std::runtime_error(std::string("normal_exit : ") + what_arg) {}
+};
+

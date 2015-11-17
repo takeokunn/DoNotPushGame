@@ -13,6 +13,7 @@ public:
 	const sound_arr_t& get_sound() const NOEXCEPT;
 
 	Status game_main();
+	//Status helicopter();
 private:
 	const dxle::pointi m_first_;
 	dxle::pointi m_p_;

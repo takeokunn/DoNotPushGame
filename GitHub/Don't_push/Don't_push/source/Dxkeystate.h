@@ -9,7 +9,7 @@
 class keystate
 {
 public:
-	void update() NOEXCEPT;
+	bool update() NOEXCEPT;
 	int operator[](size_t n) const NOEXCEPT;
 	int at(size_t n) const NOEXCEPT;
 	bool shift() const NOEXCEPT;

@@ -67,7 +67,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 			ScreenFlip();//裏画面表示
 		}
 	}
-	catch (std::exception&){
+	catch (const normal_exit&) {
+	}
+	catch (const std::exception&){
 		DxLib_End();
 		return -1;
 	}
