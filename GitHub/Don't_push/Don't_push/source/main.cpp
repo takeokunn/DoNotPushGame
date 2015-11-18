@@ -73,10 +73,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		DxLib_End();
 		return -1;
 	}
-
-	//終了処理--------------------------------------------------------------
-
 	DxLib_End();
-
 	return 0;   
 }

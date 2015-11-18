@@ -9,9 +9,15 @@
 class keystate
 {
 public:
+	keystate() NOEXCEPT;
+	keystate(const keystate&) = delete;
+	keystate(keystate&&) = delete;
+	keystate& operator=(const keystate&) = delete;
+	keystate& operator=(keystate&&) = delete;
 	bool update() NOEXCEPT;
+	bool flush();
 	int operator[](size_t n) const NOEXCEPT;
-	int at(size_t n) const NOEXCEPT;
+	int at(size_t n) const;
 	bool shift() const NOEXCEPT;
 	bool lshift() const NOEXCEPT;
 	bool rshift() const NOEXCEPT;
@@ -27,7 +33,8 @@ public:
 	bool space() const NOEXCEPT;
 	static CONSTEXPR_OR_CONST size_t keybufsize = 256;
 private:
-	std::array<int, 256> keystatebuf = {{0}};
+	bool flush_stream();
+	std::array<int, 256> keystatebuf;
 };
 bool operator!=(const keystate& l, size_t r);
 inline bool operator!=(size_t l, const keystate& r) {

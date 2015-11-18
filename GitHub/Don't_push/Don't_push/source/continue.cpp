@@ -2,7 +2,12 @@
 #include "Dxkeystate.h"
 #include "DxLib.h"
 #include <array>
-Status continu(const img_arr_t& img_arr, const sound_arr_t& sound) {
+#include <algorithm>
+#ifdef _MSC_VER
+#pragma warning (push)
+#pragma warning (disable: 4706) //warning C4706: 条件式の比較値は、代入の結果になっています。
+#endif
+Status continu(const img_arr_t&, const sound_arr_t& sound) {
 	for (auto& s : sound) s.second.stop();//BGM全部停止
 	const auto Font_1 = CreateFontToHandle(NULL, 30, 1, DX_FONTTYPE_ANTIALIASING);//選択肢表示の文字
 	CONSTEXPR_OR_STATICCONST int select0_x = 200;	//文字の座標（左上）
@@ -10,14 +15,14 @@ Status continu(const img_arr_t& img_arr, const sound_arr_t& sound) {
 	CONSTEXPR_OR_STATICCONST int select1_x = 200;
 	CONSTEXPR_OR_STATICCONST int select1_y = 250;
 
-	const std::array<int, 2>color = { GetColor(0,0,0), GetColor(255,255,255) };//選択している, 選択していない
+	const std::array<unsigned int, 2>color = { GetColor(0,0,0), GetColor(255,255,255) };//選択している, 選択していない
 	bool flag_no_continue = false;		//コンティニューするかどうか
 
 	//メインループ
 	keystate state;
 	auto normal_con_f = []() -> bool { return -1 != ProcessMessage() && 0 == ScreenFlip() && 0 == ClearDrawScreen(); };
-	volatile bool normal_flang;
-	while (normal_flang = normal_con_f() && state.update() && !state[KEY_INPUT_Z] && !state.esc()) {
+	bool is_normal_state;
+	while ((is_normal_state = normal_con_f()) && state.update() && !state[KEY_INPUT_Z] && !state.esc()) {
 		//十字キー受付
 		if ((state.up() & flag_no_continue) || (state.down() & !flag_no_continue)){
 			flag_no_continue = !flag_no_continue;
@@ -29,7 +34,10 @@ Status continu(const img_arr_t& img_arr, const sound_arr_t& sound) {
 		DrawBox(180, 155 + flag_no_continue*100, 200, 175 + flag_no_continue*100, color[0], TRUE);	//選択してるのが分かるようにするやつ
 		DrawStringToHandle(120, WINDOW_HEIGHT - (WINDOW_HEIGHT / 4), "- Zキーを押して決定だよ -", GetColor(0, 0, 0), Font_1);//Cキー押してね
 	}
-	if (!normal_flang) throw std::runtime_error("");
+	if (!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");
 	if (state.esc()) throw normal_exit();
 	return (flag_no_continue) ? Status::TITLE : Status::GAME;
 }
+#ifdef _MSC_VER
+#pragma warning (pop)
+#endif

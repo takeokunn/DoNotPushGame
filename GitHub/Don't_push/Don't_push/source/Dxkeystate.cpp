@@ -4,21 +4,44 @@
 #ifdef max
 #undef max
 #endif
+keystate::keystate() NOEXCEPT : keystatebuf() {
+	this->flush_stream();
+}
+
 bool keystate::update() NOEXCEPT {
 	char buf[keybufsize];
 	auto re = GetHitKeyStateAll(buf);
+	if (0 != re) return false;
 	for (size_t i = 0; i < keybufsize; ++i) {
 		if (buf[i] && std::numeric_limits<int>::max() != this->keystatebuf[i]) ++this->keystatebuf[i];
 		else this->keystatebuf[i] = 0;
 	}
-	return 0 == re;
+	return true;
+}
+
+bool keystate::flush() {
+	this->flush_stream();
+	this->keystatebuf.fill(0);
+	return true;
+}
+bool keystate::flush_stream() {
+	char buf[2][keybufsize] = {};
+	for (size_t i = 0; i < this->keystatebuf.size(); ++i) buf[0][i] = 0 != this->keystatebuf[i];
+	char* first_p;
+	char* last_p;
+	size_t i;
+	for (first_p = buf[0], last_p = buf[1]; 0 == DxLib::GetHitKeyStateAll(last_p); std::swap(first_p, last_p)) {
+		for (i = 0; i < keybufsize && !first_p[i] && !last_p[i]; ++i);
+		if (i == keybufsize) break;
+	}
+	return (i == keybufsize);
 }
 
 int keystate::operator[](size_t n) const NOEXCEPT {
 	return this->keystatebuf[n];
 }
 
-int keystate::at(size_t n) const NOEXCEPT {
+int keystate::at(size_t n) const {
 	return this->keystatebuf.at(n);
 }
 bool keystate::shift() const NOEXCEPT {
