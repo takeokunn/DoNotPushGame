@@ -20,7 +20,7 @@ bool keystate::update() NOEXCEPT {
 }
 
 bool keystate::fllush() {
-	this->fllush_stream();
+	if(this->fllush_stream()) return false;
 	this->keystatebuf.fill(0);
 	return true;
 }
