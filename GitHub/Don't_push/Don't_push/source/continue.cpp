@@ -10,9 +10,9 @@
 Status continu(const img_arr_t&, const sound_arr_t& sound) {
 	for (auto& s : sound) s.second.stop();//BGM全部停止
 	const auto Font_1 = CreateFontToHandle(NULL, 30, 1, DX_FONTTYPE_ANTIALIASING);//選択肢表示の文字
-	CONSTEXPR_OR_STATICCONST int select0_x = 200;	//文字の座標（左上）
+	CONSTEXPR_OR_STATICCONST int select0_x = 260;	//文字の座標（左上）
 	CONSTEXPR_OR_STATICCONST int select0_y = 150;
-	CONSTEXPR_OR_STATICCONST int select1_x = 200;
+	CONSTEXPR_OR_STATICCONST int select1_x = 260;
 	CONSTEXPR_OR_STATICCONST int select1_y = 250;
 
 	const std::array<unsigned int, 2>color = { GetColor(0,0,0), GetColor(255,255,255) };//選択している, 選択していない

@@ -28,7 +28,7 @@ Status game_c::game_main(){
 	}
 	if (!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");
 	if (m_state_.esc()) throw normal_exit();
-	return Status::END;
+	return Status::CONTINUE;
 }
 #ifdef _MSC_VER
 #pragma warning (pop)

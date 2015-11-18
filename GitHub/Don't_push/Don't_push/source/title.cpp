@@ -19,9 +19,9 @@ Status title(const img_arr_t&, const sound_arr_t& sound) {
 	bool is_normal_state = true;
 	while (state.update() && !state[KEY_INPUT_Z] && !state.esc() && (is_normal_state = normal_con_f())) {
 		DrawBox(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GetColor(100, 180, 250), TRUE);	//背景
-		DrawStringToHandle(30 + 5, WINDOW_HEIGHT / 3 + 5, "D...DON'T PUSH!!", GetColor(255, 255, 255), Font_title);		//タイトル（影）
-		DrawStringToHandle(30, WINDOW_HEIGHT / 3, "D...DON'T PUSH!!", GetColor(0, 0, 0), Font_title);					//タイトル
-		DrawStringToHandle(180, WINDOW_HEIGHT - (WINDOW_HEIGHT / 3), "- Zキーを押してね -", GetColor(0, 0, 0), Font_1); //Zキー押してね
+		DrawStringToHandle(100 + 5, WINDOW_HEIGHT / 3 + 5, "D...DON'T PUSH!!", GetColor(255, 255, 255), Font_title);		//タイトル（影）
+		DrawStringToHandle(100, WINDOW_HEIGHT / 3, "D...DON'T PUSH!!", GetColor(0, 0, 0), Font_title);					//タイトル
+		DrawStringToHandle(260, WINDOW_HEIGHT - (WINDOW_HEIGHT / 3), "- Zキーを押してね -", GetColor(0, 0, 0), Font_1); //Zキー押してね
 	}
 	if (!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");
 	sound.at("title").stop();
