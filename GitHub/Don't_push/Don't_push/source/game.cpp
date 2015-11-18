@@ -18,7 +18,7 @@ void game_c::move_x() NOEXCEPT{
 #pragma warning (disable: 4706) //warning C4706: 条件式の比較値は、代入の結果になっています。
 #endif
 Status game_c::game_main(){
-	m_state_.flush();
+	m_state_.fllush();
 	this->m_sound_["flower garden"].play(DxSoundMode::LOOP);
 	bool is_normal_state  =true;
 	while ((is_normal_state = normal_con_f()) && m_state_.update() && !m_state_[KEY_INPUT_Z] && !m_state_.esc()) {

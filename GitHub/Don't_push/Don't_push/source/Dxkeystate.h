@@ -15,7 +15,7 @@ public:
 	keystate& operator=(const keystate&) = delete;
 	keystate& operator=(keystate&&) = delete;
 	bool update() NOEXCEPT;
-	bool flush();
+	bool fllush();
 	int operator[](size_t n) const NOEXCEPT;
 	int at(size_t n) const;
 	bool shift() const NOEXCEPT;
@@ -33,7 +33,7 @@ public:
 	bool space() const NOEXCEPT;
 	static CONSTEXPR_OR_CONST size_t keybufsize = 256;
 private:
-	bool flush_stream();
+	bool fllush_stream();
 	std::array<int, 256> keystatebuf;
 };
 bool operator!=(const keystate& l, size_t r);

@@ -5,7 +5,7 @@
 #undef max
 #endif
 keystate::keystate() NOEXCEPT : keystatebuf() {
-	this->flush_stream();
+	this->fllush_stream();
 }
 
 bool keystate::update() NOEXCEPT {
@@ -19,12 +19,12 @@ bool keystate::update() NOEXCEPT {
 	return true;
 }
 
-bool keystate::flush() {
-	this->flush_stream();
+bool keystate::fllush() {
+	this->fllush_stream();
 	this->keystatebuf.fill(0);
 	return true;
 }
-bool keystate::flush_stream() {
+bool keystate::fllush_stream() {
 	char buf[2][keybufsize] = {};
 	for (size_t i = 0; i < this->keystatebuf.size(); ++i) buf[0][i] = 0 != this->keystatebuf[i];
 	char* first_p;

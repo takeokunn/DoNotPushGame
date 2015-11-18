@@ -12,7 +12,6 @@ Status end(const img_arr_t&, const sound_arr_t& sound) {
 	const int Font_title = CreateFontToHandle(nullptr, 100, 5, DX_FONTTYPE_EDGE);//タイトルロゴ
 	const int Font_1 = CreateFontToHandle(nullptr, 30, 1, DX_FONTTYPE_ANTIALIASING);//「Xキーを押してね」の奴
 	keystate state;
-	state.flush();
 	auto normal_con_f = []() -> bool { return -1 != ProcessMessage() && 0 == ScreenFlip() && 0 == ClearDrawScreen(); };
 	volatile bool is_normal_state;
 	while ((is_normal_state = normal_con_f()) && state.update() && !state[KEY_INPUT_X] && !state.esc()) {

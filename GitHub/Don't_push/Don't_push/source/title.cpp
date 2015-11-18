@@ -13,7 +13,6 @@ Status title(const img_arr_t&, const sound_arr_t& sound) {
 	const int Font_title = CreateFontToHandle(nullptr, 70, 5, DX_FONTTYPE_EDGE);        //タイトルロゴ
 	const int Font_1     = CreateFontToHandle(nullptr, 30, 1, DX_FONTTYPE_ANTIALIASING);//「Zキーを押してね」の奴
 	keystate state;
-	state.flush();
 	auto normal_con_f = []() -> bool { 
 		return -1 != ProcessMessage() && 0 == ScreenFlip() && 0 == ClearDrawScreen(); 
 	};
