@@ -106,7 +106,7 @@ dxle::pointd circular_motion::get_pos() const NOEXCEPT {
 }
 static void extruded(size_t& fall_frame, dxle::pointi& move_target, const dxle::pointi& move_cause, const dxle::pointi& target_img_size, const int first_y) {
 	constexpr double g = 9.80665;
-	if (move_target.x < WINDOW_WIDTH / 4) {
+	if (move_target.x + target_img_size.x < WINDOW_WIDTH / 4) {
 		++fall_frame;
 		move_target.y = first_y + static_cast<int>(g / 2 * fall_frame);
 	}
