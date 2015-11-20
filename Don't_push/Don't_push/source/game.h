@@ -30,4 +30,6 @@ private:
 	img_arr_t m_status_img_;
 	sound_arr_t m_sound_;
 	dxle::Graph2D::Screen m_back_img_;
+	dxle::Graph2D::Screen m_bouninngennA_;
+	dxle::Graph2D::Screen m_bouninngennB_;
 };

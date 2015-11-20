@@ -31,6 +31,8 @@ img_arr_t make_image_array() {
 	re.insert(img("kuruma"));
 	re.insert(img("seoinage"));
 	re.insert(img("tori"));
+	re.insert(img("Presentation1"));
+	re.insert(img("back_str"));
 	return re;
 }
 class make_DxSHandle_pair {

@@ -26,7 +26,8 @@ Status title(const img_arr_t&, const sound_arr_t& sound) {
 	if (!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");
 	sound.at("title").stop();
 	if (state.esc()) throw normal_exit();
-	return Status::GAME;
+	//return Status::GAME;
+	return Status::HELICOPTER_ANIMATION;
 }
 #ifdef _MSC_VER
 #pragma warning (pop)
