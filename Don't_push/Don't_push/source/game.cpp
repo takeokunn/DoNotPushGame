@@ -104,13 +104,16 @@ bool circular_motion::draw(const dxle::Graph2D::Texture2D& img) const {
 dxle::pointd circular_motion::get_pos() const NOEXCEPT {
 	return this->m_current_;
 }
-static void extruded(size_t& fall_frame, dxle::pointi& move_target, const dxle::pointi& move_cause, const dxle::pointi& target_img_size, const int first_y) {
+static void extruded(size_t& fall_frame, dxle::pointi& move_target, dxle::Graph2D::Screen& scr, const dxle::pointi& move_cause, DxGHandle& imgarr, const int first_y) {
 	constexpr double g = 9.80665;
-	if (move_target.x + target_img_size.x < WINDOW_WIDTH / 4) {
+	if (move_target.x + scr.GetGraphSize().x < WINDOW_WIDTH / 4) {
 		++fall_frame;
-		move_target.y = first_y + static_cast<int>(g / 2 * fall_frame);
+		move_target.y = first_y + static_cast<int>(12.5 * g / 2 * fall_frame);//自由落下
+		if (1 == fall_frame) {
+			scr.DrawnOn([&imgarr]() {imgarr.DrawExtendGraph({}, { imgarr.GetGraphSize().x / 3, imgarr.GetGraphSize().y / 3 }, true); });
+		}
 	}
-	if (move_cause.x < move_target.x + target_img_size.x) move_target.x = move_cause.x - target_img_size.x;
+	if (move_cause.x < move_target.x + scr.GetGraphSize().x) move_target.x = move_cause.x - scr.GetGraphSize().x;
 }
 Status game_c::helicopter_event() {
 	this->m_state_.fllush();
@@ -120,7 +123,6 @@ Status game_c::helicopter_event() {
 	constexpr int fadeout_time_frame = 200;
 	//fade out
 	for (int i = 0; i < fadeout_time_frame && (is_normal_state = normal_con_f()) && m_state_.update() && !m_state_.esc(); ++i) {
-		//this->m_img_["Presentation1"].DrawGraph({}, false);
 		this->m_back_img_.DrawGraph({}, false);
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>((fadeout_time_frame - i) * 256.0/ fadeout_time_frame));
 		this->m_img_["back_str"].DrawGraph({}, true);
@@ -139,16 +141,13 @@ Status game_c::helicopter_event() {
 	const int first_yB = m_p_.y;
 	while ((is_normal_state = normal_con_f()) && m_state_.update() && !m_state_[KEY_INPUT_Z] && !m_state_.esc() && helicopter.update()) {
 		this->m_back_img_.DrawGraph({}, false);
-		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
-		this->m_img_["Presentation1"].DrawGraph({}, false);
-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-		extruded(fall_frameB, m_p_, static_cast<dxle::pointi>(helicopter.get_pos()), this->m_bouninngennB_.GetGraphSize(), first_yB);
-		extruded(fall_frameA, ningenA, m_p_, this->m_bouninngennA_.GetGraphSize(), first_yA);
+		extruded(fall_frameB, m_p_, this->m_bouninngennB_, static_cast<dxle::pointi>(helicopter.get_pos()), this->m_img_["bouninngennB_fall"], first_yB);
+		extruded(fall_frameA, ningenA, this->m_bouninngennA_, m_p_, this->m_img_["bouninngennA_fall"], first_yA);
 		this->m_bouninngennA_.DrawGraph(ningenA, true);
 		this->m_bouninngennB_.DrawGraph(this->m_p_, true);
-		//helicopter_img.DrawGraph({ m_window_s_.x * 23 / 26, m_window_s_.y * 1 / 82}, true);
 		helicopter.draw(helicopter_img);
-		WaitKey();
+		//WaitKey();
+		if (WINDOW_HEIGHT < ningenA.y && WINDOW_HEIGHT < this->m_p_.y) break;//ふたりとも落ちたらゲーム終わり
 	}
 	if (!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");
 	if (m_state_.esc()) throw normal_exit();
