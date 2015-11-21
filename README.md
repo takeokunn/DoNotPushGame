@@ -11,6 +11,9 @@
 ## Download方法
 [Release](https://github.com/TakeObara/DoNotPushGame/releases)よりビルド済みバイナリが手にはいります。
 
+https://gist.github.com/yumetodo/1bc47ce42b6128e1950c
+を使用するとReleaseから最新版を落としてきます。DVDに焼く場合はこれを推奨します。
+
 ソースコードは
 
 ```sh
