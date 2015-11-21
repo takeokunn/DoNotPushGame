@@ -36,7 +36,7 @@ Status continu(const img_arr_t&, const sound_arr_t& sound) {
 	}
 	if (!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");
 	if (state.esc()) throw normal_exit();
-	return (flag_no_continue) ? Status::TITLE : Status::GAME;
+	return (flag_no_continue) ? Status::TITLE : Status::HELICOPTER_ANIMATION;
 }
 #ifdef _MSC_VER
 #pragma warning (pop)

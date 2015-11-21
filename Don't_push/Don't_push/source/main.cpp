@@ -35,7 +35,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	//処理-----------------------------------------------------------
 
 	try{
-		game_c game({ WINDOW_WIDTH * 71 / 128 , WINDOW_HEIGHT * 2 / 7 });//青の棒人形(Playable)の初期位置
+		game_c game;
 		while (Status::EXIT != status_ && -1 != ProcessMessage()){
 			switch (status_)
 			{

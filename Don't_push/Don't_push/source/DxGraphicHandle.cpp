@@ -250,7 +250,7 @@ DxGHandle make_gradation_graph_handle(unsigned int base_color, bool trans_flag) 
 	CreateFullColorData(&tmp.ColorData);
 	tmp.MipMapCount = 0;
 	tmp.Height = 1;
-	tmp.Width = y_gradation_rgb_arr.size();
+	tmp.Width = static_cast<int>(y_gradation_rgb_arr.size());
 	tmp.Pitch = tmp.Width * tmp.ColorData.PixelByte;
 	tmp.GraphData = y_gradation_rgb_arr.data();
 	return DxGHandle(CreateGraphFromBaseImage(&tmp));
@@ -367,7 +367,7 @@ uint8_t calc_threshold_algolithm_otu(const DxGHandle & handle) {
 	ReleaseBaseImage(&baseimage);
 
 	hist_arr_t sumN, sumM;
-	for (size_t i = 0; i < histgram.size(); ++i) {
+	for (uint32_t i = 0; i < histgram.size(); ++i) {
 		sumN[i] = sumN[i ? i - 1 : 0] + histgram[i];
 		sumM[i] = sumM[i ? i - 1 : 0] + histgram[i] * i;
 	}

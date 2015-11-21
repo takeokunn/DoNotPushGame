@@ -13,10 +13,11 @@ power_bar_c::power_bar_c(const power_bar_c & o) NOEXCEPT
 void power_bar_c::update() NOEXCEPT {
 	++this->spent_frame_;
 	if (this->spent_frame_ < this->frame_num_to_fill_) {
-		this->draw_pixcel_num_ = this->whole_bar_size_.x * this->spent_frame_ / this->frame_num_to_fill_;
+		this->draw_pixcel_num_ = this->whole_bar_size_.x * static_cast<int>(this->spent_frame_ / this->frame_num_to_fill_);
 	}
 	else {
-		this->draw_pixcel_num_ = this->spent_frame_ = 0;//バーが一杯になったら0に戻す
+		this->draw_pixcel_num_ = 0;//バーが一杯になったら0に戻す
+		this->spent_frame_ = 0;
 	}
 }
 
