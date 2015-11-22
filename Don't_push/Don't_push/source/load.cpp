@@ -9,14 +9,6 @@ public:
 private:
 	std::string path;
 };
-img_arr_t make_status_image_array(){
-	img_arr_t rtn;
-	make_DxGHandle_pair img("assets\\status_img\\");
-	rtn.insert(img("title"));
-	rtn.insert(img("game"));
-	rtn.insert(img("end"));
-	return rtn;
-}
 img_arr_t make_image_array() {
 	img_arr_t re;
 	make_DxGHandle_pair img("assets\\img\\");
@@ -33,6 +25,7 @@ img_arr_t make_image_array() {
 	re.insert(img("tori"));
 	re.insert(img("Presentation1"));
 	re.insert(img("back_str"));
+	re.insert(img("game_main_gauge_bg"));
 	return re;
 }
 class make_DxSHandle_pair {

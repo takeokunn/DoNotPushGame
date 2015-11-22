@@ -35,7 +35,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	//処理-----------------------------------------------------------
 
 	try{
-		game_c game;
+		game_c game({ WINDOW_WIDTH * 57 / 256 , WINDOW_HEIGHT * 2 / 7 }, { WINDOW_WIDTH * 71 / 128 , WINDOW_HEIGHT * 2 / 7 });//棒人形A, 棒人形B
 		while (Status::EXIT != status_ && -1 != ProcessMessage()){
 			switch (status_)
 			{

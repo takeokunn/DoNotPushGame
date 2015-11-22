@@ -4,6 +4,7 @@
 #else
 #define NOEXCEPT
 #endif //_MSC_VER > 1800
+#define ATT_PURE NOEXCEPT//attribute [[pure]]
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
 #define DxHANDLE_NOEXCEPT
 #else

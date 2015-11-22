@@ -1,67 +1,44 @@
-﻿#include "game.h"
+﻿#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#include "game.h"
 #include "Dxkeystate.h"
 #include "load.h"
 #include "DxLib.h"
 #include "define.h"
 #include "power_bar.h"
+#include "circular_motion.h"
 #include <cmath>
 #include <array>
 #include <algorithm>
+#include <deque>
 
-class obj_info
-{
-public:
-	obj_info(const dxle::pointi& first_p, const DxGHandle* img_normal, const DxGHandle* img_fall)
-		: m_first_pos_(first_p), m_p_(first_p), m_img_({ img_normal, img_fall }), m_fall_frame(0), m_current_img_no_(0)
-	{
-		this->m_screen_ = dxle::Graph2D::MakeScreen(this->m_img_[0]->GetGraphSize().x / 3, this->m_img_[0]->GetGraphSize().y / 3, true);
-		this->m_screen_.DrawnOn([this]() {this->m_img_[0]->DrawExtendGraph({}, { this->m_img_[0]->GetGraphSize().x / 3, this->m_img_[0]->GetGraphSize().y / 3 }, true); });
-	}
-	void change_img() NOEXCEPT {
-		this->m_current_img_no_ ^= 1;//0, 1交互入れ替え
-		this->m_screen_.DrawnOn([this]() {
-			this->m_img_[0]->DrawExtendGraph({}, { this->m_img_[m_current_img_no_]->GetGraphSize().x / 3, this->m_img_[m_current_img_no_]->GetGraphSize().y / 3 }, true);
-		});
-	}
-	bool draw(bool Trans_flag = true) const NOEXCEPT {
-		return 0 == this->m_screen_.DrawGraph(this->m_p_, Trans_flag);
-	}
-	void pos_init() NOEXCEPT {
-		this->m_p_ = m_first_pos_;
-	}
-	const dxle::Graph2D::Screen& get_img() const NOEXCEPT { return this->m_screen_; }
-	const dxle::pointi& get_fitst_pos() const NOEXCEPT { return this->m_first_pos_; }
-	dxle::pointi& get_pos() NOEXCEPT { return this->m_p_; }
-	const dxle::pointi& get_pos() const NOEXCEPT { return this->m_p_; }
-	bool is_fallen() const NOEXCEPT { return WINDOW_HEIGHT < this->m_p_.y; }
 
-	size_t m_fall_frame;
-private:
-	const dxle::pointi m_first_pos_;
-	dxle::pointi m_p_;
-	std::array<const DxGHandle*, 2> m_img_;
-	dxle::Graph2D::Screen m_screen_;
-	uint8_t m_current_img_no_;
-};
 struct game_c::Impl {
-	Impl() : m_window_s(static_cast<int>(WINDOW_WIDTH), static_cast<int>(WINDOW_HEIGHT)), m_state(), m_back_img(dxle::Graph2D::MakeScreen(m_window_s.x, m_window_s.y)),
-		m_img(make_image_array()), m_status_img(make_status_image_array()), m_sound(make_sound_array()),
+	Impl(const dxle::pointi& bouninngennA_p, const dxle::pointi& bouninngennB_p)
+		: m_window_s(static_cast<int>(WINDOW_WIDTH), static_cast<int>(WINDOW_HEIGHT)), m_state(), m_back_img(dxle::Graph2D::MakeScreen(m_window_s.x, m_window_s.y)),
+		m_img(make_image_array()), m_sound(make_sound_array()), score(),
 		m_bouninngenn{ {
-			{{ WINDOW_WIDTH * 57 / 256 , WINDOW_HEIGHT * 2 / 7 }, &m_img["bouninngennA"], &m_img["bouninngennA_fall"]},//棒人形A
-			{{ WINDOW_WIDTH * 71 / 128 , WINDOW_HEIGHT * 2 / 7 }, &m_img["bouninngennB"], &m_img["bouninngennB_fall"]} //棒人形B
+			{ bouninngennA_p, &m_img["bouninngennA"], &m_img["bouninngennA_fall"]},//棒人形A
+			{ bouninngennB_p, &m_img["bouninngennB"], &m_img["bouninngennB_fall"]} //棒人形B
 		} }
 	{
 		this->m_back_img.DrawnOn([this]() {m_img["gake"].DrawExtendGraph({}, m_window_s, false); });
 	}
+	void state_init() NOEXCEPT;
+	bool normal_con_f() const NOEXCEPT;
+	void move_x(int limit_l_x, int limit_r_x) NOEXCEPT;
+	void fadeout_prelude_masseage();
+	void fall_bouninngenn(size_t bouninngenn_no, const std::deque<dxle::pointi>& pos_record);
 	const dxle::pointi m_window_s;
 	keystate m_state;
 	dxle::Graph2D::Screen m_back_img;
 	img_arr_t m_img;
-	img_arr_t m_status_img;
 	sound_arr_t m_sound;
+	uint8_t score;//0-100
 	std::array<obj_info, 2>m_bouninngenn;
 };
-game_c::game_c() : pimpl(new game_c::Impl()){}
+game_c::game_c(const dxle::pointi& bouninngennA_p, const dxle::pointi& bouninngennB_p) : pimpl(new game_c::Impl(bouninngennA_p, bouninngennB_p)){}
 
 game_c::~game_c() {
 	for (auto& s : this->pimpl->m_sound) s.second.stop();
@@ -71,40 +48,65 @@ const sound_arr_t & game_c::get_sound() const NOEXCEPT {
 	return this->pimpl->m_sound;
 }
 
-const img_arr_t & game_c::get_status_img() const NOEXCEPT {
-	return this->pimpl->m_status_img;
-}
-
 const img_arr_t & game_c::get_img() const NOEXCEPT {
 	return this->pimpl->m_img;
 }
 
-bool game_c::normal_con_f() const NOEXCEPT { return -1 != ProcessMessage() && 0 == ScreenFlip() && 0 == ClearDrawScreen(); }
+bool game_c::Impl::normal_con_f() const NOEXCEPT { return -1 != ProcessMessage() && 0 == ScreenFlip() && 0 == ClearDrawScreen(); }
 
-void game_c::move_x() NOEXCEPT{
+void game_c::Impl::move_x(int limit_l_x, int limit_r_x) NOEXCEPT{
+	if (limit_r_x < limit_l_x) std::swap(limit_l_x, limit_r_x);
 	static CONSTEXPR_OR_CONST int CHARACTER_MOVE_SPEED = 4;
-	this->pimpl->m_state.update();
-	if (this->pimpl->m_state.left()) this->pimpl->m_bouninngenn[1].get_pos().x -= CHARACTER_MOVE_SPEED;
-	if (this->pimpl->m_state.right()) this->pimpl->m_bouninngenn[1].get_pos().x += CHARACTER_MOVE_SPEED;
+	this->m_state.update();
+	if (this->m_state.left()) this->m_bouninngenn[1].get_pos().x -= CHARACTER_MOVE_SPEED;
+	if (this->m_state.right()) this->m_bouninngenn[1].get_pos().x += CHARACTER_MOVE_SPEED;
+	this->m_bouninngenn[1].get_pos().x = std::min(limit_r_x, std::max(this->m_bouninngenn[1].get_pos().x, limit_l_x));
 }
 
 #ifdef _MSC_VER
 #pragma warning (push)
 #pragma warning (disable: 4706) //warning C4706: 条件式の比較値は、代入の結果になっています。
 #endif
-void game_c::fadeout_prelude_masseage() {
+void game_c::Impl::state_init() NOEXCEPT {
+	this->m_state.fllush();
+	for (auto& i : this->m_bouninngenn) i.state_init();
+	this->score = 0;
+}
+void game_c::Impl::fadeout_prelude_masseage() {
 	constexpr int fadeout_time_frame = 200;
 	bool is_normal_state = true;
 
 	//fade out
-	for (int i = 0; i < fadeout_time_frame && (is_normal_state = normal_con_f()) && pimpl->m_state.update() && !pimpl->m_state.esc(); ++i) {
-		this->pimpl->m_back_img.DrawGraph({}, false);
+	for (int i = 0; i < fadeout_time_frame && (is_normal_state = normal_con_f()) && m_state.update() && !m_state.esc(); ++i) {
+		this->m_back_img.DrawGraph({}, false);
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>((fadeout_time_frame - i) * 256.0 / fadeout_time_frame));
-		this->pimpl->m_img["back_str"].DrawGraph({}, true);
+		this->m_img["back_str"].DrawGraph({}, true);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-		for (auto& i : this->pimpl->m_bouninngenn) i.draw();
+		for (auto& im : this->m_bouninngenn) im.draw();
 	}
-	if (pimpl->m_state.esc()) throw normal_exit();
+	if (m_state.esc()) throw normal_exit();
+}
+
+static int calc_free_fall(int y, size_t t) ATT_PURE {
+	constexpr double g = 9.80665;
+	constexpr double correction_factor = 10.5;
+	return y + static_cast<int>(correction_factor * g / 2 * t);
+}
+void game_c::Impl::fall_bouninngenn(size_t bouninngenn_no, const std::deque<dxle::pointi>& pos_record) {
+	const int v = [&pos_record]() -> int {
+		if (pos_record.size() < 2) return 10;
+		int64_t sum = 0;
+		int t = 0;
+		for (auto it = pos_record.begin(); it != pos_record.end() - 1; ++it) {
+			const auto tmp = it[1].x - it->x;
+			if (0 <= tmp) {
+				sum += tmp;
+				++t;
+			}
+		}
+		return static_cast<int>(sum / t);
+	}();
+
 }
 #ifdef _MSC_VER
 #pragma warning (pop)
@@ -113,78 +115,64 @@ void game_c::fadeout_prelude_masseage() {
 #pragma warning (push)
 #pragma warning (disable: 4706) //warning C4706: 条件式の比較値は、代入の結果になっています。
 #endif
+
+static double bouninngenn_moving_distance(const std::array<obj_info, 2>& bouninngenn) {
+	const auto denominator = std::abs(distance_first(bouninngenn[0], bouninngenn[1]));
+	return std::abs(denominator - bouninngenn[1].distance_from_first().x) * 100.0 / denominator;
+}
 Status game_c::game_main() {
-	this->pimpl->m_state.fllush();
-	for (auto& i : this->pimpl->m_bouninngenn) i.pos_init();
+	this->pimpl->state_init();//状態初期化
 	this->pimpl->m_sound["flower garden"].play(DxSoundMode::LOOP);
-	this->fadeout_prelude_masseage();
+	this->pimpl->fadeout_prelude_masseage();
+	power_bar_c power_bar({ WINDOW_WIDTH * 7 / 16, WINDOW_HEIGHT * 11 / 12 }, { WINDOW_WIDTH * 11 / 32, WINDOW_HEIGHT * 2 / 75 }, 10, GetColor(229, 225, 225));
+	std::deque<dxle::pointi> pos_record;
 	bool is_normal_state = true;
-	while ((is_normal_state = normal_con_f()) && pimpl->m_state.update() && !pimpl->m_state[KEY_INPUT_Z] && !pimpl->m_state.esc()) {
-		this->move_x();
+	while ((is_normal_state = this->pimpl->normal_con_f()) && this->pimpl->m_state.update() && !this->pimpl->m_state[KEY_INPUT_Z] && !this->pimpl->m_state.esc()) {
+		power_bar.update();
+		this->pimpl->move_x(this->pimpl->m_bouninngenn[0].calc_first_bottom_right_pos().x, this->pimpl->m_bouninngenn[1].get_fitst_pos().x);
+		if (4 < pos_record.size()) pos_record.pop_front();
+		pos_record.push_back(this->pimpl->m_bouninngenn[1].get_pos());
 		this->pimpl->m_back_img.DrawGraph({}, false);
 		this->pimpl->m_bouninngenn[1].draw();
+		this->pimpl->m_img["game_main_gauge_bg"].DrawExtendGraph({ WINDOW_WIDTH / 2, WINDOW_HEIGHT * 5 / 6 }, { WINDOW_WIDTH * 7 / 16, WINDOW_HEIGHT * 7 / 60 }, false);
+		power_bar.draw();
 	}
 	if (!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");
-	if (pimpl->m_state.esc()) throw normal_exit();
-	return Status::CONTINUE;
+	if (this->pimpl->m_state.esc()) throw normal_exit();
+
+	const int d = distance(this->pimpl->m_bouninngenn[0], this->pimpl->m_bouninngenn[1]);
+	const auto rate = bouninngenn_moving_distance(this->pimpl->m_bouninngenn);
+	const auto p_rate = power_bar.get_percent();
+	bool is_game_over = false;
+	if (d < 0 || rate < 80.0 || p_rate < 60.0) {
+		this->pimpl->fall_bouninngenn(1, pos_record);//落とそうとして落とされる、ゲームオーバー
+		is_game_over = true;
+	}
+	else {
+		this->pimpl->score = static_cast<uint8_t>((p_rate + rate) / 2);//0-100
+		if (this->pimpl->score < 40) {
+			this->pimpl->fall_bouninngenn(1, pos_record);//落とそうとして落とされる、ゲームオーバー
+			is_game_over = true;
+		}
+		else {
+			this->pimpl->fall_bouninngenn(0, pos_record);//落とす。成功！
+		}
+	}
+	return (is_game_over) ? Status::GAME_OVER : Status::RESULT_ECHO;
 }
 #ifdef _MSC_VER
 #pragma warning (pop)
 #endif
-class circular_motion
-{
-public:
-	circular_motion() = delete;
-	circular_motion(const dxle::pointi& center_pos, const dxle::pointi& first_pos, double angular_v, const DxGHandle& img_normal, const DxGHandle& img_fall) NOEXCEPT;
-	circular_motion(const circular_motion&) = delete;
-	circular_motion(circular_motion&&) = delete;
-	circular_motion& operator=(const circular_motion&) = delete;
-	circular_motion& operator=(circular_motion&&) = delete;
-	bool update() NOEXCEPT;
-	bool draw() const;
-	dxle::pointi get_pos() const NOEXCEPT;
-	const obj_info& get_obj() const NOEXCEPT;
-private:
-	const dxle::pointi m_center_;
-	const double m_r_;
-	const double m_first_rad_;
-	double m_angular_v_;// rad./sec. Dextrorotation(右回り。yは下向き正)
-	obj_info m_obj_;
-	size_t m_t_;
-};
 
-circular_motion::circular_motion(const dxle::pointi & center_pos, const dxle::pointi& first_pos, double angular_v, const DxGHandle& img_normal, const DxGHandle& img_fall) NOEXCEPT
-	: m_center_(center_pos), m_r_(std::hypot(first_pos.x - m_center_.x, first_pos.y - m_center_.y)), 
-	m_first_rad_(std::acos((first_pos.x - m_center_.x) / m_r_) * (((first_pos.y - m_center_.y) < 0) ? -1 : 1)),
-	m_angular_v_(angular_v), m_obj_(first_pos, &img_normal, &img_fall), m_t_()
-{}
-
-bool circular_motion::update() NOEXCEPT {
-	++this->m_t_;
-	this->m_obj_.get_pos() = static_cast<dxle::pointi>(dxle::pointd(m_center_.x + this->m_r_ * std::cos(m_first_rad_ + this->m_t_ * this->m_angular_v_), m_center_.y + this->m_r_ * std::sin(m_first_rad_ + this->m_t_ * this->m_angular_v_)));
-	return true;
-}
-
-bool circular_motion::draw() const {
-	return this->m_obj_.draw();
-}
-
-const obj_info & circular_motion::get_obj() const NOEXCEPT { return this->m_obj_; }
-
-dxle::pointi circular_motion::get_pos() const NOEXCEPT {
-	return this->m_obj_.get_pos();
-}
-
-static void extruded(obj_info& move_target, const obj_info& move_cause) {
-	constexpr double g = 9.80665;
+static void extruder(obj_info& move_target, const obj_info& move_cause) {
 	if (move_target.get_pos().x + move_target.get_img().GetGraphSize().x < WINDOW_WIDTH / 4) {
 		++move_target.m_fall_frame;
-		move_target.get_pos().y = move_cause.get_fitst_pos().y + static_cast<int>(10.5 * g / 2 * move_target.m_fall_frame);//自由落下
+		move_target.get_pos().y = calc_free_fall(move_cause.get_fitst_pos().y, move_target.m_fall_frame);
 		if (1 == move_target.m_fall_frame) {
 			move_target.change_img();
 		}
 	}
-	if (move_cause.get_pos().x < move_target.get_pos().x + move_target.get_img().GetGraphSize().x) {
+	if (distance(move_target, move_cause) < 0) {
 		move_target.get_pos().x = move_cause.get_pos().x - move_target.get_img().GetGraphSize().x;
 	}
 }
@@ -193,19 +181,18 @@ static void extruded(obj_info& move_target, const obj_info& move_cause) {
 #pragma warning (disable: 4706) //warning C4706: 条件式の比較値は、代入の結果になっています。
 #endif
 Status game_c::helicopter_event() {
-	this->pimpl->m_state.fllush();
-	for (auto& i : this->pimpl->m_bouninngenn) i.pos_init();
+	this->pimpl->state_init();//状態初期化
 	this->pimpl->m_sound["flower garden"].play(DxSoundMode::LOOP);
-	this->fadeout_prelude_masseage();
+	this->pimpl->fadeout_prelude_masseage();
 	circular_motion helicopter(
 		{ pimpl->m_window_s.x / 2, -100 }, { pimpl->m_window_s.x * 23 / 26, pimpl->m_window_s.y * 1 / 82 },
 		1.0 / 30.0, this->pimpl->m_img["herikoputa-"], this->pimpl->m_img["herikoputa-"]
 	);
 	bool is_normal_state = true;
-	while ((is_normal_state = normal_con_f()) && pimpl->m_state.update() && !pimpl->m_state[KEY_INPUT_Z] && !pimpl->m_state.esc() && helicopter.update()) {
+	while ((is_normal_state = this->pimpl->normal_con_f()) && pimpl->m_state.update() && !pimpl->m_state[KEY_INPUT_Z] && !pimpl->m_state.esc() && helicopter.update()) {
 		this->pimpl->m_back_img.DrawGraph({}, false);
-		extruded(this->pimpl->m_bouninngenn[1], helicopter.get_obj());
-		extruded(this->pimpl->m_bouninngenn[0], this->pimpl->m_bouninngenn[1]);
+		extruder(this->pimpl->m_bouninngenn[1], helicopter.get_obj());
+		extruder(this->pimpl->m_bouninngenn[0], this->pimpl->m_bouninngenn[1]);
 		for (auto& i : this->pimpl->m_bouninngenn) i.draw();
 		helicopter.draw();
 		//WaitKey();

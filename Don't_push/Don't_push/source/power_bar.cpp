@@ -2,7 +2,7 @@
 #include "DxLib.h"
 #include "DxHandleException.h"
 
-power_bar_c::power_bar_c(dxle::pointi base_point, dxle::pointi whole_bar_size, size_t frame_num_to_fill, unsigned int color) NOEXCEPT 
+power_bar_c::power_bar_c(const dxle::pointi& base_point, const dxle::pointi& whole_bar_size, size_t frame_num_to_fill, unsigned int color) NOEXCEPT
 	: base_point_(base_point), whole_bar_size_(whole_bar_size), draw_pixcel_num_(0), 
 	color_(color), spent_frame_(0), frame_num_to_fill_(frame_num_to_fill) {}
 

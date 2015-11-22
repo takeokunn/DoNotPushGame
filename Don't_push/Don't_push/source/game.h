@@ -7,18 +7,12 @@
 class game_c
 {
 public:
-	game_c();
+	game_c(const dxle::pointi& bouninngennA_p, const dxle::pointi& bouninngennB_p);
 	~game_c();
 	game_c(const game_c&) = delete;
 	game_c(game_c&&) = delete;
 	const img_arr_t& get_img() const NOEXCEPT;
-	const img_arr_t& get_status_img() const NOEXCEPT;
 	const sound_arr_t& get_sound() const NOEXCEPT;
-
-	bool normal_con_f() const NOEXCEPT;
-	void move_x() NOEXCEPT;
-
-	void fadeout_prelude_masseage();
 
 	Status game_main();
 	Status helicopter_event();
