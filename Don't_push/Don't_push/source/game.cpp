@@ -106,7 +106,14 @@ void game_c::Impl::fall_bouninngenn(size_t bouninngenn_no, const std::deque<dxle
 		}
 		return static_cast<int>(sum / t);
 	}();
-
+	bool is_normal_state = true;
+	while ((is_normal_state = this->normal_con_f()) && this->m_state.update() && !this->m_state.esc()) {
+		this->m_bouninngenn[bouninngenn_no].get_pos().x -= v;
+		this->m_back_img.DrawGraph({}, false);
+		for (auto& i : this->m_bouninngenn) i.draw();
+	}
+	if (!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");
+	if (this->m_state.esc()) throw normal_exit();
 }
 #ifdef _MSC_VER
 #pragma warning (pop)
@@ -133,7 +140,7 @@ Status game_c::game_main() {
 		if (4 < pos_record.size()) pos_record.pop_front();
 		pos_record.push_back(this->pimpl->m_bouninngenn[1].get_pos());
 		this->pimpl->m_back_img.DrawGraph({}, false);
-		this->pimpl->m_bouninngenn[1].draw();
+		for (auto& i : this->pimpl->m_bouninngenn) i.draw();
 		this->pimpl->m_img["game_main_gauge_bg"].DrawExtendGraph({ WINDOW_WIDTH / 2, WINDOW_HEIGHT * 5 / 6 }, { WINDOW_WIDTH * 7 / 16, WINDOW_HEIGHT * 7 / 60 }, false);
 		power_bar.draw();
 	}
