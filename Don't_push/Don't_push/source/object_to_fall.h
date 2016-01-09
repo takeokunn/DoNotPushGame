@@ -12,7 +12,7 @@ public:
 	bool collision_detecter(int target_x, int target_y, const DxGHandle& target_handle);
 	bool collision_detecter(const dxle::pointi&  target, const DxGHandle& target_handle);
 private:
+	DxGHandle handle_;
 	dxle::pointi self_;
 	int pixcel_per_frame_;
-	DxGHandle handle_;
 };

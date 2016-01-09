@@ -59,6 +59,8 @@ dlldata.c
 *.pidb
 *.svclog
 *.scc
+*.tlog
+*.lastbuildstate
 
 # Chutzpah Test files
 _Chutzpah*
@@ -68,6 +70,7 @@ ipch/
 *.aps
 *.ncb
 *.opensdf
+*.opendb
 *.sdf
 *.cachefile
 

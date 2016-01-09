@@ -29,12 +29,12 @@ private:
 	dxle::pointi base_point_;
 	///<summary>バーの大きさ(最大)</summary>
 	const dxle::pointi whole_bar_size_;
-	///<summary>バーの長さが最大になるまでに必要なframe数</summary>
-	const size_t frame_num_to_fill_;
-	///<summary>バーの長さが0の時からのframe数</summary>
-	size_t spent_frame_;
 	///<summary>バーの長さ</summary>
 	int draw_pixcel_num_;
 	///<summary>バーの色</summary>
 	const unsigned int color_;
+	///<summary>バーの長さが0の時からのframe数</summary>
+	size_t spent_frame_;
+	///<summary>バーの長さが最大になるまでに必要なframe数</summary>
+	const size_t frame_num_to_fill_;
 };

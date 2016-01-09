@@ -1,12 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Don't_push", "Don't_push\Don't_push.vcxproj", "{0AAC0B39-62EF-40A7-AED9-300DA0922B73}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		clang_Debug|x64 = clang_Debug|x64
+		clang_Debug|x86 = clang_Debug|x86
+		clang_Release|x64 = clang_Release|x64
+		clang_Release|x86 = clang_Release|x86
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
 		Release|x64 = Release|x64
@@ -17,6 +21,14 @@ Global
 		VS2015Release|x86 = VS2015Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0AAC0B39-62EF-40A7-AED9-300DA0922B73}.clang_Debug|x64.ActiveCfg = clang_Debug|x64
+		{0AAC0B39-62EF-40A7-AED9-300DA0922B73}.clang_Debug|x64.Build.0 = clang_Debug|x64
+		{0AAC0B39-62EF-40A7-AED9-300DA0922B73}.clang_Debug|x86.ActiveCfg = clang_Debug|Win32
+		{0AAC0B39-62EF-40A7-AED9-300DA0922B73}.clang_Debug|x86.Build.0 = clang_Debug|Win32
+		{0AAC0B39-62EF-40A7-AED9-300DA0922B73}.clang_Release|x64.ActiveCfg = clang_Release|x64
+		{0AAC0B39-62EF-40A7-AED9-300DA0922B73}.clang_Release|x64.Build.0 = clang_Release|x64
+		{0AAC0B39-62EF-40A7-AED9-300DA0922B73}.clang_Release|x86.ActiveCfg = clang_Release|Win32
+		{0AAC0B39-62EF-40A7-AED9-300DA0922B73}.clang_Release|x86.Build.0 = clang_Release|Win32
 		{0AAC0B39-62EF-40A7-AED9-300DA0922B73}.Debug|x64.ActiveCfg = Debug|x64
 		{0AAC0B39-62EF-40A7-AED9-300DA0922B73}.Debug|x64.Build.0 = Debug|x64
 		{0AAC0B39-62EF-40A7-AED9-300DA0922B73}.Debug|x86.ActiveCfg = Debug|Win32
