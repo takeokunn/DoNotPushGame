@@ -73,7 +73,7 @@ void game_c::Impl::state_init() NOEXCEPT {
 	this->score = 0;
 }
 void game_c::Impl::fadeout_prelude_masseage() {
-	constexpr int fadeout_time_frame = 200;
+	DXLE_STATIC_CONSTEXPR int fadeout_time_frame = 200;
 	bool is_normal_state = true;
 
 	//fade out
@@ -88,8 +88,8 @@ void game_c::Impl::fadeout_prelude_masseage() {
 }
 
 static int calc_free_fall(int y, size_t t) ATT_PURE {
-	constexpr double g = 9.80665;
-	constexpr double correction_factor = 10.5;
+	DXLE_STATIC_CONSTEXPR double g = 9.80665;
+	DXLE_STATIC_CONSTEXPR double correction_factor = 10.5;
 	return y + static_cast<int>(correction_factor * g / 2 * t);
 }
 void game_c::Impl::fall_bouninngenn(size_t bouninngenn_no, const std::deque<dxle::pointi>& pos_record) {
