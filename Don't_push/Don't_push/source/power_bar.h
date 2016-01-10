@@ -17,6 +17,8 @@ public:
 	///<param name="color">バーの色</param>
 	power_bar_c(const dxle::pointi& base_point, const dxle::pointi& whole_bar_size, size_t frame_num_to_fill, unsigned int color) NOEXCEPT;
 	explicit power_bar_c(const power_bar_c& o) NOEXCEPT;
+	power_bar_c& operator=(const power_bar_c&) = delete;
+	power_bar_c& operator=(power_bar_c&&) = delete;
 	///<summary>状態を更新します。描画ループで毎回呼び出してください</summary>
 	void update() NOEXCEPT;
 	///<summary>描画します</summary>
