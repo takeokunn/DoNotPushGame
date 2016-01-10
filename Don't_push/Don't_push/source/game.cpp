@@ -32,7 +32,7 @@ struct game_c::Impl {
 	void fall_bouninngenn(size_t bouninngenn_no, const std::deque<dxle::pointi>& pos_record);
 	const dxle::pointi m_window_s;
 	keystate m_state;
-	dxle::Graph2D::Screen m_back_img;
+	dxle::Graph2D::screen m_back_img;
 	img_arr_t m_img;
 	sound_arr_t m_sound;
 	uint8_t score;//0-100
@@ -141,7 +141,8 @@ Status game_c::game_main() {
 		pos_record.push_back(this->pimpl->m_bouninngenn[1].get_pos());
 		this->pimpl->m_back_img.DrawGraph({}, false);
 		for (auto& i : this->pimpl->m_bouninngenn) i.draw();
-		this->pimpl->m_img["game_main_gauge_bg"].DrawExtendGraph({ WINDOW_WIDTH / 2, WINDOW_HEIGHT * 5 / 6 }, { WINDOW_WIDTH * 7 / 16, WINDOW_HEIGHT * 7 / 60 }, false);
+		const dxle::pointi gauge_bg_p = { WINDOW_WIDTH / 2, WINDOW_HEIGHT * 5 / 6 };
+		this->pimpl->m_img["game_main_gauge_bg"].DrawExtendGraph(gauge_bg_p, gauge_bg_p + dxle::pointi{ WINDOW_WIDTH * 7 / 16, WINDOW_HEIGHT * 7 / 60 }, false);
 		power_bar.draw();
 	}
 	if (!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");
@@ -172,7 +173,7 @@ Status game_c::game_main() {
 #endif
 
 static void extruder(obj_info& move_target, const obj_info& move_cause) {
-	if (move_target.get_pos().x + move_target.get_img().GetGraphSize().x < WINDOW_WIDTH / 4) {
+	if (move_target.get_pos().x + move_target.get_img().GetGraphSize().width < WINDOW_WIDTH / 4) {
 		++move_target.m_fall_frame;
 		move_target.get_pos().y = calc_free_fall(move_cause.get_fitst_pos().y, move_target.m_fall_frame);
 		if (1 == move_target.m_fall_frame) {
@@ -180,7 +181,7 @@ static void extruder(obj_info& move_target, const obj_info& move_cause) {
 		}
 	}
 	if (distance(move_target, move_cause) < 0) {
-		move_target.get_pos().x = move_cause.get_pos().x - move_target.get_img().GetGraphSize().x;
+		move_target.get_pos().x = move_cause.get_pos().x - move_target.get_img().GetGraphSize().width;
 	}
 }
 #ifdef _MSC_VER

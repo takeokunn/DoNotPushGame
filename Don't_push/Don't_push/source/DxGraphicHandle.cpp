@@ -194,7 +194,7 @@ namespace detail {
 	DXLE_CONSTEXPR uint8_t DxGetGValue(unsigned int X8R8G8B8) { return static_cast<uint8_t>((0x0000FF00 & X8R8G8B8) >> 8); }
 	DXLE_CONSTEXPR uint8_t DxGetBValue(unsigned int X8R8G8B8) { return static_cast<uint8_t>(0x000000FF & X8R8G8B8); }
 	struct RGB_t {
-		RGB_t() = default;
+		DXLE_CONSTEXPR RGB_t() : r(), g(), b() {}
 		DXLE_CONSTEXPR RGB_t(uint8_t i_r, uint8_t i_g, uint8_t i_b) : r(i_r), g(i_g), b(i_b){}
 		explicit DXLE_CONSTEXPR RGB_t(unsigned int X8R8G8B8) : r(DxGetRValue(X8R8G8B8)), g(DxGetGValue(X8R8G8B8)), b(DxGetBValue(X8R8G8B8)) {}
 		uint8_t r;
@@ -361,7 +361,7 @@ uint8_t calc_threshold_algolithm_otu(const DxGHandle & handle) {
 	BASEIMAGE baseimage = to_BASEIMAGE(handle);
 	if (baseimage.ColorData.PixelByte != 4) throw std::runtime_error("to_BASEIMAGE関数が不正な構造体を作成しました。");
 
-	hist_arr_t histgram = { 0 };//初期化
+	hist_arr_t histgram = {};//初期化
 	for (int i = 0; i < baseimage.Height * baseimage.Width; ++i)
 		++histgram[to_YPbPr(RGB_t(static_cast<uint32_t*>(baseimage.GraphData)[i])).y];//投票
 	ReleaseBaseImage(&baseimage);

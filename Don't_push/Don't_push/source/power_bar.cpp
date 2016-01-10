@@ -22,7 +22,7 @@ void power_bar_c::update() NOEXCEPT {
 }
 
 int power_bar_c::draw() const DxHANDLE_NOEXCEPT {
-	const auto re = DrawBox(this->base_point_.x, this->base_point_.y, this->draw_pixcel_num_ + 1, this->whole_bar_size_.y, this->color_, TRUE);
+	const auto re = DrawBox(this->base_point_.x, this->base_point_.y, this->base_point_.x + this->draw_pixcel_num_ + 1, this->base_point_.y + this->whole_bar_size_.y, this->color_, TRUE);
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
 	if (-1 == re) throw DxDraw_runtime_error("DrawBox failed.");
 #endif

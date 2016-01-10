@@ -25,7 +25,7 @@ private:
 	const dxle::pointi m_first_pos_;
 	dxle::pointi m_p_;
 	std::array<const DxGHandle*, 2> m_img_;
-	dxle::Graph2D::Screen m_screen_;
+	dxle::Graph2D::screen m_screen_;
 	uint8_t m_current_img_no_;
 };
 int distance(const obj_info& l, const obj_info& r) NOEXCEPT;

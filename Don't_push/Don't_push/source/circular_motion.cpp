@@ -1,7 +1,7 @@
 #include "circular_motion.h"
 #include "DxLib.h"
 obj_info::obj_info(const dxle::pointi& first_p, const DxGHandle* img_normal, const DxGHandle* img_fall)
-	: m_first_pos_(first_p), m_p_(first_p), m_img_({ img_normal, img_fall }), m_fall_frame(0), m_current_img_no_(0)
+	: m_fall_frame(0), m_first_pos_(first_p), m_p_(first_p), m_img_({ { img_normal, img_fall } }), m_current_img_no_(0)
 {
 	this->m_screen_ = dxle::Graph2D::MakeScreen(this->m_img_[0]->GetGraphSize().x / 3, this->m_img_[0]->GetGraphSize().y / 3, true);
 	this->m_screen_.DrawnOn([this]() {this->m_img_[0]->DrawExtendGraph({}, { this->m_img_[0]->GetGraphSize().x / 3, this->m_img_[0]->GetGraphSize().y / 3 }, true); });
@@ -31,7 +31,7 @@ void obj_info::state_init() NOEXCEPT {
 	this->change_img(0);
 }
 
-const dxle::Graph2D::Screen& obj_info::get_img() const NOEXCEPT { return this->m_screen_; }
+const dxle::Graph2D::screen& obj_info::get_img() const NOEXCEPT { return this->m_screen_; }
 const dxle::pointi& obj_info::get_fitst_pos() const NOEXCEPT { return this->m_first_pos_; }
 dxle::pointi& obj_info::get_pos() NOEXCEPT { return this->m_p_; }
 const dxle::pointi& obj_info::get_pos() const NOEXCEPT { return this->m_p_; }
@@ -60,9 +60,9 @@ dxle::pointi circular_motion::get_pos() const NOEXCEPT {
 }
 
 int distance(const obj_info & l, const obj_info & r) NOEXCEPT {
-	return r.get_pos().x - l.get_img().GetGraphSize().x - l.get_pos().x;
+	return r.get_pos().x - l.get_img().GetGraphSize().width - l.get_pos().x;
 }
 
 int distance_first(const obj_info & l, const obj_info & r) NOEXCEPT {
-	return r.get_fitst_pos().x - l.get_img().GetGraphSize().x - l.get_fitst_pos().x;
+	return r.get_fitst_pos().x - l.get_img().GetGraphSize().width - l.get_fitst_pos().x;
 }
