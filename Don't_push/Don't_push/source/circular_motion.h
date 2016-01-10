@@ -12,7 +12,7 @@ public:
 	void change_img(int no = -1) NOEXCEPT;
 	bool draw(bool Trans_flag = true) const NOEXCEPT;
 	void state_init() NOEXCEPT;
-	const dxle::Graph2D::Screen& get_img() const NOEXCEPT;
+	const dxle::Graph2D::screen& get_img() const NOEXCEPT;
 	const dxle::pointi& get_fitst_pos() const NOEXCEPT;
 	dxle::pointi& get_pos() NOEXCEPT;
 	const dxle::pointi& get_pos() const NOEXCEPT;

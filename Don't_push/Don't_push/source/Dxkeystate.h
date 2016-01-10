@@ -31,7 +31,7 @@ public:
 	bool down() const NOEXCEPT;
 	bool enter() const NOEXCEPT;
 	bool space() const NOEXCEPT;
-	static CONSTEXPR_OR_CONST size_t keybufsize = 256;
+	DXLE_STATIC_CONSTEXPR size_t keybufsize = 256;
 private:
 	bool fllush_stream();
 	std::array<int, 256> keystatebuf;

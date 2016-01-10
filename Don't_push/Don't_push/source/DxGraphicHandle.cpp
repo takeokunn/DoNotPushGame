@@ -190,13 +190,13 @@ dxle::pointi DxGHandle::GetRelativeGraphCenter() const DxHANDLE_NOEXCEPT{
 	return this->GetGraphSize() / 2;
 }
 namespace detail {
-	CONSTEXPR_FUNCTION uint8_t DxGetRValue(unsigned int X8R8G8B8) { return static_cast<uint8_t>((0x00FF0000 & X8R8G8B8) >> 16); }
-	CONSTEXPR_FUNCTION uint8_t DxGetGValue(unsigned int X8R8G8B8) { return static_cast<uint8_t>((0x0000FF00 & X8R8G8B8) >> 8); }
-	CONSTEXPR_FUNCTION uint8_t DxGetBValue(unsigned int X8R8G8B8) { return static_cast<uint8_t>(0x000000FF & X8R8G8B8); }
+	DXLE_CONSTEXPR uint8_t DxGetRValue(unsigned int X8R8G8B8) { return static_cast<uint8_t>((0x00FF0000 & X8R8G8B8) >> 16); }
+	DXLE_CONSTEXPR uint8_t DxGetGValue(unsigned int X8R8G8B8) { return static_cast<uint8_t>((0x0000FF00 & X8R8G8B8) >> 8); }
+	DXLE_CONSTEXPR uint8_t DxGetBValue(unsigned int X8R8G8B8) { return static_cast<uint8_t>(0x000000FF & X8R8G8B8); }
 	struct RGB_t {
 		RGB_t() = default;
-		CONSTEXPR_FUNCTION RGB_t(uint8_t i_r, uint8_t i_g, uint8_t i_b) : r(i_r), g(i_g), b(i_b){}
-		explicit CONSTEXPR_FUNCTION RGB_t(unsigned int X8R8G8B8) : r(DxGetRValue(X8R8G8B8)), g(DxGetGValue(X8R8G8B8)), b(DxGetBValue(X8R8G8B8)) {}
+		DXLE_CONSTEXPR RGB_t(uint8_t i_r, uint8_t i_g, uint8_t i_b) : r(i_r), g(i_g), b(i_b){}
+		explicit DXLE_CONSTEXPR RGB_t(unsigned int X8R8G8B8) : r(DxGetRValue(X8R8G8B8)), g(DxGetGValue(X8R8G8B8)), b(DxGetBValue(X8R8G8B8)) {}
 		uint8_t r;
 		uint8_t g;
 		uint8_t b;
@@ -209,14 +209,14 @@ namespace detail {
 	}
 	struct YPbPr {//ITU-R BT.709 cf.)http://koujinz.cocolog-nifty.com/blog/2009/03/rgbycbcr-a4a5.html
 		YPbPr() = default;
-		CONSTEXPR_FUNCTION YPbPr(uint8_t i_y, uint8_t i_pb, uint8_t i_pr) : y(i_y), pb(i_pb), pr(i_pr) {}
-		explicit CONSTEXPR_FUNCTION YPbPr(uint8_t i_y) : y(i_y), pb(0), pr(0) {}
+		DXLE_CONSTEXPR YPbPr(uint8_t i_y, uint8_t i_pb, uint8_t i_pr) : y(i_y), pb(i_pb), pr(i_pr) {}
+		explicit DXLE_CONSTEXPR YPbPr(uint8_t i_y) : y(i_y), pb(0), pr(0) {}
 		uint8_t y, pb, pr;
 	};
-	CONSTEXPR_FUNCTION YPbPr to_YPbPr(RGB_t in) NOEXCEPT {
+	DXLE_CONSTEXPR YPbPr to_YPbPr(RGB_t in) NOEXCEPT{
 		return YPbPr(static_cast<uint8_t>(0.2126 * in.r + 0.7152 * in.g + 0.0722 * in.b), static_cast<uint8_t>(-0.1146 * in.r - 0.3854 * in.g + 0.5 * in.b), static_cast<uint8_t>(0.5 * in.r - 0.4542 * in.g - 0.0458 * in.b));
 	}
-	CONSTEXPR_FUNCTION RGB_t to_RGB_t(YPbPr in) NOEXCEPT {
+	DXLE_CONSTEXPR RGB_t to_RGB_t(YPbPr in) NOEXCEPT{
 		return RGB_t(static_cast<uint8_t>(in.y + 1.5748 * in.pr), static_cast<uint8_t>(in.y - 0.1873 * in.pb - 0.4681 * in.pr), static_cast<uint8_t>(in.y + 1.8556 * in.pb));
 	}
 	double num_distance(double a, double b) {
@@ -224,7 +224,7 @@ namespace detail {
 		return tmp.second - tmp.first;
 	}
 }
-CXX14_CONSTEXPR std::array<detail::RGB_t, 256> make_y_gradation_rgb_arr_helper() NOEXCEPT {
+DXLE_CXX14_CONSTEXPR std::array<detail::RGB_t, 256> make_y_gradation_rgb_arr_helper() NOEXCEPT{
 	std::array<detail::RGB_t, 256> data_arr;
 	static_assert(sizeof(detail::RGB_t) == 3, "sizeof struct 'detail::COLORTYPE' is not equal with 3.");
 	for (uint8_t i = 0; i < data_arr.size(); ++i) data_arr[i] = detail::to_RGB_t(detail::YPbPr(i));

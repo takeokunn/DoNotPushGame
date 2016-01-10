@@ -56,7 +56,7 @@ bool game_c::Impl::normal_con_f() const NOEXCEPT { return -1 != ProcessMessage()
 
 void game_c::Impl::move_x(int limit_l_x, int limit_r_x) NOEXCEPT{
 	if (limit_r_x < limit_l_x) std::swap(limit_l_x, limit_r_x);
-	static CONSTEXPR_OR_CONST int CHARACTER_MOVE_SPEED = 4;
+	DXLE_STATIC_CONSTEXPR int CHARACTER_MOVE_SPEED = 4;
 	this->m_state.update();
 	if (this->m_state.left()) this->m_bouninngenn[1].get_pos().x -= CHARACTER_MOVE_SPEED;
 	if (this->m_state.right()) this->m_bouninngenn[1].get_pos().x += CHARACTER_MOVE_SPEED;
