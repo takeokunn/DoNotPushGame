@@ -32,9 +32,9 @@ bool keystate::fllush_stream() {
 	size_t i;
 	for (first_p = buf[0], last_p = buf[1]; 0 == DxLib::GetHitKeyStateAll(last_p); std::swap(first_p, last_p)) {
 		for (i = 0; i < keybufsize && !first_p[i] && !last_p[i]; ++i);
-		if (i == keybufsize) break;
+		if (i == keybufsize) return true;
 	}
-	return (i == keybufsize);
+	return false;
 }
 
 int keystate::operator[](size_t n) const NOEXCEPT {

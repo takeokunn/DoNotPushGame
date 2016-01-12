@@ -7,12 +7,24 @@ obj_info::obj_info(const dxle::pointi& first_p, const DxGHandle* img_normal, con
 	this->m_screen_.DrawnOn([this]() {this->m_img_[0]->DrawExtendGraph({}, { this->m_img_[0]->GetGraphSize().x / 3, this->m_img_[0]->GetGraphSize().y / 3 }, true); });
 }
 
+dxle::sizei obj_info::get_obj_size() const NOEXCEPT
+{
+	return this->m_screen_.GetGraphSize();
+}
+
+obj_info::obj_info(obj_info&& o) NOEXCEPT
+	: m_first_pos_(o.m_first_pos_), m_p_(o.m_p_), m_img_(o.m_img_),
+	m_screen_(std::move(o.m_screen_)), m_current_img_no_(o.m_current_img_no_)
+{}
+
 dxle::pointi obj_info::calc_first_bottom_right_pos() const NOEXCEPT {
-	return this->m_p_ + this->m_screen_.GetGraphSize();
+	auto re = this->m_p_ + this->m_screen_.GetGraphSize();
+	return re;
 }
 
 dxle::pointi obj_info::distance_from_first() const NOEXCEPT {
-	return this->m_first_pos_ - this->m_p_;
+	auto re = this->m_first_pos_ - this->m_p_;
+	return re;
 }
 
 void obj_info::change_img(int no) NOEXCEPT {
@@ -60,9 +72,9 @@ dxle::pointi circular_motion::get_pos() const NOEXCEPT {
 }
 
 int distance(const obj_info & l, const obj_info & r) NOEXCEPT {
-	return r.get_pos().x - l.get_img().GetGraphSize().width - l.get_pos().x;
+	return r.get_pos().x - l.get_obj_size().width - l.get_pos().x;
 }
 
 int distance_first(const obj_info & l, const obj_info & r) NOEXCEPT {
-	return r.get_fitst_pos().x - l.get_img().GetGraphSize().width - l.get_fitst_pos().x;
+	return r.get_fitst_pos().x - l.get_obj_size().width - l.get_fitst_pos().x;
 }

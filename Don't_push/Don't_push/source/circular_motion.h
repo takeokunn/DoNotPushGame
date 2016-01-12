@@ -9,6 +9,10 @@ class obj_info
 {
 public:
 	obj_info(const dxle::pointi& first_p, const DxGHandle* img_normal, const DxGHandle* img_fall);
+	obj_info(const obj_info& o) = delete;
+	obj_info(obj_info&& o) NOEXCEPT;
+	obj_info& operator=(const obj_info&) = delete;
+	obj_info& operator=(obj_info&&) = delete;
 	void change_img(int no = -1) NOEXCEPT;
 	bool draw(bool Trans_flag = true) const NOEXCEPT;
 	void state_init() NOEXCEPT;
@@ -16,6 +20,7 @@ public:
 	const dxle::pointi& get_fitst_pos() const NOEXCEPT;
 	dxle::pointi& get_pos() NOEXCEPT;
 	const dxle::pointi& get_pos() const NOEXCEPT;
+	dxle::sizei get_obj_size() const NOEXCEPT;
 	dxle::pointi calc_first_bottom_right_pos() const NOEXCEPT;
 	dxle::pointi distance_from_first() const NOEXCEPT;
 	bool is_fallen() const NOEXCEPT;
