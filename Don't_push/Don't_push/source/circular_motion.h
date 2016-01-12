@@ -20,6 +20,7 @@ public:
 	const dxle::pointi& get_fitst_pos() const NOEXCEPT;
 	dxle::pointi& get_pos() NOEXCEPT;
 	const dxle::pointi& get_pos() const NOEXCEPT;
+	dxle::sizei get_obj_size() const NOEXCEPT;
 	dxle::pointi calc_first_bottom_right_pos() const NOEXCEPT;
 	dxle::pointi distance_from_first() const NOEXCEPT;
 	bool is_fallen() const NOEXCEPT;
