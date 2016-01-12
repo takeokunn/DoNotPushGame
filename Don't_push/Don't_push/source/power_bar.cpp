@@ -13,7 +13,7 @@ power_bar_c::power_bar_c(const power_bar_c & o) NOEXCEPT
 void power_bar_c::update() NOEXCEPT {
 	++this->spent_frame_;
 	if (this->spent_frame_ < this->frame_num_to_fill_) {
-		this->draw_pixcel_num_ = this->whole_bar_size_.x * static_cast<int>(this->spent_frame_ / this->frame_num_to_fill_);
+		this->draw_pixcel_num_ = static_cast<int>(this->whole_bar_size_.x * this->spent_frame_ / static_cast<double>(this->frame_num_to_fill_));
 	}
 	else {
 		this->draw_pixcel_num_ = 0;//バーが一杯になったら0に戻す
@@ -22,7 +22,7 @@ void power_bar_c::update() NOEXCEPT {
 }
 
 int power_bar_c::draw() const DxHANDLE_NOEXCEPT {
-	const auto re = DrawBox(this->base_point_.x, this->base_point_.y, this->base_point_.x + this->draw_pixcel_num_ + 1, this->base_point_.y + this->whole_bar_size_.y, this->color_, TRUE);
+	const auto re = DrawBox(this->base_point_.x, this->base_point_.y, this->base_point_.x + this->draw_pixcel_num_ + 1, this->base_point_.y + this->whole_bar_size_.y, this->color_, true);
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
 	if (-1 == re) throw DxDraw_runtime_error("DrawBox failed.");
 #endif
