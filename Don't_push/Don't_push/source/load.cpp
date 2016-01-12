@@ -43,5 +43,6 @@ sound_arr_t make_sound_array() {
 	make_DxSHandle_pair sound("assets\\music\\");
 	re.insert(sound("flower garden"));
 	re.insert(sound("title"));
+	re.insert(sound("Thank_you_for_playing"));
 	return re;
 }
