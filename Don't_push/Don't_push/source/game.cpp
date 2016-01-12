@@ -29,7 +29,7 @@ struct game_c::Impl {
 	bool normal_con_f() const NOEXCEPT;
 	void move_x(int limit_l_x, int limit_r_x) NOEXCEPT;
 	void fadeout_prelude_masseage();
-	void fall_bouninngenn(size_t bouninngenn_no, const std::deque<dxle::pointi>& pos_record);
+	void fall_bouninngenn(size_t bouninngenn_no, const std::deque<dxle::pointi>& pos_record, const power_bar_c& power_bar);
 	const dxle::pointi m_window_s;
 	keystate m_state;
 	dxle::Graph2D::screen m_back_img;
@@ -92,7 +92,49 @@ static int calc_free_fall(int y, size_t t) ATT_PURE {
 	constexpr double correction_factor = 10.5;
 	return y + static_cast<int>(correction_factor * g / 2 * t);
 }
-void game_c::Impl::fall_bouninngenn(size_t bouninngenn_no, const std::deque<dxle::pointi>& pos_record) {
+namespace detail {
+	int	DrawBox_kai_impl(dxle::pointi p, dxle::sizei size, unsigned int border_color, unsigned int border_width) {
+		if (1U == border_width) return DxLib::DrawBox(p.x - 1, p.y - 1, p.x + size.width, p.y + size.height, border_color, false);
+		else {
+			const int b_w = static_cast<int>(border_width);
+			const auto f_rshift_roundup = [](unsigned int n) DXLE_NOEXCEPT_OR_NOTHROW -> int{ return static_cast<int>((n >> 1) + (n & 1)); };
+			const auto f_rshift = [](unsigned int n) DXLE_NOEXCEPT_OR_NOTHROW -> int{ return static_cast<int>(n >> 1); };
+			//第一引数で指定された部分の外に枠線を引く。
+			//DxLib::DrawLineの座標指定は太さが例えば7なら4のところ、6なら3のところの座標を指定する
+			auto re = DxLib::DrawLine(p.x - b_w, p.y - f_rshift_roundup(border_width), p.x + size.width + b_w, p.y - f_rshift_roundup(border_width), border_color, b_w);//上
+			if (-1 == re) return re;
+			re = DxLib::DrawLine(p.x + size.width + f_rshift(border_width), p.y - b_w, p.x + size.width + f_rshift(border_width), p.y + size.height + b_w, border_color, b_w);//右
+			if (-1 == re) return re;
+			re = DxLib::DrawLine(p.x - b_w, p.y + size.height + f_rshift(border_width), p.x + size.width + b_w, p.y + size.height + f_rshift(border_width), border_color, b_w);//下
+			if (-1 == re) return re;
+			return DxLib::DrawLine(p.x - f_rshift_roundup(border_width), p.y - b_w, p.x - f_rshift_roundup(border_width), p.y + size.height + b_w, border_color, b_w);//左
+		}
+	}
+}
+int	DrawBox_kai(dxle::pointi p, dxle::sizei size, unsigned int border_color, unsigned int border_width) {
+	if (static_cast<unsigned int>(std::abs(std::min(size.width, size.height))) < border_width) return -1;
+	return detail::DrawBox_kai_impl(p, size, border_color, border_width);
+}
+int	DrawBox_kai(dxle::pointi p, dxle::sizei size, unsigned int border_color, unsigned int border_width, unsigned int back_ground_color) {
+	const auto smaller_size = std::min(size.width, size.height);
+	if (static_cast<unsigned int>(std::abs(smaller_size)) < border_width) return -1;
+	const int b_w = static_cast<int>(border_width);
+	if (smaller_size < b_w) return -1;
+	else if (smaller_size / 2 < b_w) return DxLib::DrawBox(p.x - b_w, p.y - b_w, p.x + size.width + b_w - 1, p.y + size.height + b_w - 1, back_ground_color, true);
+	else {
+		if (2048 < size.height * size.width) {
+			auto re = DxLib::DrawBox(p.x, p.y, p.x + size.width - 1, p.y + size.height - 1, back_ground_color, true);//back_ground
+			if (-1 == re) return re;
+			return detail::DrawBox_kai_impl(p, size, border_color, border_width);//border
+		}
+		else {
+			auto re = DxLib::DrawBox(p.x - b_w, p.y - b_w, p.x + size.width + b_w, p.y + size.height + b_w, border_color, true);//border
+			if (-1 == re) return re;
+			return DxLib::DrawBox(p.x, p.y, p.x + size.width - 1, p.y + size.height - 1, back_ground_color, true);//back_ground
+		}
+	}
+}
+void game_c::Impl::fall_bouninngenn(size_t bouninngenn_no, const std::deque<dxle::pointi>& pos_record, const power_bar_c& power_bar) {
 	const int v = [&pos_record]() -> int {
 		if (pos_record.size() < 2) return 10;
 		int64_t sum = 0;
@@ -111,6 +153,7 @@ void game_c::Impl::fall_bouninngenn(size_t bouninngenn_no, const std::deque<dxle
 		this->m_bouninngenn[bouninngenn_no].get_pos().x -= v;
 		this->m_back_img.DrawGraph({}, false);
 		for (auto& i : this->m_bouninngenn) i.draw();
+		power_bar.draw();
 	}
 	if (!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");
 	if (this->m_state.esc()) throw normal_exit();
@@ -131,7 +174,7 @@ Status game_c::game_main() {
 	this->pimpl->state_init();//状態初期化
 	this->pimpl->m_sound["flower garden"].play(DxSoundMode::LOOP);
 	this->pimpl->fadeout_prelude_masseage();
-	power_bar_c power_bar({ WINDOW_WIDTH * 7 / 16, WINDOW_HEIGHT * 11 / 12 }, { WINDOW_WIDTH * 11 / 32, WINDOW_HEIGHT * 2 / 75 }, 10, GetColor(229, 225, 225));
+	power_bar_c power_bar({ WINDOW_WIDTH * 9 / 16, WINDOW_HEIGHT * 11 / 12 }, { WINDOW_WIDTH * 11 / 32, WINDOW_HEIGHT * 2 / 75 }, 20, GetColor(64, 142, 142));
 	std::deque<dxle::pointi> pos_record;
 	bool is_normal_state = true;
 	while ((is_normal_state = this->pimpl->normal_con_f()) && this->pimpl->m_state.update() && !this->pimpl->m_state[KEY_INPUT_Z] && !this->pimpl->m_state.esc()) {
@@ -142,6 +185,7 @@ Status game_c::game_main() {
 		this->pimpl->m_back_img.DrawGraph({}, false);
 		for (auto& i : this->pimpl->m_bouninngenn) i.draw();
 		const dxle::pointi gauge_bg_p = { WINDOW_WIDTH / 2, WINDOW_HEIGHT * 5 / 6 };
+		DrawBox_kai(gauge_bg_p, { WINDOW_WIDTH * 7 / 16, WINDOW_HEIGHT * 7 / 60 }, DxLib::GetColor(4, 182, 182), 2, DxLib::GetColor(229, 255, 255));
 		this->pimpl->m_img["game_main_gauge_bg"].DrawExtendGraph(gauge_bg_p, gauge_bg_p + dxle::pointi{ WINDOW_WIDTH * 7 / 16, WINDOW_HEIGHT * 7 / 60 }, false);
 		power_bar.draw();
 	}
@@ -153,17 +197,17 @@ Status game_c::game_main() {
 	const auto p_rate = power_bar.get_percent();
 	bool is_game_over = false;
 	if (d < 0 || rate < 80.0 || p_rate < 60.0) {
-		this->pimpl->fall_bouninngenn(1, pos_record);//落とそうとして落とされる、ゲームオーバー
+		this->pimpl->fall_bouninngenn(1, pos_record, power_bar);//落とそうとして落とされる、ゲームオーバー
 		is_game_over = true;
 	}
 	else {
 		this->pimpl->score = static_cast<uint8_t>((p_rate + rate) / 2);//0-100
 		if (this->pimpl->score < 40) {
-			this->pimpl->fall_bouninngenn(1, pos_record);//落とそうとして落とされる、ゲームオーバー
+			this->pimpl->fall_bouninngenn(1, pos_record, power_bar);//落とそうとして落とされる、ゲームオーバー
 			is_game_over = true;
 		}
 		else {
-			this->pimpl->fall_bouninngenn(0, pos_record);//落とす。成功！
+			this->pimpl->fall_bouninngenn(0, pos_record, power_bar);//落とす。成功！
 		}
 	}
 	return (is_game_over) ? Status::GAME_OVER : Status::RESULT_ECHO;
