@@ -9,18 +9,16 @@
 #include "power_bar.h"
 #include "circular_motion.h"
 #include <cmath>
-#include <array>
 #include <algorithm>
 #include <deque>
+#include <tuple>
 
 struct game_c::Impl {
 	Impl(const dxle::pointi& bouninngennA_p, const dxle::pointi& bouninngennB_p)
 		: m_window_s(static_cast<int>(WINDOW_WIDTH), static_cast<int>(WINDOW_HEIGHT)), m_state(), m_back_img(dxle::Graph2D::MakeScreen(m_window_s.x, m_window_s.y)),
 		m_img(make_image_array()), m_sound(make_sound_array()), score(),
-		m_bouninngenn({ {
-			{ bouninngennA_p, &m_img["bouninngennA"], &m_img["bouninngennA_fall"]},//棒人形A
-			{ bouninngennB_p, &m_img["bouninngennB"], &m_img["bouninngennB_fall"]} //棒人形B
-		} })
+		m_bouninngenn_a{ bouninngennA_p, &m_img["bouninngennA"], &m_img["bouninngennA_fall"] },//棒人形A
+		m_bouninngenn_b{ bouninngennB_p, &m_img["bouninngennB"], &m_img["bouninngennB_fall"] } //棒人形B
 	{
 		this->m_back_img.DrawnOn([this]() {m_img["gake"].DrawExtendGraph({}, m_window_s, false); });
 	}
@@ -33,13 +31,15 @@ struct game_c::Impl {
 	void move_x(int limit_l_x, int limit_r_x) NOEXCEPT;
 	void fadeout_prelude_masseage();
 	template<std::size_t bouninngenn_no> void fall_bouninngenn(const std::deque<dxle::pointi>& pos_record);
+	bool bouninngen_draw() const NOEXCEPT;
 	const dxle::pointi m_window_s;
 	keystate m_state;
 	dxle::Graph2D::screen m_back_img;
 	img_arr_t m_img;
 	sound_arr_t m_sound;
 	std::uint8_t score;//0-100
-	std::array<obj_info, 2>m_bouninngenn;
+	obj_info m_bouninngenn_a;
+	obj_info m_bouninngenn_b;
 };
 game_c::game_c(const dxle::pointi& bouninngennA_p, const dxle::pointi& bouninngennB_p) : pimpl(new game_c::Impl(bouninngennA_p, bouninngennB_p)){}
 
@@ -61,9 +61,9 @@ void game_c::Impl::move_x(int limit_l_x, int limit_r_x) NOEXCEPT{
 	if (limit_r_x < limit_l_x) std::swap(limit_l_x, limit_r_x);
 	DXLE_STATIC_CONSTEXPR int CHARACTER_MOVE_SPEED = 4;
 	this->m_state.update();
-	if (this->m_state.left()) this->m_bouninngenn[1].get_pos().x -= CHARACTER_MOVE_SPEED;
-	if (this->m_state.right()) this->m_bouninngenn[1].get_pos().x += CHARACTER_MOVE_SPEED;
-	this->m_bouninngenn[1].get_pos().x = std::min(limit_r_x, std::max(this->m_bouninngenn[1].get_pos().x, limit_l_x));
+	if (this->m_state.left()) this->m_bouninngenn_b.get_pos().x -= CHARACTER_MOVE_SPEED;
+	if (this->m_state.right()) this->m_bouninngenn_b.get_pos().x += CHARACTER_MOVE_SPEED;
+	this->m_bouninngenn_b.get_pos().x = std::min(limit_r_x, std::max(this->m_bouninngenn_b.get_pos().x, limit_l_x));
 }
 
 #ifdef _MSC_VER
@@ -72,7 +72,7 @@ void game_c::Impl::move_x(int limit_l_x, int limit_r_x) NOEXCEPT{
 #endif
 void game_c::Impl::state_init() NOEXCEPT {
 	this->m_state.fllush();
-	for (auto& i : this->m_bouninngenn) i.state_init();
+	this->bouninngen_draw();
 	this->score = 0;
 }
 void game_c::Impl::fadeout_prelude_masseage() {
@@ -85,9 +85,14 @@ void game_c::Impl::fadeout_prelude_masseage() {
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>((fadeout_time_frame - i) * 256.0 / fadeout_time_frame));
 		this->m_img["back_str"].DrawGraph({}, true);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-		for (auto& im : this->m_bouninngenn) im.draw();
+		this->bouninngen_draw();
 	}
 	if (m_state.esc()) throw normal_exit();
+}
+
+bool game_c::Impl::bouninngen_draw() const NOEXCEPT
+{
+	return m_bouninngenn_a.draw() && m_bouninngenn_b.draw();;
 }
 
 static int calc_free_fall(int y, size_t t) ATT_PURE {
@@ -111,9 +116,9 @@ template<std::size_t bouninngenn_no> void game_c::Impl::fall_bouninngenn(const s
 	}();
 	bool is_normal_state = true;
 	while ((is_normal_state = this->normal_con_f()) && this->m_state.update() && !this->m_state.esc()) {
-		this->m_bouninngenn[bouninngenn_no].get_pos().x -= v;
+		std::get<bouninngenn_no>(std::tie(this->m_bouninngenn_a, this->m_bouninngenn_b)).get_pos().x -= v;
 		this->m_back_img.DrawGraph({}, false);
-		for (auto& i : this->m_bouninngenn) i.draw();
+		this->bouninngen_draw();
 	}
 	if (!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");
 	if (this->m_state.esc()) throw normal_exit();
@@ -139,11 +144,11 @@ Status game_c::game_main() {
 	bool is_normal_state = true;
 	while ((is_normal_state = this->pimpl->normal_con_f()) && this->pimpl->m_state.update() && !this->pimpl->m_state[KEY_INPUT_Z] && !this->pimpl->m_state.esc()) {
 		power_bar.update();
-		this->pimpl->move_x(this->pimpl->m_bouninngenn[0].calc_first_bottom_right_pos().x, this->pimpl->m_bouninngenn[1].get_fitst_pos().x);
+		this->pimpl->move_x(this->pimpl->m_bouninngenn_a.calc_first_bottom_right_pos().x, this->pimpl->m_bouninngenn_b.get_fitst_pos().x);
 		if (4 < pos_record.size()) pos_record.pop_front();
-		pos_record.push_back(this->pimpl->m_bouninngenn[1].get_pos());
+		pos_record.push_back(this->pimpl->m_bouninngenn_b.get_pos());
 		this->pimpl->m_back_img.DrawGraph({}, false);
-		for (auto& i : this->pimpl->m_bouninngenn) i.draw();
+		this->pimpl->bouninngen_draw();
 		const dxle::pointi gauge_bg_p = { WINDOW_WIDTH / 2, WINDOW_HEIGHT * 5 / 6 };
 		this->pimpl->m_img["game_main_gauge_bg"].DrawExtendGraph(gauge_bg_p, gauge_bg_p + dxle::pointi{ WINDOW_WIDTH * 7 / 16, WINDOW_HEIGHT * 7 / 60 }, false);
 		power_bar.draw();
@@ -151,8 +156,8 @@ Status game_c::game_main() {
 	if (!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");
 	if (this->pimpl->m_state.esc()) throw normal_exit();
 
-	const int d = distance(this->pimpl->m_bouninngenn[0], this->pimpl->m_bouninngenn[1]);
-	const auto rate = bouninngenn_moving_distance(this->pimpl->m_bouninngenn[0], this->pimpl->m_bouninngenn[1]);
+	const int d = distance(this->pimpl->m_bouninngenn_a, this->pimpl->m_bouninngenn_b);
+	const auto rate = bouninngenn_moving_distance(this->pimpl->m_bouninngenn_a, this->pimpl->m_bouninngenn_b);
 	const auto p_rate = power_bar.get_percent();
 	bool is_game_over = false;
 	if (d < 0 || rate < 80.0 || p_rate < 60.0) {
@@ -202,12 +207,12 @@ Status game_c::helicopter_event() {
 	bool is_normal_state = true;
 	while ((is_normal_state = this->pimpl->normal_con_f()) && pimpl->m_state.update() && !pimpl->m_state[KEY_INPUT_Z] && !pimpl->m_state.esc() && helicopter.update()) {
 		this->pimpl->m_back_img.DrawGraph({}, false);
-		extruder(this->pimpl->m_bouninngenn[1], helicopter.get_obj());
-		extruder(this->pimpl->m_bouninngenn[0], this->pimpl->m_bouninngenn[1]);
-		for (auto& i : this->pimpl->m_bouninngenn) i.draw();
+		extruder(this->pimpl->m_bouninngenn_b, helicopter.get_obj());
+		extruder(this->pimpl->m_bouninngenn_a, this->pimpl->m_bouninngenn_b);
+		this->pimpl->bouninngen_draw();
 		helicopter.draw();
 		//WaitKey();
-		if (std::all_of(this->pimpl->m_bouninngenn.begin(), this->pimpl->m_bouninngenn.end(), [](const obj_info& a) -> bool { return a.is_fallen(); }))break;//ふたりとも落ちたらゲーム終わり
+		if (this->pimpl->m_bouninngenn_a.is_fallen() && this->pimpl->m_bouninngenn_b.is_fallen()) break;//ふたりとも落ちたらゲーム終わり
 	}
 	if (!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");
 	if (pimpl->m_state.esc()) throw normal_exit();
