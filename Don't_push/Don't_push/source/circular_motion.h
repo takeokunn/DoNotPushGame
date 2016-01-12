@@ -9,6 +9,10 @@ class obj_info
 {
 public:
 	obj_info(const dxle::pointi& first_p, const DxGHandle* img_normal, const DxGHandle* img_fall);
+	obj_info(const obj_info& o) = delete;
+	obj_info(obj_info&& o) NOEXCEPT;
+	obj_info& operator=(const obj_info&) = delete;
+	obj_info& operator=(obj_info&&) = delete;
 	void change_img(int no = -1) NOEXCEPT;
 	bool draw(bool Trans_flag = true) const NOEXCEPT;
 	void state_init() NOEXCEPT;

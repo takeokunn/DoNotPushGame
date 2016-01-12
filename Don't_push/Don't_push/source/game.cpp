@@ -13,29 +13,32 @@
 #include <algorithm>
 #include <deque>
 
-
 struct game_c::Impl {
 	Impl(const dxle::pointi& bouninngennA_p, const dxle::pointi& bouninngennB_p)
 		: m_window_s(static_cast<int>(WINDOW_WIDTH), static_cast<int>(WINDOW_HEIGHT)), m_state(), m_back_img(dxle::Graph2D::MakeScreen(m_window_s.x, m_window_s.y)),
 		m_img(make_image_array()), m_sound(make_sound_array()), score(),
-		m_bouninngenn{ {
+		m_bouninngenn({ {
 			{ bouninngennA_p, &m_img["bouninngennA"], &m_img["bouninngennA_fall"]},//棒人形A
 			{ bouninngennB_p, &m_img["bouninngennB"], &m_img["bouninngennB_fall"]} //棒人形B
-		} }
+		} })
 	{
 		this->m_back_img.DrawnOn([this]() {m_img["gake"].DrawExtendGraph({}, m_window_s, false); });
 	}
+	Impl(const Impl&) = delete;
+	Impl(Impl&&) = delete;
+	Impl& operator=(const Impl&) = delete;
+	Impl& operator=(Impl&&) = delete;
 	void state_init() NOEXCEPT;
 	bool normal_con_f() const NOEXCEPT;
 	void move_x(int limit_l_x, int limit_r_x) NOEXCEPT;
 	void fadeout_prelude_masseage();
-	void fall_bouninngenn(size_t bouninngenn_no, const std::deque<dxle::pointi>& pos_record);
+	template<std::size_t bouninngenn_no> void fall_bouninngenn(const std::deque<dxle::pointi>& pos_record);
 	const dxle::pointi m_window_s;
 	keystate m_state;
 	dxle::Graph2D::screen m_back_img;
 	img_arr_t m_img;
 	sound_arr_t m_sound;
-	uint8_t score;//0-100
+	std::uint8_t score;//0-100
 	std::array<obj_info, 2>m_bouninngenn;
 };
 game_c::game_c(const dxle::pointi& bouninngennA_p, const dxle::pointi& bouninngennB_p) : pimpl(new game_c::Impl(bouninngennA_p, bouninngennB_p)){}
@@ -92,7 +95,7 @@ static int calc_free_fall(int y, size_t t) ATT_PURE {
 	DXLE_STATIC_CONSTEXPR double correction_factor = 10.5;
 	return y + static_cast<int>(correction_factor * g / 2 * t);
 }
-void game_c::Impl::fall_bouninngenn(size_t bouninngenn_no, const std::deque<dxle::pointi>& pos_record) {
+template<std::size_t bouninngenn_no> void game_c::Impl::fall_bouninngenn(const std::deque<dxle::pointi>& pos_record) {
 	const int v = [&pos_record]() -> int {
 		if (pos_record.size() < 2) return 10;
 		int64_t sum = 0;
@@ -123,9 +126,9 @@ void game_c::Impl::fall_bouninngenn(size_t bouninngenn_no, const std::deque<dxle
 #pragma warning (disable: 4706) //warning C4706: 条件式の比較値は、代入の結果になっています。
 #endif
 
-static double bouninngenn_moving_distance(const std::array<obj_info, 2>& bouninngenn) {
-	const auto denominator = std::abs(distance_first(bouninngenn[0], bouninngenn[1]));
-	return std::abs(denominator - bouninngenn[1].distance_from_first().x) * 100.0 / denominator;
+static double bouninngenn_moving_distance(const obj_info& bouninngenn_a, const obj_info& bouninngenn_b) {
+	const auto denominator = std::abs(distance_first(bouninngenn_a, bouninngenn_b));
+	return std::abs(denominator - bouninngenn_b.distance_from_first().x) * 100.0 / denominator;
 }
 Status game_c::game_main() {
 	this->pimpl->state_init();//状態初期化
@@ -149,21 +152,21 @@ Status game_c::game_main() {
 	if (this->pimpl->m_state.esc()) throw normal_exit();
 
 	const int d = distance(this->pimpl->m_bouninngenn[0], this->pimpl->m_bouninngenn[1]);
-	const auto rate = bouninngenn_moving_distance(this->pimpl->m_bouninngenn);
+	const auto rate = bouninngenn_moving_distance(this->pimpl->m_bouninngenn[0], this->pimpl->m_bouninngenn[1]);
 	const auto p_rate = power_bar.get_percent();
 	bool is_game_over = false;
 	if (d < 0 || rate < 80.0 || p_rate < 60.0) {
-		this->pimpl->fall_bouninngenn(1, pos_record);//落とそうとして落とされる、ゲームオーバー
+		this->pimpl->fall_bouninngenn<1>(pos_record);//落とそうとして落とされる、ゲームオーバー
 		is_game_over = true;
 	}
 	else {
 		this->pimpl->score = static_cast<uint8_t>((p_rate + rate) / 2);//0-100
 		if (this->pimpl->score < 40) {
-			this->pimpl->fall_bouninngenn(1, pos_record);//落とそうとして落とされる、ゲームオーバー
+			this->pimpl->fall_bouninngenn<1>(pos_record);//落とそうとして落とされる、ゲームオーバー
 			is_game_over = true;
 		}
 		else {
-			this->pimpl->fall_bouninngenn(0, pos_record);//落とす。成功！
+			this->pimpl->fall_bouninngenn<0>(pos_record);//落とす。成功！
 		}
 	}
 	return (is_game_over) ? Status::GAME_OVER : Status::RESULT_ECHO;

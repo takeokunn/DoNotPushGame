@@ -11,6 +11,8 @@ public:
 	~game_c();
 	game_c(const game_c&) = delete;
 	game_c(game_c&&) = delete;
+	game_c& operator=(const game_c&) = delete;
+	game_c& operator=(game_c&&) = delete;
 	const img_arr_t& get_img() const NOEXCEPT;
 	const sound_arr_t& get_sound() const NOEXCEPT;
 

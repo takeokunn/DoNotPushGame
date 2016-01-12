@@ -15,7 +15,7 @@ Status continu(const img_arr_t&, const sound_arr_t& sound) {
 	DXLE_STATIC_CONSTEXPR int select1_x = 260;
 	DXLE_STATIC_CONSTEXPR int select1_y = 250;
 
-	const std::array<unsigned int, 2>color = { GetColor(0,0,0), GetColor(255,255,255) };//選択している, 選択していない
+	const std::array<unsigned int, 2>color = { { GetColor(0,0,0), GetColor(255,255,255) } };//選択している, 選択していない
 	bool flag_no_continue = false;		//コンティニューするかどうか
 
 	//メインループ
