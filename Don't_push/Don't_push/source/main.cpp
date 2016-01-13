@@ -56,6 +56,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 				status_ = game.helicopter_event();
 				break;
 			case Status::CONTINUE:
+			case Status::GAME_OVER:
+			case Status::RESULT_ECHO:
 				status_ = continu(game.get_img(), game.get_sound());//ここでGAMEで流れだした音楽を止める
 				break;
 			case Status::EXIT:

@@ -26,12 +26,12 @@ struct game_c::Impl {
 	Impl(Impl&&) = delete;
 	Impl& operator=(const Impl&) = delete;
 	Impl& operator=(Impl&&) = delete;
+	bool bouninngen_draw() const NOEXCEPT;
 	void state_init() NOEXCEPT;
 	bool normal_con_f() const NOEXCEPT;
 	void move_x(int limit_l_x, int limit_r_x) NOEXCEPT;
 	void fadeout_prelude_masseage();
 	template<std::size_t bouninngenn_no> void fall_bouninngenn(const std::deque<dxle::pointi>& pos_record, const power_bar_c& power_bar);
-	bool bouninngen_draw() const NOEXCEPT;
 	const dxle::pointi m_window_s;
 	keystate m_state;
 	dxle::Graph2D::screen m_back_img;
@@ -66,15 +66,20 @@ void game_c::Impl::move_x(int limit_l_x, int limit_r_x) NOEXCEPT{
 	this->m_bouninngenn_b.get_pos().x = std::min(limit_r_x, std::max(this->m_bouninngenn_b.get_pos().x, limit_l_x));
 }
 
-#ifdef _MSC_VER
-#pragma warning (push)
-#pragma warning (disable: 4706) //warning C4706: 条件式の比較値は、代入の結果になっています。
-#endif
+bool game_c::Impl::bouninngen_draw() const NOEXCEPT
+{
+	return m_bouninngenn_a.draw() && m_bouninngenn_b.draw();;
+}
+
 void game_c::Impl::state_init() NOEXCEPT {
 	this->m_state.fllush();
 	this->bouninngen_draw();
 	this->score = 0;
 }
+#ifdef _MSC_VER
+#pragma warning (push)
+#pragma warning (disable: 4706) //warning C4706: 条件式の比較値は、代入の結果になっています。
+#endif
 void game_c::Impl::fadeout_prelude_masseage() {
 	DXLE_STATIC_CONSTEXPR int fadeout_time_frame = 200;
 	bool is_normal_state = true;
@@ -89,17 +94,10 @@ void game_c::Impl::fadeout_prelude_masseage() {
 	}
 	if (m_state.esc()) throw normal_exit();
 }
+#ifdef _MSC_VER
+#pragma warning (pop)
+#endif
 
-bool game_c::Impl::bouninngen_draw() const NOEXCEPT
-{
-	return m_bouninngenn_a.draw() && m_bouninngenn_b.draw();;
-}
-
-static int calc_free_fall(int y, size_t t) ATT_PURE {
-	DXLE_STATIC_CONSTEXPR double g = 9.80665;
-	DXLE_STATIC_CONSTEXPR double correction_factor = 10.5;
-	return y + static_cast<int>(correction_factor * g / 2 * t);
-}
 namespace detail {
 	int	DrawBox_kai_impl(dxle::pointi p, dxle::sizei size, unsigned int border_color, unsigned int border_width) {
 		if (1U == border_width) return DxLib::DrawBox(p.x - 1, p.y - 1, p.x + size.width, p.y + size.height, border_color, false);
@@ -142,26 +140,62 @@ int	DrawBox_kai(dxle::pointi p, dxle::sizei size, unsigned int border_color, uns
 		}
 	}
 }
-template<std::size_t bouninngenn_no> void game_c::Impl::fall_bouninngenn(const std::deque<dxle::pointi>& pos_record, const power_bar_c& power_bar) {
-	const int v = [&pos_record]() -> int {
-		if (pos_record.size() < 2) return 10;
-		int64_t sum = 0;
-		int t = 0;
-		for (auto it = pos_record.begin(); it != pos_record.end() - 1; ++it) {
-			const auto tmp = it[1].x - it->x;
-			if (0 <= tmp) {
-				sum += tmp;
-				++t;
+static int calc_free_fall(int y, size_t t) ATT_PURE {
+	DXLE_STATIC_CONSTEXPR double g = 9.80665;
+	DXLE_STATIC_CONSTEXPR double correction_factor = 10.5;
+	return y + static_cast<int>(correction_factor * g / 2 * t);
+}
+namespace detail {
+	static void extruder_helper(obj_info& move_target) {
+		if (move_target.get_pos().x + move_target.get_img().GetGraphSize().width < GROUND_LEFT_X) {
+			++move_target.m_fall_frame;
+			move_target.get_pos().y = calc_free_fall(move_target.get_fitst_pos().y, move_target.m_fall_frame);
+			if (1 == move_target.m_fall_frame) {
+				move_target.change_img();
 			}
 		}
-		return static_cast<int>(sum / t);
-	}();
+	}
+}
+static void extruder(obj_info& move_target, const int v) {
+	detail::extruder_helper(move_target);
+	move_target.get_pos().x -= v;
+}
+static void extruder(obj_info& move_target, const obj_info& move_cause) {
+	detail::extruder_helper(move_target);
+	if (distance(move_target, move_cause) < 0) {
+		move_target.get_pos().x = move_cause.get_pos().x - move_target.get_img().GetGraphSize().width;
+	}
+}
+static int calc_v_from_pos_rec(const std::deque<dxle::pointi>& pos_record) 
+{
+	if (pos_record.size() < 2) return 10;
+	int64_t sum = 0;
+	int t = 0;
+	for (auto it = pos_record.begin(); it != pos_record.end() - 1; ++it) {
+		const auto tmp = it[1].x - it->x;
+		if (0 <= tmp) {
+			sum += tmp;
+			++t;
+		}
+	}
+	return std::max(4, static_cast<int>(sum / t));
+}
+#ifdef _MSC_VER
+#pragma warning (push)
+#pragma warning (disable: 4706) //warning C4706: 条件式の比較値は、代入の結果になっています。
+#endif
+template<std::size_t bouninngenn_no> void game_c::Impl::fall_bouninngenn(const std::deque<dxle::pointi>& pos_record, const power_bar_c& power_bar) {
+	const int v = calc_v_from_pos_rec(pos_record);
 	bool is_normal_state = true;
+	auto& bouninngenn = std::get<bouninngenn_no>(std::tie(this->m_bouninngenn_a, this->m_bouninngenn_b));
 	while ((is_normal_state = this->normal_con_f()) && this->m_state.update() && !this->m_state.esc()) {
-		std::get<bouninngenn_no>(std::tie(this->m_bouninngenn_a, this->m_bouninngenn_b)).get_pos().x -= v;
+		extruder(bouninngenn, v);
 		this->m_back_img.DrawGraph({}, false);
 		this->bouninngen_draw();
+		DrawBox_kai(POWER_BAR_BG_POS, POWER_BAR_BG_SIZE, DxLib::GetColor(4, 182, 182), 2, DxLib::GetColor(229, 255, 255));
 		power_bar.draw();
+		//WaitKey();
+		if (bouninngenn.is_fallen()) break;
 	}
 	if (!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");
 	if (this->m_state.esc()) throw normal_exit();
@@ -169,15 +203,15 @@ template<std::size_t bouninngenn_no> void game_c::Impl::fall_bouninngenn(const s
 #ifdef _MSC_VER
 #pragma warning (pop)
 #endif
-#ifdef _MSC_VER
-#pragma warning (push)
-#pragma warning (disable: 4706) //warning C4706: 条件式の比較値は、代入の結果になっています。
-#endif
 
 static double bouninngenn_moving_distance(const obj_info& bouninngenn_a, const obj_info& bouninngenn_b) {
 	const auto denominator = std::abs(distance_first(bouninngenn_a, bouninngenn_b));
 	return std::abs(denominator - bouninngenn_b.distance_from_first().x) * 100.0 / denominator;
 }
+#ifdef _MSC_VER
+#pragma warning (push)
+#pragma warning (disable: 4706) //warning C4706: 条件式の比較値は、代入の結果になっています。
+#endif
 Status game_c::game_main() {
 	this->pimpl->state_init();//状態初期化
 	this->pimpl->m_sound["flower garden"].play(DxSoundMode::LOOP);
@@ -192,9 +226,8 @@ Status game_c::game_main() {
 		pos_record.push_back(this->pimpl->m_bouninngenn_b.get_pos());
 		this->pimpl->m_back_img.DrawGraph({}, false);
 		this->pimpl->bouninngen_draw();
-		const dxle::pointi gauge_bg_p = { WINDOW_WIDTH / 2, WINDOW_HEIGHT * 5 / 6 };
-		DrawBox_kai(gauge_bg_p, { WINDOW_WIDTH * 7 / 16, WINDOW_HEIGHT * 7 / 60 }, DxLib::GetColor(4, 182, 182), 2, DxLib::GetColor(229, 255, 255));
-		this->pimpl->m_img["game_main_gauge_bg"].DrawExtendGraph(gauge_bg_p, gauge_bg_p + dxle::pointi{ WINDOW_WIDTH * 7 / 16, WINDOW_HEIGHT * 7 / 60 }, false);
+		DrawBox_kai(POWER_BAR_BG_POS, POWER_BAR_BG_SIZE, DxLib::GetColor(4, 182, 182), 2, DxLib::GetColor(229, 255, 255));
+		this->pimpl->m_img["game_main_gauge_bg"].DrawExtendGraph(POWER_BAR_BG_POS, POWER_BAR_BG_POS + dxle::pointi{ WINDOW_WIDTH * 7 / 16, WINDOW_HEIGHT * 7 / 60 }, false);
 		power_bar.draw();
 	}
 	if (!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");
@@ -223,19 +256,6 @@ Status game_c::game_main() {
 #ifdef _MSC_VER
 #pragma warning (pop)
 #endif
-
-static void extruder(obj_info& move_target, const obj_info& move_cause) {
-	if (move_target.get_pos().x + move_target.get_img().GetGraphSize().width < WINDOW_WIDTH / 4) {
-		++move_target.m_fall_frame;
-		move_target.get_pos().y = calc_free_fall(move_cause.get_fitst_pos().y, move_target.m_fall_frame);
-		if (1 == move_target.m_fall_frame) {
-			move_target.change_img();
-		}
-	}
-	if (distance(move_target, move_cause) < 0) {
-		move_target.get_pos().x = move_cause.get_pos().x - move_target.get_img().GetGraphSize().width;
-	}
-}
 #ifdef _MSC_VER
 #pragma warning (push)
 #pragma warning (disable: 4706) //warning C4706: 条件式の比較値は、代入の結果になっています。

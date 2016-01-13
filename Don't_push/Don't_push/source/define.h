@@ -6,9 +6,14 @@
 #include <unordered_map>
 #include <string>
 #include <stdexcept>
+#include <dxlibex/basic_types.hpp>
+
 DXLE_STATIC_CONSTEXPR size_t WINDOW_WIDTH = 800;
 DXLE_STATIC_CONSTEXPR size_t WINDOW_HEIGHT = 600;
 DXLE_STATIC_CONSTEXPR int FIRST_CHARA_X = WINDOW_WIDTH / 2;
+DXLE_STATIC_CONSTEXPR int GROUND_LEFT_X = WINDOW_WIDTH / 4;
+DXLE_STATIC_CONSTEXPR dxle::pointi POWER_BAR_BG_POS = { WINDOW_WIDTH / 2, WINDOW_HEIGHT * 5 / 6 };
+DXLE_STATIC_CONSTEXPR dxle::sizei POWER_BAR_BG_SIZE = { WINDOW_WIDTH * 7 / 16, WINDOW_HEIGHT * 7 / 60 };
 
 //状態管理
 enum class Status{
