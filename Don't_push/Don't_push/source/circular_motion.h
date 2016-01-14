@@ -35,6 +35,8 @@ private:
 };
 int distance(const obj_info& l, const obj_info& r) NOEXCEPT;
 int distance_first(const obj_info& l, const obj_info& r) NOEXCEPT;
+void extruder(obj_info& move_target, const int v) NOEXCEPT;
+void extruder(obj_info& move_target, const obj_info& move_cause) NOEXCEPT;
 class circular_motion
 {
 public:

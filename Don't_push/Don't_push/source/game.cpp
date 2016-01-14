@@ -140,32 +140,6 @@ int	DrawBox_kai(dxle::pointi p, dxle::sizei size, unsigned int border_color, uns
 		}
 	}
 }
-static int calc_free_fall(int y, size_t t) ATT_PURE {
-	DXLE_STATIC_CONSTEXPR double g = 9.80665;
-	DXLE_STATIC_CONSTEXPR double correction_factor = 10.5;
-	return y + static_cast<int>(correction_factor * g / 2 * t);
-}
-namespace detail {
-	static void extruder_helper(obj_info& move_target) {
-		if (move_target.get_pos().x + move_target.get_img().GetGraphSize().width < GROUND_LEFT_X) {
-			++move_target.m_fall_frame;
-			move_target.get_pos().y = calc_free_fall(move_target.get_fitst_pos().y, move_target.m_fall_frame);
-			if (1 == move_target.m_fall_frame) {
-				move_target.change_img();
-			}
-		}
-	}
-}
-static void extruder(obj_info& move_target, const int v) {
-	detail::extruder_helper(move_target);
-	move_target.get_pos().x -= v;
-}
-static void extruder(obj_info& move_target, const obj_info& move_cause) {
-	detail::extruder_helper(move_target);
-	if (distance(move_target, move_cause) < 0) {
-		move_target.get_pos().x = move_cause.get_pos().x - move_target.get_img().GetGraphSize().width;
-	}
-}
 static int calc_v_from_pos_rec(const std::deque<dxle::pointi>& pos_record) 
 {
 	if (pos_record.size() < 2) return 10;
@@ -227,7 +201,7 @@ Status game_c::game_main() {
 		this->pimpl->m_back_img.DrawGraph({}, false);
 		this->pimpl->bouninngen_draw();
 		DrawBox_kai(POWER_BAR_BG_POS, POWER_BAR_BG_SIZE, DxLib::GetColor(4, 182, 182), 2, DxLib::GetColor(229, 255, 255));
-		this->pimpl->m_img["game_main_gauge_bg"].DrawExtendGraph(POWER_BAR_BG_POS, POWER_BAR_BG_POS + dxle::pointi{ WINDOW_WIDTH * 7 / 16, WINDOW_HEIGHT * 7 / 60 }, false);
+		this->pimpl->m_img["game_main_gauge_bg"].DrawExtendGraph(POWER_BAR_BG_POS, POWER_BAR_BG_POS + POWER_BAR_BG_SIZE, false);
 		power_bar.draw();
 	}
 	if (!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");

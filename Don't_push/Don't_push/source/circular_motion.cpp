@@ -78,3 +78,27 @@ int distance(const obj_info & l, const obj_info & r) NOEXCEPT {
 int distance_first(const obj_info & l, const obj_info & r) NOEXCEPT {
 	return r.get_fitst_pos().x - l.get_obj_size().width - l.get_fitst_pos().x;
 }
+static int calc_free_fall(int y, size_t t) ATT_PURE {
+	DXLE_STATIC_CONSTEXPR double g = 9.80665;
+	DXLE_STATIC_CONSTEXPR double correction_factor = 10.5;
+	return y + static_cast<int>(correction_factor * g / 2 * t);
+}
+static void extruder_helper(obj_info& move_target) NOEXCEPT {
+	if (move_target.get_pos().x + move_target.get_img().GetGraphSize().width < GROUND_LEFT_X) {
+		++move_target.m_fall_frame;
+		move_target.get_pos().y = calc_free_fall(move_target.get_fitst_pos().y, move_target.m_fall_frame);
+		if (1 == move_target.m_fall_frame) {
+			move_target.change_img();
+		}
+	}
+}
+void extruder(obj_info & move_target, const int v) NOEXCEPT {
+	extruder_helper(move_target);
+	move_target.get_pos().x -= v;
+}
+void extruder(obj_info& move_target, const obj_info& move_cause) NOEXCEPT {
+	extruder_helper(move_target);
+	if (distance(move_target, move_cause) < 0) {
+		move_target.get_pos().x = move_cause.get_pos().x - move_target.get_img().GetGraphSize().width;
+	}
+}
