@@ -79,7 +79,7 @@ int distance_first(const obj_info & l, const obj_info & r) NOEXCEPT {
 }
 double bouninngenn_moving_distance(const obj_info& bouninngenn_a, const obj_info& bouninngenn_b) NOEXCEPT {
 	const auto denominator = std::abs(distance_first(bouninngenn_a, bouninngenn_b));
-	return std::abs(denominator - bouninngenn_b.distance_from_first().x) * 100.0 / denominator;
+	return std::abs(bouninngenn_b.distance_from_first().x) * 100.0 / denominator;
 }
 static int calc_free_fall(int y, size_t t) ATT_PURE {
 	DXLE_STATIC_CONSTEXPR double g = 9.80665;
