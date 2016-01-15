@@ -76,6 +76,8 @@ bool game_c::Impl::bouninngen_draw() const NOEXCEPT
 
 void game_c::Impl::state_init() NOEXCEPT {
 	this->m_state.fllush();
+	this->m_bouninngenn_a.state_init();
+	this->m_bouninngenn_b.state_init();
 	this->bouninngen_draw();
 	this->score = 0;
 }
