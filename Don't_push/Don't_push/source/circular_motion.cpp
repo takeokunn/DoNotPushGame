@@ -23,8 +23,7 @@ dxle::pointi obj_info::calc_first_bottom_right_pos() const NOEXCEPT {
 }
 
 dxle::pointi obj_info::distance_from_first() const NOEXCEPT {
-	auto re = this->m_first_pos_ - this->m_p_;
-	return re;
+	return this->m_first_pos_ - this->m_p_;
 }
 
 void obj_info::change_img(int no) NOEXCEPT {
@@ -77,6 +76,10 @@ int distance(const obj_info & l, const obj_info & r) NOEXCEPT {
 
 int distance_first(const obj_info & l, const obj_info & r) NOEXCEPT {
 	return r.get_fitst_pos().x - l.get_obj_size().width - l.get_fitst_pos().x;
+}
+double bouninngenn_moving_distance(const obj_info& bouninngenn_a, const obj_info& bouninngenn_b) NOEXCEPT {
+	const auto denominator = std::abs(distance_first(bouninngenn_a, bouninngenn_b));
+	return std::abs(denominator - bouninngenn_b.distance_from_first().x) * 100.0 / denominator;
 }
 static int calc_free_fall(int y, size_t t) ATT_PURE {
 	DXLE_STATIC_CONSTEXPR double g = 9.80665;

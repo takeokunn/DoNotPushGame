@@ -178,10 +178,6 @@ template<std::size_t bouninngenn_no> void game_c::Impl::fall_bouninngenn(const s
 #pragma warning (pop)
 #endif
 
-static double bouninngenn_moving_distance(const obj_info& bouninngenn_a, const obj_info& bouninngenn_b) {
-	const auto denominator = std::abs(distance_first(bouninngenn_a, bouninngenn_b));
-	return std::abs(denominator - bouninngenn_b.distance_from_first().x) * 100.0 / denominator;
-}
 #ifdef _MSC_VER
 #pragma warning (push)
 #pragma warning (disable: 4706) //warning C4706: 条件式の比較値は、代入の結果になっています。
