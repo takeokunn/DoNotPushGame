@@ -29,7 +29,7 @@ struct game_c::Impl {
 	bool bouninngen_draw() const NOEXCEPT;
 	void state_init() NOEXCEPT;
 	bool normal_con_f() const NOEXCEPT;
-	void move_x(int limit_l_x, int limit_r_x) NOEXCEPT;
+	int move_x(int limit_l_x, int limit_r_x) NOEXCEPT;
 	void fadeout_prelude_masseage();
 	template<std::size_t bouninngenn_no> void fall_bouninngenn(const std::deque<dxle::pointi>& pos_record, const power_bar_c& power_bar);
 	const dxle::pointi m_window_s;
@@ -57,13 +57,16 @@ const img_arr_t & game_c::get_img() const NOEXCEPT {
 
 bool game_c::Impl::normal_con_f() const NOEXCEPT { return -1 != ProcessMessage() && 0 == ScreenFlip() && 0 == ClearDrawScreen(); }
 
-void game_c::Impl::move_x(int limit_l_x, int limit_r_x) NOEXCEPT{
+int game_c::Impl::move_x(int limit_l_x, int limit_r_x) NOEXCEPT{
 	if (limit_r_x < limit_l_x) std::swap(limit_l_x, limit_r_x);
 	DXLE_STATIC_CONSTEXPR int CHARACTER_MOVE_SPEED = 4;
 	this->m_state.update();
-	if (this->m_state.left()) this->m_bouninngenn_b.get_pos().x -= CHARACTER_MOVE_SPEED;
-	if (this->m_state.right()) this->m_bouninngenn_b.get_pos().x += CHARACTER_MOVE_SPEED;
-	this->m_bouninngenn_b.get_pos().x = std::min(limit_r_x, std::max(this->m_bouninngenn_b.get_pos().x, limit_l_x));
+	auto& b_x_ref = this->m_bouninngenn_b.get_pos().x;
+	const volatile auto pre = b_x_ref;
+	if (this->m_state.left()) b_x_ref -= CHARACTER_MOVE_SPEED;
+	if (this->m_state.right()) b_x_ref += CHARACTER_MOVE_SPEED;
+	b_x_ref = std::min(limit_r_x, std::max(b_x_ref, limit_l_x));
+	return b_x_ref - pre;
 }
 
 bool game_c::Impl::bouninngen_draw() const NOEXCEPT
@@ -142,7 +145,8 @@ int	DrawBox_kai(dxle::pointi p, dxle::sizei size, unsigned int border_color, uns
 }
 static int calc_v_from_pos_rec(const std::deque<dxle::pointi>& pos_record) 
 {
-	if (pos_record.size() < 2) return 10;
+	DXLE_STATIC_CONSTEXPR int default_v = 4;
+	if (pos_record.size() < 2) return default_v;
 	int64_t sum = 0;
 	int t = 0;
 	for (auto it = pos_record.begin(); it != pos_record.end() - 1; ++it) {
@@ -152,7 +156,7 @@ static int calc_v_from_pos_rec(const std::deque<dxle::pointi>& pos_record)
 			++t;
 		}
 	}
-	return std::max(4, static_cast<int>(sum / t));
+	return t ? std::max(default_v, static_cast<int>(sum / t)) : default_v;//avoid div-zero exceptions
 }
 #ifdef _MSC_VER
 #pragma warning (push)
@@ -191,8 +195,9 @@ Status game_c::game_main() {
 	bool is_normal_state = true;
 	while ((is_normal_state = this->pimpl->normal_con_f()) && this->pimpl->m_state.update() && !this->pimpl->m_state[KEY_INPUT_Z] && !this->pimpl->m_state.esc()) {
 		power_bar.update();
-		this->pimpl->move_x(this->pimpl->m_bouninngenn_a.calc_first_bottom_right_pos().x, this->pimpl->m_bouninngenn_b.get_fitst_pos().x);
-		if (4 < pos_record.size()) pos_record.pop_front();
+		const int d = this->pimpl->move_x(this->pimpl->m_bouninngenn_a.calc_first_bottom_right_pos().x, this->pimpl->m_bouninngenn_b.get_fitst_pos().x);
+		if (d < 0) pos_record.clear();//逆方向に進んだらflush
+		if (POS_REC_NUM < pos_record.size()) pos_record.pop_front();
 		pos_record.push_back(this->pimpl->m_bouninngenn_b.get_pos());
 		this->pimpl->m_back_img.DrawGraph({}, false);
 		this->pimpl->bouninngen_draw();
@@ -203,25 +208,23 @@ Status game_c::game_main() {
 	if (!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");
 	if (this->pimpl->m_state.esc()) throw normal_exit();
 
-	const int d = distance(this->pimpl->m_bouninngenn_a, this->pimpl->m_bouninngenn_b);
 	const auto rate = bouninngenn_moving_distance(this->pimpl->m_bouninngenn_a, this->pimpl->m_bouninngenn_b);
 	const auto p_rate = power_bar.get_percent();
-	bool is_game_over = false;
-	if (d < 0 || rate < 80.0 || p_rate < 60.0) {
+	if (rate < 70.0 || p_rate < 60.0) {
 		this->pimpl->fall_bouninngenn<1>(pos_record, power_bar);//落とそうとして落とされる、ゲームオーバー
-		is_game_over = true;
+		return Status::GAME_OVER;
 	}
 	else {
 		this->pimpl->score = static_cast<uint8_t>((p_rate + rate) / 2);//0-100
 		if (this->pimpl->score < 40) {
 			this->pimpl->fall_bouninngenn<1>(pos_record, power_bar);//落とそうとして落とされる、ゲームオーバー
-			is_game_over = true;
+			return Status::GAME_OVER;
 		}
 		else {
 			this->pimpl->fall_bouninngenn<0>(pos_record, power_bar);//落とす。成功！
+			return Status::RESULT_ECHO;
 		}
 	}
-	return (is_game_over) ? Status::GAME_OVER : Status::RESULT_ECHO;
 }
 #ifdef _MSC_VER
 #pragma warning (pop)
