@@ -15,12 +15,12 @@
 #include <boost/optional.hpp>
 struct game_c::Impl {
 	Impl(const dxle::pointi& bouninngennA_p, const dxle::pointi& bouninngennB_p)
-		: m_window_s(static_cast<int>(WINDOW_WIDTH), static_cast<int>(WINDOW_HEIGHT)), m_state(), m_back_img(dxle::Graph2D::MakeScreen(m_window_s.x, m_window_s.y)),
+		: m_window_s(static_cast<int>(WINDOW_WIDTH), static_cast<int>(WINDOW_HEIGHT)), m_state(), m_back_img(dxle::graph2d::MakeScreen(m_window_s.x, m_window_s.y)),
 		m_img(make_image_array()), m_sound(make_sound_array()), score(), game_end_img(),
 		m_bouninngenn_a{ bouninngennA_p, &m_img["bouninngennA"], &m_img["bouninngennA_fall"] },//棒人形A
 		m_bouninngenn_b{ bouninngennB_p, &m_img["bouninngennB"], &m_img["bouninngennB_fall"] } //棒人形B
 	{
-		this->m_back_img.DrawnOn([this]() {m_img["gake"].DrawExtendGraph({}, m_window_s, false); });
+		this->m_back_img.drawn_on([this]() {m_img["gake"].DrawExtendGraph({}, m_window_s, false); });
 	}
 	Impl(const Impl&) = delete;
 	Impl(Impl&&) = delete;
@@ -34,11 +34,11 @@ struct game_c::Impl {
 	template<std::size_t bouninngenn_no> void fall_bouninngenn(const std::deque<dxle::pointi>& pos_record, const power_bar_c& power_bar);
 	const dxle::pointi m_window_s;
 	keystate m_state;
-	dxle::Graph2D::screen m_back_img;
+	dxle::graph2d::screen m_back_img;
 	img_arr_t m_img;
 	sound_arr_t m_sound;
 	std::uint8_t score;//0-100
-	boost::optional<dxle::Graph2D::screen> game_end_img;
+	boost::optional<dxle::graph2d::screen> game_end_img;
 	obj_info m_bouninngenn_a;
 	obj_info m_bouninngenn_b;
 };
@@ -213,8 +213,8 @@ Status game_c::game_main() {
 	if (this->pimpl->m_state.esc()) throw normal_exit();
 
 	//save image
-	auto tmp = dxle::Graph2D::MakeScreen(WINDOW_WIDTH, WINDOW_HEIGHT);
-	tmp.DrawnOn([this, &power_bar](){
+	auto tmp = dxle::graph2d::MakeScreen(WINDOW_WIDTH, WINDOW_HEIGHT);
+	tmp.drawn_on([this, &power_bar](){
 		this->pimpl->m_back_img.DrawGraph({}, false);
 		DrawBox_kai(POWER_BAR_BG_POS, POWER_BAR_BG_SIZE, DxLib::GetColor(4, 182, 182), 2, DxLib::GetColor(229, 255, 255));
 		this->pimpl->m_img["game_main_gauge_bg"].DrawExtendGraph(POWER_BAR_BG_POS, POWER_BAR_BG_POS + POWER_BAR_BG_SIZE, false);
@@ -268,8 +268,8 @@ Status game_c::helicopter_event() {
 	if (!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");
 	if (pimpl->m_state.esc()) throw normal_exit();
 	//save image
-	auto tmp = dxle::Graph2D::MakeScreen(WINDOW_WIDTH, WINDOW_HEIGHT);
-	tmp.DrawnOn([this, &helicopter]() {
+	auto tmp = dxle::graph2d::MakeScreen(WINDOW_WIDTH, WINDOW_HEIGHT);
+	tmp.drawn_on([this, &helicopter]() {
 		this->pimpl->m_back_img.DrawGraph({}, false);
 		helicopter.draw();
 	});
