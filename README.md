@@ -20,6 +20,12 @@ https://gist.github.com/yumetodo/1bc47ce42b6128e1950c
 git clone https://github.com/TakeObara/DoNotPushGame.git
 ```
 
+もしくは
+
+```sh
+https://yumetodo@bitbucket.org/yumetodo/donotpushgame.github
+```
+
 ## dependency 依存関係
 - [DxLibEx](https://github.com/Nagarei/DxLibEx)
 - [DxLib](http://homepage2.nifty.com/natupaji/DxLib/)
