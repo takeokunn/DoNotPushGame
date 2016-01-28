@@ -7,10 +7,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Don't_push", "Don't_push\Do
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		2013CTP_Debug|x64 = 2013CTP_Debug|x64
-		2013CTP_Debug|x86 = 2013CTP_Debug|x86
-		2013CTP_Release|x64 = 2013CTP_Release|x64
-		2013CTP_Release|x86 = 2013CTP_Release|x86
 		clang_Debug|x64 = clang_Debug|x64
 		clang_Debug|x86 = clang_Debug|x86
 		clang_Release|x64 = clang_Release|x64
@@ -25,14 +21,6 @@ Global
 		VS2015Release|x86 = VS2015Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0AAC0B39-62EF-40A7-AED9-300DA0922B73}.2013CTP_Debug|x64.ActiveCfg = 2013CTP_Debug|Win32
-		{0AAC0B39-62EF-40A7-AED9-300DA0922B73}.2013CTP_Debug|x64.Build.0 = 2013CTP_Debug|x64
-		{0AAC0B39-62EF-40A7-AED9-300DA0922B73}.2013CTP_Debug|x86.ActiveCfg = 2013CTP_Debug|Win32
-		{0AAC0B39-62EF-40A7-AED9-300DA0922B73}.2013CTP_Debug|x86.Build.0 = 2013CTP_Debug|Win32
-		{0AAC0B39-62EF-40A7-AED9-300DA0922B73}.2013CTP_Release|x64.ActiveCfg = 2013CTP_Release|Win32
-		{0AAC0B39-62EF-40A7-AED9-300DA0922B73}.2013CTP_Release|x64.Build.0 = 2013CTP_Release|x64
-		{0AAC0B39-62EF-40A7-AED9-300DA0922B73}.2013CTP_Release|x86.ActiveCfg = 2013CTP_Release|Win32
-		{0AAC0B39-62EF-40A7-AED9-300DA0922B73}.2013CTP_Release|x86.Build.0 = 2013CTP_Release|Win32
 		{0AAC0B39-62EF-40A7-AED9-300DA0922B73}.clang_Debug|x64.ActiveCfg = clang_Debug|x64
 		{0AAC0B39-62EF-40A7-AED9-300DA0922B73}.clang_Debug|x64.Build.0 = clang_Debug|x64
 		{0AAC0B39-62EF-40A7-AED9-300DA0922B73}.clang_Debug|x86.ActiveCfg = clang_Debug|Win32
