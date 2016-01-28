@@ -66,6 +66,9 @@
     <ClInclude Include="source\circular_motion.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Desktop\Optional-master\optional.hpp">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\DxGraphicHandle.cpp">
