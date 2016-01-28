@@ -12,11 +12,11 @@
 #include <algorithm>
 #include <deque>
 #include <tuple>
-
+#include <sprout/optional.hpp>
 struct game_c::Impl {
 	Impl(const dxle::pointi& bouninngennA_p, const dxle::pointi& bouninngennB_p)
 		: m_window_s(static_cast<int>(WINDOW_WIDTH), static_cast<int>(WINDOW_HEIGHT)), m_state(), m_back_img(dxle::Graph2D::MakeScreen(m_window_s.x, m_window_s.y)),
-		m_img(make_image_array()), m_sound(make_sound_array()), score(),
+		m_img(make_image_array()), m_sound(make_sound_array()), score(), game_end_img(),
 		m_bouninngenn_a{ bouninngennA_p, &m_img["bouninngennA"], &m_img["bouninngennA_fall"] },//棒人形A
 		m_bouninngenn_b{ bouninngennB_p, &m_img["bouninngennB"], &m_img["bouninngennB_fall"] } //棒人形B
 	{
@@ -38,6 +38,7 @@ struct game_c::Impl {
 	img_arr_t m_img;
 	sound_arr_t m_sound;
 	std::uint8_t score;//0-100
+	sprout::optional<dxle::Graph2D::screen> game_end_img;
 	obj_info m_bouninngenn_a;
 	obj_info m_bouninngenn_b;
 };
@@ -80,6 +81,7 @@ void game_c::Impl::state_init() NOEXCEPT {
 	this->m_bouninngenn_b.state_init();
 	this->bouninngen_draw();
 	this->score = 0;
+	this->game_end_img = sprout::nullopt_t{};
 }
 #ifdef _MSC_VER
 #pragma warning (push)
@@ -209,6 +211,16 @@ Status game_c::game_main() {
 	}
 	if (!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");
 	if (this->pimpl->m_state.esc()) throw normal_exit();
+
+	//save image
+	dxle::Graph2D::screen tmp;
+	tmp.DrawnOn([this, &power_bar](){
+		this->pimpl->m_back_img.DrawGraph({}, false);
+		DrawBox_kai(POWER_BAR_BG_POS, POWER_BAR_BG_SIZE, DxLib::GetColor(4, 182, 182), 2, DxLib::GetColor(229, 255, 255));
+		this->pimpl->m_img["game_main_gauge_bg"].DrawExtendGraph(POWER_BAR_BG_POS, POWER_BAR_BG_POS + POWER_BAR_BG_SIZE, false);
+		power_bar.draw();
+	});
+	this->pimpl->game_end_img = std::move(tmp);
 
 	const auto rate = bouninngenn_moving_distance(this->pimpl->m_bouninngenn_a, this->pimpl->m_bouninngenn_b);
 	const auto p_rate = power_bar.get_percent();
