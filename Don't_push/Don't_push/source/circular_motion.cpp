@@ -3,8 +3,8 @@
 obj_info::obj_info(const dxle::pointi& first_p, const DxGHandle* img_normal, const DxGHandle* img_fall)
 	: m_fall_frame(0), m_first_pos_(first_p), m_p_(first_p), m_img_({ { img_normal, img_fall } }), m_current_img_no_(0)
 {
-	this->m_screen_ = dxle::Graph2D::MakeScreen(this->m_img_[0]->GetGraphSize().x / 3, this->m_img_[0]->GetGraphSize().y / 3, true);
-	this->m_screen_.DrawnOn([this]() {this->m_img_[0]->DrawExtendGraph({}, { this->m_img_[0]->GetGraphSize().x / 3, this->m_img_[0]->GetGraphSize().y / 3 }, true); });
+	this->m_screen_ = dxle::graph2d::MakeScreen(this->m_img_[0]->GetGraphSize().x / 3, this->m_img_[0]->GetGraphSize().y / 3, true);
+	this->m_screen_.drawn_on([this]() {this->m_img_[0]->DrawExtendGraph({}, { this->m_img_[0]->GetGraphSize().x / 3, this->m_img_[0]->GetGraphSize().y / 3 }, true); });
 }
 
 dxle::sizei obj_info::get_obj_size() const NOEXCEPT
@@ -28,7 +28,7 @@ dxle::pointi obj_info::distance_from_first() const NOEXCEPT {
 
 void obj_info::change_img(int no) NOEXCEPT {
 	this->m_current_img_no_ = (no < 0 || this->m_img_.size() <= static_cast<size_t>(no)) ? this->m_current_img_no_ ^ 1 : static_cast<uint8_t>(no);
-	this->m_screen_.DrawnOn([this]() {
+	this->m_screen_.drawn_on([this]() {
 		this->m_img_[0]->DrawExtendGraph({}, { this->m_img_[m_current_img_no_]->GetGraphSize().x / 3, this->m_img_[m_current_img_no_]->GetGraphSize().y / 3 }, true);
 	});
 }
@@ -42,7 +42,7 @@ void obj_info::state_init() NOEXCEPT {
 	this->change_img(0);
 }
 
-const dxle::Graph2D::screen& obj_info::get_img() const NOEXCEPT { return this->m_screen_; }
+const dxle::graph2d::screen& obj_info::get_img() const NOEXCEPT { return this->m_screen_; }
 const dxle::pointi& obj_info::get_fitst_pos() const NOEXCEPT { return this->m_first_pos_; }
 dxle::pointi& obj_info::get_pos() NOEXCEPT { return this->m_p_; }
 const dxle::pointi& obj_info::get_pos() const NOEXCEPT { return this->m_p_; }

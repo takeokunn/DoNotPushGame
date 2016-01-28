@@ -18,6 +18,8 @@ public:
 
 	Status game_main();
 	Status helicopter_event();
+	Status echo_score();
+	Status echo_game_over();
 private:
 	struct Impl;
 	std::unique_ptr<Impl> pimpl;

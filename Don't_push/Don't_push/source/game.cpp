@@ -12,15 +12,15 @@
 #include <algorithm>
 #include <deque>
 #include <tuple>
-
+#include <boost/optional.hpp>
 struct game_c::Impl {
 	Impl(const dxle::pointi& bouninngennA_p, const dxle::pointi& bouninngennB_p)
-		: m_window_s(static_cast<int>(WINDOW_WIDTH), static_cast<int>(WINDOW_HEIGHT)), m_state(), m_back_img(dxle::Graph2D::MakeScreen(m_window_s.x, m_window_s.y)),
-		m_img(make_image_array()), m_sound(make_sound_array()), score(),
+		: m_window_s(static_cast<int>(WINDOW_WIDTH), static_cast<int>(WINDOW_HEIGHT)), m_state(), m_back_img(dxle::graph2d::MakeScreen(m_window_s.x, m_window_s.y)),
+		m_img(make_image_array()), m_sound(make_sound_array()), score(), game_end_img(),
 		m_bouninngenn_a{ bouninngennA_p, &m_img["bouninngennA"], &m_img["bouninngennA_fall"] },//棒人形A
 		m_bouninngenn_b{ bouninngennB_p, &m_img["bouninngennB"], &m_img["bouninngennB_fall"] } //棒人形B
 	{
-		this->m_back_img.DrawnOn([this]() {m_img["gake"].DrawExtendGraph({}, m_window_s, false); });
+		this->m_back_img.drawn_on([this]() {m_img["gake"].DrawExtendGraph({}, m_window_s, false); });
 	}
 	Impl(const Impl&) = delete;
 	Impl(Impl&&) = delete;
@@ -34,10 +34,11 @@ struct game_c::Impl {
 	template<std::size_t bouninngenn_no> void fall_bouninngenn(const std::deque<dxle::pointi>& pos_record, const power_bar_c& power_bar);
 	const dxle::pointi m_window_s;
 	keystate m_state;
-	dxle::Graph2D::screen m_back_img;
+	dxle::graph2d::screen m_back_img;
 	img_arr_t m_img;
 	sound_arr_t m_sound;
 	std::uint8_t score;//0-100
+	boost::optional<dxle::graph2d::screen> game_end_img;
 	obj_info m_bouninngenn_a;
 	obj_info m_bouninngenn_b;
 };
@@ -80,6 +81,7 @@ void game_c::Impl::state_init() NOEXCEPT {
 	this->m_bouninngenn_b.state_init();
 	this->bouninngen_draw();
 	this->score = 0;
+	this->game_end_img = boost::none_t{};
 }
 #ifdef _MSC_VER
 #pragma warning (push)
@@ -210,6 +212,16 @@ Status game_c::game_main() {
 	if (!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");
 	if (this->pimpl->m_state.esc()) throw normal_exit();
 
+	//save image
+	auto tmp = dxle::graph2d::MakeScreen(WINDOW_WIDTH, WINDOW_HEIGHT);
+	tmp.drawn_on([this, &power_bar](){
+		this->pimpl->m_back_img.DrawGraph({}, false);
+		DrawBox_kai(POWER_BAR_BG_POS, POWER_BAR_BG_SIZE, DxLib::GetColor(4, 182, 182), 2, DxLib::GetColor(229, 255, 255));
+		this->pimpl->m_img["game_main_gauge_bg"].DrawExtendGraph(POWER_BAR_BG_POS, POWER_BAR_BG_POS + POWER_BAR_BG_SIZE, false);
+		power_bar.draw();
+	});
+	this->pimpl->game_end_img = std::move(tmp);
+
 	const auto rate = bouninngenn_moving_distance(this->pimpl->m_bouninngenn_a, this->pimpl->m_bouninngenn_b);
 	const auto p_rate = power_bar.get_percent();
 	if (rate < 70.0 || p_rate < 60.0) {
@@ -253,6 +265,37 @@ Status game_c::helicopter_event() {
 		//WaitKey();
 		if (this->pimpl->m_bouninngenn_a.is_fallen() && this->pimpl->m_bouninngenn_b.is_fallen()) break;//ふたりとも落ちたらゲーム終わり
 	}
+	if (!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");
+	if (pimpl->m_state.esc()) throw normal_exit();
+	//save image
+	auto tmp = dxle::graph2d::MakeScreen(WINDOW_WIDTH, WINDOW_HEIGHT);
+	tmp.drawn_on([this, &helicopter]() {
+		this->pimpl->m_back_img.DrawGraph({}, false);
+		helicopter.draw();
+	});
+	this->pimpl->game_end_img = std::move(tmp);
+	return Status::CONTINUE;
+}
+Status game_c::echo_score()
+{
+	if (!this->pimpl->game_end_img) throw std::runtime_error("this->pimpl->game_end_img is empty.");
+
+	return Status::CONTINUE;
+}
+Status game_c::echo_game_over()
+{
+	if (!this->pimpl->game_end_img) throw std::runtime_error("this->pimpl->game_end_img is empty.");
+	this->pimpl->m_state.fllush();
+	this->pimpl->game_end_img->DrawGraph(dxle::pointi{}, false);
+	this->pimpl->m_state.fllush();
+	this->pimpl->game_end_img->filter_HSB(0, 0, 0, -60);
+	this->pimpl->game_end_img->DrawGraph(dxle::pointi{}, false);
+	const auto font = CreateFontToHandle(nullptr, 30, 1, DX_FONTTYPE_ANTIALIASING);
+	DrawStringToHandle(260, 150, "GAME OVER!", DxLib::GetColor(255, 255, 255), font);
+	DrawStringToHandle(260, 200, "Press Z to continue.", DxLib::GetColor(255, 255, 255), font);
+	bool is_normal_state = this->pimpl->normal_con_f();
+	if (!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");
+	while ((is_normal_state = -1 != ProcessMessage()) && pimpl->m_state.update() && !pimpl->m_state[KEY_INPUT_Z] && !pimpl->m_state.esc()) std::this_thread::sleep_for(std::chrono::milliseconds(50));
 	if (!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");
 	if (pimpl->m_state.esc()) throw normal_exit();
 	return Status::CONTINUE;
