@@ -23,7 +23,7 @@ git clone https://github.com/TakeObara/DoNotPushGame.git
 もしくは
 
 ```sh
-https://yumetodo@bitbucket.org/yumetodo/donotpushgame.github
+https://yumetodo@bitbucket.org/yumetodo/donotpushgame.git
 ```
 
 ## dependency 依存関係
