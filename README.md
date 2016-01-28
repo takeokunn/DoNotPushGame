@@ -29,6 +29,7 @@ https://yumetodo@bitbucket.org/yumetodo/donotpushgame.github
 ## dependency 依存関係
 - [DxLibEx](https://github.com/Nagarei/DxLibEx)
 - [DxLib](http://homepage2.nifty.com/natupaji/DxLib/)
+- [Boost](www.boost.org)(``boost::optional``)
 
 最終的にGHandleとSHandleはDxLibExに移行する。暫定的にオレオレclassを使用中・・・
 
