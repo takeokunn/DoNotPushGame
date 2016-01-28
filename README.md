@@ -29,7 +29,7 @@ https://yumetodo@bitbucket.org/yumetodo/donotpushgame.github
 ## dependency 依存関係
 - [DxLibEx](https://github.com/Nagarei/DxLibEx)
 - [DxLib](http://homepage2.nifty.com/natupaji/DxLib/)
-- [Boost](www.boost.org)(``boost::optional``)
+- [Boost](www.boost.org)(``boost::optional``を使用。boost 1.59.0で動作確認)
 
 最終的にGHandleとSHandleはDxLibExに移行する。暫定的にオレオレclassを使用中・・・
 
@@ -39,9 +39,10 @@ https://yumetodo@bitbucket.org/yumetodo/donotpushgame.github
 - Visual Studio 2015 Update 1 Clang with Microsoft CodeGen(clang3.7)
 
 ## Compile方法
-1. 環境変数``DXLIB_ROOT``と``DXLIBEX_ROOT``を設定する  
+1. 環境変数``DXLIB_ROOT``と``DXLIBEX_ROOT``と``BOOST_ROOT``を設定する  
 ex.)``DXLIB_ROOT``を``D:\lib\DxLib_VC\プロジェクトに追加すべきファイル_VC用``に  
-``DXLIBEX_ROOT``を``C:\Users\yumetodo\Documents\git\DxLibEx``に
+``DXLIBEX_ROOT``を``C:\Users\yumetodo\Documents\git\DxLibEx``に  
+``BOOST_ROOT``を``C:\lib\boost_1_60_0``に
 2. ``Don't_push.sln``を開く
 3. ビルド構成を適切に選択する。Visual Studio 2015の人は``VS2015Debug``または``VS2015Release``に。なおVisual Studio2013の人はビルドツールセットの設定をやり直すこと。(November CTPいれよう)
 4. ビルド→ソリューションのビルドでビルドする
