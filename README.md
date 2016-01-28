@@ -34,8 +34,9 @@ https://yumetodo@bitbucket.org/yumetodo/donotpushgame.github
 最終的にGHandleとSHandleはDxLibExに移行する。暫定的にオレオレclassを使用中・・・
 
 ## Compiler Support 対応コンパイラー
-- Visual Studio 2013 November CTP
-- Visual Studio 2015
+- Visual Studio 2013 Update 5
+- Visual Studio 2015 Update 1
+- Visual Studio 2015 Update 1 Clang with Microsoft CodeGen(clang3.7)
 
 ## Compile方法
 1. 環境変数``DXLIB_ROOT``と``DXLIBEX_ROOT``を設定する  
