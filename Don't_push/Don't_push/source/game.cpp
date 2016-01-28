@@ -213,7 +213,7 @@ Status game_c::game_main() {
 	if (this->pimpl->m_state.esc()) throw normal_exit();
 
 	//save image
-	dxle::Graph2D::screen tmp;
+	auto tmp = dxle::Graph2D::MakeScreen(WINDOW_WIDTH, WINDOW_HEIGHT);
 	tmp.DrawnOn([this, &power_bar](){
 		this->pimpl->m_back_img.DrawGraph({}, false);
 		DrawBox_kai(POWER_BAR_BG_POS, POWER_BAR_BG_SIZE, DxLib::GetColor(4, 182, 182), 2, DxLib::GetColor(229, 255, 255));
@@ -266,6 +266,34 @@ Status game_c::helicopter_event() {
 		if (this->pimpl->m_bouninngenn_a.is_fallen() && this->pimpl->m_bouninngenn_b.is_fallen()) break;//ふたりとも落ちたらゲーム終わり
 	}
 	if (!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");
+	if (pimpl->m_state.esc()) throw normal_exit();
+	return Status::CONTINUE;
+}
+Status game_c::echo_score()
+{
+	if (!this->pimpl->game_end_img) throw std::runtime_error("this->pimpl->game_end_img is empty.");
+
+	return Status::CONTINUE;
+}
+namespace detail {
+	struct dirty_hack_texture_2d : protected dxle::Graph2D::screen {
+		int filter_HSB(bool HueType, int16_t Hue, int Saturation, int16_t Bright) const DXLE_NOEXCEPT_OR_NOTHROW {
+			return DxLib::GraphFilter(this->GetHandle(), DX_GRAPH_FILTER_HSB, HueType, Hue, Saturation, Bright);
+		}
+	};
+	int filter_HSB(const dirty_hack_texture_2d& gp, bool HueType, int16_t Hue, int Saturation, int16_t Bright) DXLE_NOEXCEPT_OR_NOTHROW {
+		return gp.filter_HSB(HueType, Hue, Saturation, Bright);
+	}
+}
+Status game_c::echo_game_over()
+{
+	if (!this->pimpl->game_end_img) throw std::runtime_error("this->pimpl->game_end_img is empty.");
+	detail::filter_HSB((*dynamic_cast<detail::dirty_hack_texture_2d*>(&(this->pimpl->game_end_img.get()))), 0, 0, 0, -60);
+	this->pimpl->game_end_img->DrawGraph(dxle::pointi{}, false);
+	const auto font = CreateFontToHandle(nullptr, 30, 1, DX_FONTTYPE_ANTIALIASING);
+	DrawStringToHandle(260, 150, "GAME OVER!", DxLib::GetColor(255, 255, 255), font);
+	DrawStringToHandle(260, 200, "Press Z to continue.", DxLib::GetColor(255, 255, 255), font);
+	while (pimpl->m_state.update() && !pimpl->m_state[KEY_INPUT_Z] && !pimpl->m_state.esc());
 	if (pimpl->m_state.esc()) throw normal_exit();
 	return Status::CONTINUE;
 }
