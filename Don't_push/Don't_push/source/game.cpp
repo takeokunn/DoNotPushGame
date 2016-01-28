@@ -267,6 +267,13 @@ Status game_c::helicopter_event() {
 	}
 	if (!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");
 	if (pimpl->m_state.esc()) throw normal_exit();
+	//save image
+	auto tmp = dxle::Graph2D::MakeScreen(WINDOW_WIDTH, WINDOW_HEIGHT);
+	tmp.DrawnOn([this, &helicopter]() {
+		this->pimpl->m_back_img.DrawGraph({}, false);
+		helicopter.draw();
+	});
+	this->pimpl->game_end_img = std::move(tmp);
 	return Status::CONTINUE;
 }
 Status game_c::echo_score()
@@ -275,25 +282,21 @@ Status game_c::echo_score()
 
 	return Status::CONTINUE;
 }
-namespace detail {
-	struct dirty_hack_texture_2d : protected dxle::Graph2D::screen {
-		int filter_HSB(bool HueType, int16_t Hue, int Saturation, int16_t Bright) const DXLE_NOEXCEPT_OR_NOTHROW {
-			return DxLib::GraphFilter(this->GetHandle(), DX_GRAPH_FILTER_HSB, HueType, Hue, Saturation, Bright);
-		}
-	};
-	int filter_HSB(const dirty_hack_texture_2d& gp, bool HueType, int16_t Hue, int Saturation, int16_t Bright) DXLE_NOEXCEPT_OR_NOTHROW {
-		return gp.filter_HSB(HueType, Hue, Saturation, Bright);
-	}
-}
 Status game_c::echo_game_over()
 {
 	if (!this->pimpl->game_end_img) throw std::runtime_error("this->pimpl->game_end_img is empty.");
-	detail::filter_HSB((*dynamic_cast<detail::dirty_hack_texture_2d*>(&(this->pimpl->game_end_img.get()))), 0, 0, 0, -60);
+	this->pimpl->m_state.fllush();
+	this->pimpl->game_end_img->DrawGraph(dxle::pointi{}, false);
+	this->pimpl->m_state.fllush();
+	this->pimpl->game_end_img->filter_HSB(0, 0, 0, -60);
 	this->pimpl->game_end_img->DrawGraph(dxle::pointi{}, false);
 	const auto font = CreateFontToHandle(nullptr, 30, 1, DX_FONTTYPE_ANTIALIASING);
 	DrawStringToHandle(260, 150, "GAME OVER!", DxLib::GetColor(255, 255, 255), font);
 	DrawStringToHandle(260, 200, "Press Z to continue.", DxLib::GetColor(255, 255, 255), font);
-	while (pimpl->m_state.update() && !pimpl->m_state[KEY_INPUT_Z] && !pimpl->m_state.esc());
+	bool is_normal_state = this->pimpl->normal_con_f();
+	if (!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");
+	while ((is_normal_state = -1 != ProcessMessage()) && pimpl->m_state.update() && !pimpl->m_state[KEY_INPUT_Z] && !pimpl->m_state.esc()) std::this_thread::sleep_for(std::chrono::milliseconds(50));
+	if (!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");
 	if (pimpl->m_state.esc()) throw normal_exit();
 	return Status::CONTINUE;
 }
