@@ -16,7 +16,7 @@
 struct game_c::Impl {
 	Impl(const dxle::pointi& bouninngennA_p, const dxle::pointi& bouninngennB_p)
 		: m_window_s(static_cast<int>(WINDOW_WIDTH), static_cast<int>(WINDOW_HEIGHT)), m_state(), m_back_img(dxle::Graph2D::MakeScreen(m_window_s.x, m_window_s.y)),
-		m_img(make_image_array()), m_sound(make_sound_array()), score(),
+		m_img(make_image_array()), m_sound(make_sound_array()), score(), game_end_img(),
 		m_bouninngenn_a{ bouninngennA_p, &m_img["bouninngennA"], &m_img["bouninngennA_fall"] },//棒人形A
 		m_bouninngenn_b{ bouninngennB_p, &m_img["bouninngennB"], &m_img["bouninngennB_fall"] } //棒人形B
 	{
@@ -38,6 +38,7 @@ struct game_c::Impl {
 	img_arr_t m_img;
 	sound_arr_t m_sound;
 	std::uint8_t score;//0-100
+	std::experimental::optional<dxle::Graph2D::screen> game_end_img;
 	obj_info m_bouninngenn_a;
 	obj_info m_bouninngenn_b;
 };
@@ -80,6 +81,7 @@ void game_c::Impl::state_init() NOEXCEPT {
 	this->m_bouninngenn_b.state_init();
 	this->bouninngen_draw();
 	this->score = 0;
+	this->game_end_img = {};
 }
 #ifdef _MSC_VER
 #pragma warning (push)
