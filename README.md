@@ -23,7 +23,7 @@ git clone https://github.com/TakeObara/DoNotPushGame.git
 もしくは
 
 ```sh
-https://yumetodo@bitbucket.org/yumetodo/donotpushgame.git
+git clone https://yumetodo@bitbucket.org/yumetodo/donotpushgame.git
 ```
 
 ## dependency 依存関係
@@ -67,5 +67,3 @@ http://azukifont.com/kiyaku.html
 
 ## 免責事項
 このプログラムを実行したことによって生じたいかなる損害について作者は一切の責任を負いません。
-
-
