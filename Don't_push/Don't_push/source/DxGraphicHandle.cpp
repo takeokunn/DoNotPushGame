@@ -227,7 +227,7 @@ namespace detail {
 DXLE_CXX14_CONSTEXPR std::array<detail::RGB_t, 256> make_y_gradation_rgb_arr_helper() NOEXCEPT{
 	std::array<detail::RGB_t, 256> data_arr;
 	static_assert(sizeof(detail::RGB_t) == 3, "sizeof struct 'detail::COLORTYPE' is not equal with 3.");
-	for (uint8_t i = 0; i < data_arr.size(); ++i) data_arr[i] = detail::to_RGB_t(detail::YPbPr(i));
+	for (std::size_t i = 0; i < data_arr.size(); ++i) data_arr[i] = detail::to_RGB_t(detail::YPbPr(static_cast<uint8_t>(i)));
 	return data_arr;
 }
 std::array<detail::RGB_t, 256> make_y_gradation_rgb_arr(unsigned int base_color, bool trans_flag) NOEXCEPT {
