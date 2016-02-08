@@ -18,6 +18,7 @@ DXLE_STATIC_CONSTEXPR dxle::sizei POWER_BAR_BG_SIZE = { WINDOW.width * 7 / 16, W
 DXLE_STATIC_CONSTEXPR dxle::pointi POWER_BAR_POS = { WINDOW.width * 9 / 16, WINDOW.height * 11 / 12 };
 DXLE_STATIC_CONSTEXPR dxle::sizei POWER_BAR_SIZE = { WINDOW.width * 11 / 32, WINDOW.height * 2 / 75 };
 DXLE_STATIC_CONSTEXPR std::size_t POS_REC_NUM = 1024;
+DXLE_STATIC_CONSTEXPR dxle::pointi SCORE_SHOW_IMAGE_POS = static_cast<dxle::pointi>(WINDOW / 4);
 
 //状態管理
 enum class Status{

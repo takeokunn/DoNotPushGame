@@ -29,7 +29,7 @@ struct game_c::Impl {
 	Impl& operator=(Impl&&) = delete;
 	bool bouninngen_draw() const NOEXCEPT;
 	void state_init() NOEXCEPT;
-	bool normal_con_f() const NOEXCEPT;
+	bool normal_con_f() const;
 	int move_x(int limit_l_x, int limit_r_x) NOEXCEPT;
 	void fadeout_prelude_masseage();
 	template<std::size_t bouninngenn_no> void fall_bouninngenn(const std::deque<dxle::pointi>& pos_record, const power_bar_c& power_bar);
@@ -57,7 +57,11 @@ const img_arr_t & game_c::get_img() const NOEXCEPT {
 	return this->pimpl->m_img;
 }
 
-bool game_c::Impl::normal_con_f() const NOEXCEPT { return -1 != ProcessMessage() && 0 == ScreenFlip() && 0 == ClearDrawScreen(); }
+bool game_c::Impl::normal_con_f() const { 
+	bool re = -1 != ProcessMessage() && 0 == ScreenFlip() && 0 == ClearDrawScreen();
+	if (!re) throw std::runtime_error("ProcessMessage() return -1.");
+	return re;
+}
 
 int game_c::Impl::move_x(int limit_l_x, int limit_r_x) NOEXCEPT{
 	if (limit_r_x < limit_l_x) std::swap(limit_l_x, limit_r_x);
@@ -180,7 +184,6 @@ template<std::size_t bouninngenn_no> void game_c::Impl::fall_bouninngenn(const s
 		//WaitKey();
 		if (bouninngenn.is_fallen()) break;
 	}
-	if (!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");
 	if (this->m_state.esc()) throw normal_exit();
 }
 #ifdef _MSC_VER
@@ -210,36 +213,36 @@ Status game_c::game_main() {
 		this->pimpl->m_img["game_main_gauge_bg"].DrawExtendGraph(POWER_BAR_BG_POS, POWER_BAR_BG_POS + POWER_BAR_BG_SIZE, false);
 		power_bar.draw();
 	}
-	if (!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");
 	if (this->pimpl->m_state.esc()) throw normal_exit();
-
-	//save image
-	auto tmp = dxle::graph2d::MakeScreen(WINDOW_WIDTH, WINDOW_HEIGHT);
-	tmp.drawn_on([this, &power_bar](){
-		this->pimpl->m_back_img.DrawGraph({}, false);
-		DrawBox_kai(POWER_BAR_BG_POS, POWER_BAR_BG_SIZE, DxLib::GetColor(4, 182, 182), 2, DxLib::GetColor(229, 255, 255));
-		this->pimpl->m_img["game_main_gauge_bg"].DrawExtendGraph(POWER_BAR_BG_POS, POWER_BAR_BG_POS + POWER_BAR_BG_SIZE, false);
-		power_bar.draw();
-	});
-	this->pimpl->game_end_img = std::move(tmp);
 
 	const auto rate = bouninngenn_moving_distance(this->pimpl->m_bouninngenn_a, this->pimpl->m_bouninngenn_b);
 	const auto p_rate = power_bar.get_percent();
+	Status re = Status::GAME_OVER;
 	if (rate < 70.0 || p_rate < 60.0) {
 		this->pimpl->fall_bouninngenn<1>(pos_record, power_bar);//落とそうとして落とされる、ゲームオーバー
-		return Status::GAME_OVER;
 	}
 	else {
 		this->pimpl->score = static_cast<uint8_t>((p_rate + rate) / 2);//0-100
 		if (this->pimpl->score < 40) {
 			this->pimpl->fall_bouninngenn<1>(pos_record, power_bar);//落とそうとして落とされる、ゲームオーバー
-			return Status::GAME_OVER;
 		}
 		else {
 			this->pimpl->fall_bouninngenn<0>(pos_record, power_bar);//落とす。成功！
-			return Status::RESULT_ECHO;
+			re = Status::RESULT_ECHO;
 		}
 	}
+
+	//save image
+	auto tmp = dxle::graph2d::MakeScreen(WINDOW_WIDTH, WINDOW_HEIGHT);
+	tmp.drawn_on([this, &power_bar](){
+		this->pimpl->m_back_img.DrawGraph({}, false);
+		this->pimpl->bouninngen_draw();
+		DrawBox_kai(POWER_BAR_BG_POS, POWER_BAR_BG_SIZE, DxLib::GetColor(4, 182, 182), 2, DxLib::GetColor(229, 255, 255));
+		power_bar.draw();
+	});
+	this->pimpl->game_end_img = std::move(tmp);
+
+	return re;
 }
 #ifdef _MSC_VER
 #pragma warning (pop)
@@ -266,7 +269,6 @@ Status game_c::helicopter_event() {
 		//WaitKey();
 		if (this->pimpl->m_bouninngenn_a.is_fallen() && this->pimpl->m_bouninngenn_b.is_fallen()) break;//ふたりとも落ちたらゲーム終わり
 	}
-	if (!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");
 	if (pimpl->m_state.esc()) throw normal_exit();
 	//save image
 	auto tmp = dxle::graph2d::MakeScreen(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -281,13 +283,18 @@ Status game_c::echo_score()
 {
 	if (!this->pimpl->game_end_img) throw std::runtime_error("this->pimpl->game_end_img is empty.");
 	this->pimpl->m_state.fllush();
-	this->pimpl->game_end_img->DrawExtendGraph({}, static_cast<dxle::pointi>(WINDOW), false);
-	const auto font = CreateFontToHandle(nullptr, 30, 1, DX_FONTTYPE_ANTIALIASING);
-	const auto color_white = DxLib::GetColor(255, 255, 255);
-	DrawStringToHandle(260, 150, "GAME OVER!", color_white, font);
-	DrawStringToHandle(260, 200, "Press Z to continue.", color_white, font);
 	bool is_normal_state = this->pimpl->normal_con_f();
-	if (!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");
+	const auto color_black = DxLib::GetColor(0, 0, 0);
+	DrawBox_kai(SCORE_SHOW_IMAGE_POS - dxle::pointi{ 1, 1 }, WINDOW + dxle::sizei{ 1, 1 } - SCORE_SHOW_IMAGE_POS, color_black, 5);
+	this->pimpl->game_end_img->DrawExtendGraph(SCORE_SHOW_IMAGE_POS, static_cast<dxle::pointi>(WINDOW), false);
+	const auto font = CreateFontToHandle(nullptr, 30, 1, DX_FONTTYPE_ANTIALIASING);
+	DrawStringToHandle(
+		WINDOW.width * 13 / 40, WINDOW.height / 16,
+		("GAME WIN!   Score : " + std::to_string(this->pimpl->score)).c_str(),
+		color_black, font
+	);
+	DrawStringToHandle(WINDOW.width * 13 / 40, WINDOW.height / 16 + 50, "Press Z to continue.", color_black, font);
+	is_normal_state = this->pimpl->normal_con_f();
 	while ((is_normal_state = -1 != ProcessMessage()) && pimpl->m_state.update() && !pimpl->m_state[KEY_INPUT_Z] && !pimpl->m_state.esc()) {
 		std::this_thread::sleep_for(std::chrono::milliseconds(50));
 	}
@@ -299,14 +306,14 @@ Status game_c::echo_game_over()
 {
 	if (!this->pimpl->game_end_img) throw std::runtime_error("this->pimpl->game_end_img is empty.");
 	this->pimpl->m_state.fllush();
+	bool is_normal_state = this->pimpl->normal_con_f();
 	this->pimpl->game_end_img->filter_HSB(0, 0, 0, -60);
 	this->pimpl->game_end_img->DrawGraph({}, false);
 	const auto font = CreateFontToHandle(nullptr, 30, 1, DX_FONTTYPE_ANTIALIASING);
 	const auto color_white = DxLib::GetColor(255, 255, 255);
-	DrawStringToHandle(260, 150, "GAME OVER!", color_white, font);
-	DrawStringToHandle(260, 200, "Press Z to continue.", color_white, font);
-	bool is_normal_state = this->pimpl->normal_con_f();
-	if (!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");
+	DrawStringToHandle(WINDOW.width * 13 / 40, WINDOW.height / 4, "GAME OVER!", color_white, font);
+	DrawStringToHandle(WINDOW.width * 13 / 40, WINDOW.height / 4 + 50, "Press Z to continue.", color_white, font);
+	is_normal_state = this->pimpl->normal_con_f();
 	while ((is_normal_state = -1 != ProcessMessage()) && pimpl->m_state.update() && !pimpl->m_state[KEY_INPUT_Z] && !pimpl->m_state.esc()) {
 		std::this_thread::sleep_for(std::chrono::milliseconds(50));
 	}
