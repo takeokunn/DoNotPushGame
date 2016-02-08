@@ -28,11 +28,11 @@ Status continu(const img_arr_t&, const sound_arr_t& sound) {
 			flag_no_continue = !flag_no_continue;
 		}
 		//描画
-		DrawBox(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GetColor(180, 180, 180), TRUE);	//背景
+		DrawBox(0, 0, WINDOW.width, WINDOW.height, GetColor(180, 180, 180), TRUE);	//背景
 		DrawStringToHandle(select0_x + !flag_no_continue*40, select0_y, "CONTINUE !!", color[flag_no_continue] , Font_1);//CONTINUE
 		DrawStringToHandle(select1_x + flag_no_continue*40 , select1_y, "RETIRE. . .", color[!flag_no_continue], Font_1);//RETIRE
 		DrawBox(180, 155 + flag_no_continue*100, 200, 175 + flag_no_continue*100, color[0], TRUE);	//選択してるのが分かるようにするやつ
-		DrawStringToHandle(120, WINDOW_HEIGHT - (WINDOW_HEIGHT / 4), "- Zキーを押して決定だよ -", GetColor(0, 0, 0), Font_1);//Cキー押してね
+		DrawStringToHandle(120, WINDOW.height * 3 / 4, "- Zキーを押して決定だよ -", GetColor(0, 0, 0), Font_1);//Cキー押してね
 	}
 	if (!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");
 	if (state.esc()) throw normal_exit();

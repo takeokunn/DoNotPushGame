@@ -15,7 +15,7 @@ public:
 	///<param name="whole_bar_size_">バーの大きさ(最大)</param>
 	///<param name="frame_num_to_fill">バーの長さが最大になるまでに必要なframe数</param>
 	///<param name="color">バーの色</param>
-	power_bar_c(const dxle::pointi& base_point, const dxle::pointi& whole_bar_size, size_t frame_num_to_fill, unsigned int color) NOEXCEPT;
+	power_bar_c(const dxle::pointi& base_point, const dxle::sizei& whole_bar_size, size_t frame_num_to_fill, unsigned int color) NOEXCEPT;
 	explicit power_bar_c(const power_bar_c& o) NOEXCEPT;
 	power_bar_c& operator=(const power_bar_c&) = delete;
 	power_bar_c& operator=(power_bar_c&&) = delete;
@@ -30,7 +30,7 @@ private:
 	///<summary>バーの左上の座標</summary>
 	dxle::pointi base_point_;
 	///<summary>バーの大きさ(最大)</summary>
-	const dxle::pointi whole_bar_size_;
+	const dxle::sizei whole_bar_size_;
 	///<summary>バーの長さ</summary>
 	int draw_pixcel_num_;
 	///<summary>バーの色</summary>
