@@ -11,7 +11,7 @@
 DxGHandle::DxGHandle(const char * FileName) DxHANDLE_NOEXCEPT {
 	this->GrHandle = LoadGraph(FileName);
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
-	if (-1 == this->GrHandle) throw DxGHandle_runtime_error("画像の読み込みに失敗しました");
+	if (-1 == this->GrHandle) throw DxGHandle_runtime_error("Fail to load image.");
 #endif
 }
 
@@ -20,20 +20,20 @@ DxGHandle::DxGHandle(const std::string & FileName) DxHANDLE_NOEXCEPT : DxGHandle
 DxGHandle::DxGHandle(int SizeX, int SizeY) DxHANDLE_NOEXCEPT {
 	this->GrHandle = MakeGraph(SizeX, SizeY);
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
-	if (-1 == this->GrHandle) throw DxGHandle_runtime_error("画像ハンドルの作成に失敗しました");
+	if (-1 == this->GrHandle) throw DxGHandle_runtime_error("Fail to make graphic handle.");
 #endif
 }
 
 DxGHandle::DxGHandle(dxle::pointi size) DxHANDLE_NOEXCEPT {
 	this->GrHandle = MakeGraph(size.x, size.y);
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
-	if (-1 == this->GrHandle) throw DxGHandle_runtime_error("画像ハンドルの作成に失敗しました");
+	if (-1 == this->GrHandle) throw DxGHandle_runtime_error("Fail to make graphic handle.");
 #endif
 }
 
 DxGHandle::DxGHandle(DxGHandle_t GrHandle) DxHANDLE_NOEXCEPT {
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
-	if (-1 == GrHandle) throw DxGHandle_runtime_error("画像ハンドルの作成に失敗しました");
+	if (-1 == GrHandle) throw DxGHandle_runtime_error("Fail to make graphic handle.");
 #endif
 	this->GrHandle = GrHandle;
 }
@@ -41,7 +41,7 @@ DxGHandle::DxGHandle(DxGHandle_t GrHandle) DxHANDLE_NOEXCEPT {
 int DxGHandle::DrawGraph(int x, int y, bool TransFlag) const DxHANDLE_NOEXCEPT {
 	const auto re = DxLib::DrawGraph(x, y, this->GrHandle, TransFlag);
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
-	if (-1 == re) throw DxGHandle_runtime_error("画像の描画に失敗しました");
+	if (-1 == re) throw DxGHandle_runtime_error("Fail DrawGraph().");
 #endif
 	return re;
 }
@@ -49,7 +49,7 @@ int DxGHandle::DrawGraph(int x, int y, bool TransFlag) const DxHANDLE_NOEXCEPT {
 int DxGHandle::DrawGraph(dxle::pointi p, bool TransFlag) const DxHANDLE_NOEXCEPT {
 	const auto re = DxLib::DrawGraph(p.x, p.y, this->GrHandle, TransFlag);
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
-	if (-1 == re) throw DxGHandle_runtime_error("画像の描画に失敗しました");
+	if (-1 == re) throw DxGHandle_runtime_error("Fail DrawGraph().");
 #endif
 	return re;
 }
@@ -57,7 +57,7 @@ int DxGHandle::DrawGraph(dxle::pointi p, bool TransFlag) const DxHANDLE_NOEXCEPT
 int DxGHandle::DrawTurnGraph(int x, int y, bool TransFlag) const DxHANDLE_NOEXCEPT {
 	const auto re = DxLib::DrawTurnGraph(x, y, this->GrHandle, TransFlag);
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
-	if (-1 == re) throw DxGHandle_runtime_error("画像の描画に失敗しました");
+	if (-1 == re) throw DxGHandle_runtime_error("Fail DrawGraph().");
 #endif
 	return re;
 }
@@ -65,7 +65,7 @@ int DxGHandle::DrawTurnGraph(int x, int y, bool TransFlag) const DxHANDLE_NOEXCE
 int DxGHandle::DrawTurnGraph(dxle::pointi p, bool TransFlag) const DxHANDLE_NOEXCEPT {
 	const auto re = DxLib::DrawTurnGraph(p.x, p.y, this->GrHandle, TransFlag);
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
-	if (-1 == re) throw DxGHandle_runtime_error("画像の描画に失敗しました");
+	if (-1 == re) throw DxGHandle_runtime_error("Fail DrawTurnGraph().");
 #endif
 	return re;
 }
@@ -73,7 +73,7 @@ int DxGHandle::DrawTurnGraph(dxle::pointi p, bool TransFlag) const DxHANDLE_NOEX
 int DxGHandle::DrawExtendGraph(int x1, int y1, int x2, int y2, bool TransFlag) const DxHANDLE_NOEXCEPT {
 	const auto re = DxLib::DrawExtendGraph(x1, y1, x2, y2, this->GrHandle, TransFlag);
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
-	if (-1 == re) throw DxGHandle_runtime_error("画像の拡大縮小描画に失敗しました");
+	if (-1 == re) throw DxGHandle_runtime_error("Fail DrawExtendGraph().");
 #endif
 	return re;
 }
@@ -81,7 +81,7 @@ int DxGHandle::DrawExtendGraph(int x1, int y1, int x2, int y2, bool TransFlag) c
 int DxGHandle::DrawExtendGraph(dxle::pointi p1, dxle::pointi p2, bool TransFlag) const DxHANDLE_NOEXCEPT {
 	const auto re = DxLib::DrawExtendGraph(p1.x, p1.y, p2.x, p2.y, this->GrHandle, TransFlag);
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
-	if (-1 == re) throw DxGHandle_runtime_error("画像の拡大縮小描画に失敗しました");
+	if (-1 == re) throw DxGHandle_runtime_error("Fail DrawExtendGraph().");
 #endif
 	return re;
 }
@@ -89,7 +89,7 @@ int DxGHandle::DrawExtendGraph(dxle::pointi p1, dxle::pointi p2, bool TransFlag)
 int DxGHandle::DrawRotaGraph(int x, int y, double ExtRate, double Angle, bool TransFlag, bool TurnFlag) const DxHANDLE_NOEXCEPT {
 	const auto re = DxLib::DrawRotaGraph(x, y, ExtRate, Angle, this->GrHandle, TransFlag, TurnFlag);
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
-	if (-1 == re) throw DxGHandle_runtime_error("画像の回転描画に失敗しました");
+	if (-1 == re) throw DxGHandle_runtime_error("Fail DrawRotaGraph().");
 #endif
 	return re;
 }
@@ -97,7 +97,7 @@ int DxGHandle::DrawRotaGraph(int x, int y, double ExtRate, double Angle, bool Tr
 int DxGHandle::DrawRotaGraph(dxle::pointi p, double ExtRate, double Angle, bool TransFlag, bool TurnFlag) const DxHANDLE_NOEXCEPT {
 	const auto re = DxLib::DrawRotaGraph(p.x, p.y, ExtRate, Angle, this->GrHandle, TransFlag, TurnFlag);
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
-	if (-1 == re) throw DxGHandle_runtime_error("画像の回転描画に失敗しました");
+	if (-1 == re) throw DxGHandle_runtime_error("Fail DrawRotaGraph().");
 #endif
 	return re;
 }
@@ -105,7 +105,7 @@ int DxGHandle::DrawRotaGraph(dxle::pointi p, double ExtRate, double Angle, bool 
 int DxGHandle::DrawRotaGraph(int x, int y, int cx, int cy, double ExtRate, double Angle, bool TransFlag, bool TurnFlag) const DxHANDLE_NOEXCEPT {
 	const auto re = DxLib::DrawRotaGraph2(x, y, cx, cy, ExtRate, Angle, this->GrHandle, TransFlag, TurnFlag);
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
-	if (-1 == re) throw DxGHandle_runtime_error("画像の回転描画に失敗しました");
+	if (-1 == re) throw DxGHandle_runtime_error("Fail DrawRotaGraph().");
 #endif
 	return re;
 }
@@ -113,7 +113,7 @@ int DxGHandle::DrawRotaGraph(int x, int y, int cx, int cy, double ExtRate, doubl
 int DxGHandle::DrawRotaGraph(dxle::pointi p, dxle::pointi c, double ExtRate, double Angle, bool TransFlag, bool TurnFlag) const DxHANDLE_NOEXCEPT {
 	const auto re = DxLib::DrawRotaGraph2(p.x, p.y, c.x, c.y, ExtRate, Angle, this->GrHandle, TransFlag, TurnFlag);
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
-	if (-1 == re) throw DxGHandle_runtime_error("画像の回転描画に失敗しました");
+	if (-1 == re) throw DxGHandle_runtime_error("Fail DrawRotaGraph().");
 #endif
 	return re;
 }
@@ -121,7 +121,7 @@ int DxGHandle::DrawRotaGraph(dxle::pointi p, dxle::pointi c, double ExtRate, dou
 int DxGHandle::DrawRotaGraph(int x, int y, int cx, int cy, double ExtRateX, double ExtRateY, double Angle, bool TransFlag, int TurnFlag) const DxHANDLE_NOEXCEPT {
 	const auto re = DxLib::DrawRotaGraph3(x, y, cx, cy, ExtRateX, ExtRateY, Angle, this->GrHandle, TransFlag, TurnFlag);
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
-	if (-1 == re) throw DxGHandle_runtime_error("画像の回転描画に失敗しました");
+	if (-1 == re) throw DxGHandle_runtime_error("Fail DrawRotaGraph().");
 #endif
 	return re;
 }
@@ -129,7 +129,7 @@ int DxGHandle::DrawRotaGraph(int x, int y, int cx, int cy, double ExtRateX, doub
 int DxGHandle::DrawRotaGraph(dxle::pointi p, dxle::pointi c, std::pair<double, double> ExtRate, double Angle, bool TransFlag, int TurnFlag) const DxHANDLE_NOEXCEPT {
 	const auto re = DxLib::DrawRotaGraph3(p.x, p.y, c.x, c.y, ExtRate.first, ExtRate.second, Angle, this->GrHandle, TransFlag, TurnFlag);
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
-	if (-1 == re) throw DxGHandle_runtime_error("画像の回転描画に失敗しました");
+	if (-1 == re) throw DxGHandle_runtime_error("Fail DrawRotaGraph().");
 #endif
 	return re;
 }
@@ -137,7 +137,7 @@ int DxGHandle::DrawRotaGraph(dxle::pointi p, dxle::pointi c, std::pair<double, d
 int DxGHandle::DrawModiGraph(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, bool TransFlag) const DxHANDLE_NOEXCEPT {
 	const auto re = DxLib::DrawModiGraph(x1, y1, x2, y2, x3, y3, x4, y4, this->GrHandle, TransFlag);
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
-	if (-1 == re) throw DxGHandle_runtime_error("画像の自由変形描画に失敗しました");
+	if (-1 == re) throw DxGHandle_runtime_error("Fail DrawModiGraph().");
 #endif
 	return re;
 }
@@ -145,14 +145,14 @@ int DxGHandle::DrawModiGraph(int x1, int y1, int x2, int y2, int x3, int y3, int
 int DxGHandle::DrawModiGraph(std::array<dxle::pointi, 4> p, bool TransFlag) const DxHANDLE_NOEXCEPT {
 	const auto re = DxLib::DrawModiGraph(p[0].x, p[0].y, p[1].x, p[1].y, p[2].x, p[2].y, p[3].x, p[3].y, this->GrHandle, TransFlag);
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
-	if (-1 == re) throw DxGHandle_runtime_error("画像の自由変形描画に失敗しました");
+	if (-1 == re) throw DxGHandle_runtime_error("Fail DrawModiGraph().");
 #endif
 	return re;
 }
 int DxGHandle::DrawRectGraph(int DestX, int DestY, int SrcX, int SrcY, int Width, int Height, bool TransFlag, bool TurnFlag) const DxHANDLE_NOEXCEPT {
 	const auto re = DxLib::DrawRectGraph(DestX, DestY, SrcX, SrcY, Width, Height, this->GrHandle, TransFlag, TurnFlag);
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
-	if (-1 == re) throw DxGHandle_runtime_error("画像の部分描画に失敗しました");
+	if (-1 == re) throw DxGHandle_runtime_error("Fail DrawRectGraph().");
 #endif
 	return re;
 }
@@ -160,7 +160,7 @@ int DxGHandle::DrawRectGraph(int DestX, int DestY, int SrcX, int SrcY, int Width
 int DxGHandle::DrawRectGraph(dxle::pointi Dest, dxle::pointi Src, dxle::pointi coord, bool TransFlag, bool TurnFlag) const DxHANDLE_NOEXCEPT {
 	const auto re = DxLib::DrawRectGraph(Dest.x, Dest.y, Src.x, Src.y, coord.x, coord.y, this->GrHandle, TransFlag, TurnFlag);
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
-	if (-1 == re) throw DxGHandle_runtime_error("画像の部分描画に失敗しました");
+	if (-1 == re) throw DxGHandle_runtime_error("Fail DrawRectGraph().");
 #endif
 	return re;
 }
@@ -176,7 +176,7 @@ DxGHandle DxGHandle::DerivationGraph(dxle::pointi Src, dxle::pointi coord) const
 int DxGHandle::GetGraphSize(int * SizeXBuf, int * SizeYBuf) const DxHANDLE_NOEXCEPT {
 	const auto re = DxLib::GetGraphSize(this->GrHandle, SizeXBuf, SizeYBuf);
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
-	if (-1 == re) throw DxGHandle_runtime_error("画像の大きさの取得に失敗しました");
+	if (-1 == re) throw DxGHandle_runtime_error("Fail GetGraphSize().");
 #endif
 	return re;
 }
@@ -259,7 +259,7 @@ DxGHandle make_gradation_graph_handle(unsigned int base_color, bool trans_flag) 
 int DxGHandle::filter_mono(int16_t Cb, int16_t Cr) DxHANDLE_NOEXCEPT {
 	const auto re = GraphFilter(this->GrHandle, DX_GRAPH_FILTER_MONO, Cb, Cr);
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
-	if (-1 == re) throw DxGHandle_runtime_error("モノトーンフィルタに失敗しました");
+	if (-1 == re) throw DxGHandle_runtime_error("Fail filter_mono().");
 #endif
 	return re;
 }
@@ -267,7 +267,7 @@ int DxGHandle::filter_mono(int16_t Cb, int16_t Cr) DxHANDLE_NOEXCEPT {
 int DxGHandle::filter_gaussian(uint16_t PixelWidth, int Param) DxHANDLE_NOEXCEPT {
 	const auto re = GraphFilter(this->GrHandle, DX_GRAPH_FILTER_GAUSS, PixelWidth, Param);
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
-	if (-1 == re) throw DxGHandle_runtime_error("ガウシアンフィルタに失敗しました");
+	if (-1 == re) throw DxGHandle_runtime_error("Fail filter_gaussian().");
 #endif
 	return re;
 }
@@ -275,7 +275,7 @@ int DxGHandle::filter_gaussian(uint16_t PixelWidth, int Param) DxHANDLE_NOEXCEPT
 int DxGHandle::filter_down_scale(uint8_t DivNum) DxHANDLE_NOEXCEPT {
 	const auto re = GraphFilter(this->GrHandle, DX_GRAPH_FILTER_DOWN_SCALE, DivNum);
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
-	if (-1 == re) throw DxGHandle_runtime_error("縮小フィルタに失敗しました");
+	if (-1 == re) throw DxGHandle_runtime_error("Fail filter_down_scale().");
 #endif
 	return re;
 }
@@ -283,7 +283,7 @@ int DxGHandle::filter_down_scale(uint8_t DivNum) DxHANDLE_NOEXCEPT {
 int DxGHandle::filter_bright_clip(bright_clip_mode clipmode, uint8_t clip_pram, unsigned int fillcolor, uint8_t fillalpha) DxHANDLE_NOEXCEPT {
 	const auto re = GraphFilter(this->GrHandle, DX_GRAPH_FILTER_BRIGHT_CLIP, clipmode, clip_pram, fillcolor, fillalpha);
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
-	if (-1 == re) throw DxGHandle_runtime_error("明るさクリップフィルタに失敗しました");
+	if (-1 == re) throw DxGHandle_runtime_error("Fail filter_bright_clip().");
 #endif
 	return re;
 }
@@ -291,7 +291,7 @@ int DxGHandle::filter_bright_clip(bright_clip_mode clipmode, uint8_t clip_pram, 
 int DxGHandle::filter_HSB(bool HueType, int16_t Hue, int Saturation, int16_t Bright) DxHANDLE_NOEXCEPT {
 	const auto re = GraphFilter(this->GrHandle, DX_GRAPH_FILTER_HSB, HueType, Hue, Saturation, Bright);
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
-	if (-1 == re) throw DxGHandle_runtime_error("色相・彩度・明度フィルタに失敗しました");
+	if (-1 == re) throw DxGHandle_runtime_error("Fail filter_HSB().");
 #endif
 	return re;
 }
@@ -299,7 +299,7 @@ int DxGHandle::filter_HSB(bool HueType, int16_t Hue, int Saturation, int16_t Bri
 int DxGHandle::filter_invert() DxHANDLE_NOEXCEPT {
 	const auto re = GraphFilter(this->GrHandle, DX_GRAPH_FILTER_INVERT);
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
-	if (-1 == re) throw DxGHandle_runtime_error("階調の反転フィルタに失敗しました");
+	if (-1 == re) throw DxGHandle_runtime_error("Fail filter_invert().");
 #endif
 	return re;
 }
@@ -307,7 +307,7 @@ int DxGHandle::filter_invert() DxHANDLE_NOEXCEPT {
 int DxGHandle::filter_level(uint8_t min, uint8_t max, int Gamma, uint8_t Aftermin, uint8_t Aftermax) DxHANDLE_NOEXCEPT {
 	const auto re = GraphFilter(this->GrHandle, DX_GRAPH_FILTER_LEVEL, min, max, Gamma, Aftermin, Aftermax);
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
-	if (-1 == re) throw DxGHandle_runtime_error("レベル補正フィルタに失敗しました");
+	if (-1 == re) throw DxGHandle_runtime_error("Fail filter_level().");
 #endif
 	return re;
 }
@@ -315,7 +315,7 @@ int DxGHandle::filter_level(uint8_t min, uint8_t max, int Gamma, uint8_t Aftermi
 int DxGHandle::filter_two_color(uint8_t threshold, unsigned int LowColor, uint8_t LowAlpha, unsigned int HighColor, uint8_t HighAlpha) DxHANDLE_NOEXCEPT {
 	const auto re = GraphFilter(this->GrHandle, DX_GRAPH_FILTER_LEVEL, threshold, LowColor, LowAlpha, HighColor, HighAlpha);
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
-	if (-1 == re) throw DxGHandle_runtime_error("２階調化フィルタに失敗しました");
+	if (-1 == re) throw DxGHandle_runtime_error("Fail filter_two_color().");
 #endif
 	return re;
 }
@@ -327,7 +327,7 @@ int DxGHandle::filter_two_color(uint8_t threshold, unsigned int LowColor, unsign
 int DxGHandle::filter_gradient_map(const DxGHandle & MapGrHandle, bool Reverse_flag) DxHANDLE_NOEXCEPT {
 	const auto re = GraphFilter(this->GrHandle, DX_GRAPH_FILTER_LEVEL, MapGrHandle.GrHandle, Reverse_flag);
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
-	if (-1 == re) throw DxGHandle_runtime_error("レベル補正フィルタに失敗しました");
+	if (-1 == re) throw DxGHandle_runtime_error("Fail filter_gradient_map().");
 #endif
 	return re;
 }
@@ -340,17 +340,17 @@ BASEIMAGE to_BASEIMAGE(const DxGHandle & handle) {//YOU MUST CALL ReleaseBaseIma
 	const auto size = handle.GetGraphSize();
 	const auto tmp_screen = DxLib::MakeScreen(size.x, size.y, TRUE);
 	auto err = DxLib::SetDrawScreen(tmp_screen);
-	if (-1 == err) std::runtime_error("DxLib::SetDrawScreen関数でエラーが発生しました");
+	if (-1 == err) std::runtime_error("Fail DxLib::SetDrawScreen().");
 	err = DxLib::SetDrawBlendMode(DX_BLENDMODE_SRCCOLOR, 255);// 透明部分もそのまま描画先に描き込むブレンドモードにセット
-	if (-1 == err) std::runtime_error("DxLib::SetDrawBlendMode関数でエラーが発生しました");
+	if (-1 == err) std::runtime_error("Fail DxLib::SetDrawBlendMode().");
 	handle.DrawGraph(0, 0, true);//透明度を有効に
 	BASEIMAGE BaseImage;
 	err = DxLib::CreateARGB8ColorBaseImage(size.x, size.y, &BaseImage);//画像サイズと同じサイズの BASEIMAGE を作成
-	if (-1 == err) std::runtime_error("DxLib::CreateARGB8ColorBaseImage関数でエラーが発生しました");
+	if (-1 == err) std::runtime_error("Fail DxLib::CreateARGB8ColorBaseImage().");
 	err = DxLib::GetDrawScreenBaseImage(0, 0, size.x, size.y, &BaseImage);//描画先から画像を取り込む
-	if (-1 == err) std::runtime_error("DxLib::GetDrawScreenBaseImage関数でエラーが発生しました");
+	if (-1 == err) std::runtime_error("Fail DxLib::GetDrawScreenBaseImage().");
 	err = DxLib::DeleteGraph(tmp_screen);
-	if (-1 == err) std::runtime_error("DxLib::DeleteGraph関数でエラーが発生しました");
+	if (-1 == err) std::runtime_error("Fail DxLib::DeleteGraph().");
 	return BaseImage;
 }
 using hist_arr_t = std::array<uint32_t, 256>;
@@ -359,7 +359,7 @@ uint8_t calc_threshold_algolithm_otu(const DxGHandle & handle) {
 	//http://aquioux.net/blog/coding/as/automatic-calculation-of-threshold-by-discriminant-analysis-method-again-2/
 	using namespace detail;
 	BASEIMAGE baseimage = to_BASEIMAGE(handle);
-	if (baseimage.ColorData.PixelByte != 4) throw std::runtime_error("to_BASEIMAGE関数が不正な構造体を作成しました。");
+	if (baseimage.ColorData.PixelByte != 4) throw std::runtime_error("to_BASEIMAGE() make irregal BASEIMAGE struct.");
 
 	hist_arr_t histgram = {};//初期化
 	for (int i = 0; i < baseimage.Height * baseimage.Width; ++i)

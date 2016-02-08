@@ -10,7 +10,7 @@
 #include <exception>
 //初期化関数
 int init(){
-	SetMainWindowText("アプリケーション");
+	SetMainWindowText("Don't Push Game.");
 	SetOutApplicationLogValidFlag(FALSE);
 	SetGraphMode(WINDOW_WIDTH, WINDOW_HEIGHT, 16);
 	ChangeWindowMode(TRUE);
