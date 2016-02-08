@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <deque>
 #include <tuple>
+#include <thread>
 #include <boost/optional.hpp>
 struct game_c::Impl {
 	Impl(const dxle::pointi& bouninngennA_p, const dxle::pointi& bouninngennB_p)
