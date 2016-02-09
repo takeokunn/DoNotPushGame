@@ -379,36 +379,37 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\config.h" />
-    <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\continue.h" />
-    <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\define.h" />
-    <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\DxGraphicHandle.h" />
-    <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\DxHandleException.h" />
-    <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\Dxkeystate.h" />
-    <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\DxSoundHandle.h" />
+    <ClInclude Include="source\config.h" />
+    <ClInclude Include="source\continue.h" />
+    <ClInclude Include="source\define.h" />
+    <ClInclude Include="source\DxGraphicHandle.h" />
+    <ClInclude Include="source\DxHandleException.h" />
+    <ClInclude Include="source\Dxkeystate.h" />
+    <ClInclude Include="source\DxSoundHandle.h" />
     <ClInclude Include="source\flying_mare.h" />
-    <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\game.h" />
+    <ClInclude Include="source\game.h" />
     <ClInclude Include="source\circular_motion.h" />
-    <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\load.h" />
-    <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\object_to_fall.h" />
-    <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\power_bar.h" />
-    <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\title.h" />
-    <ClInclude Include="..\..\Don%27t_push\Don%27t_push\source\util_noexcept.h" />
+    <ClInclude Include="source\load.h" />
+    <ClInclude Include="source\object_to_fall.h" />
+    <ClInclude Include="source\power_bar.h" />
+    <ClInclude Include="source\title.h" />
+    <ClInclude Include="source\util_noexcept.h" />
     <ClInclude Include="source\end.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\continue.cpp" />
-    <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\DxGraphicHandle.cpp" />
-    <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\Dxkeystate.cpp" />
-    <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\DxSoundHandle.cpp" />
-    <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\flying_mare.cpp" />
-    <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\game.cpp" />
+    <ClCompile Include="source\config.cpp" />
+    <ClCompile Include="source\continue.cpp" />
+    <ClCompile Include="source\DxGraphicHandle.cpp" />
+    <ClCompile Include="source\Dxkeystate.cpp" />
+    <ClCompile Include="source\DxSoundHandle.cpp" />
+    <ClCompile Include="source\flying_mare.cpp" />
+    <ClCompile Include="source\game.cpp" />
     <ClCompile Include="source\circular_motion.cpp" />
-    <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\load.cpp" />
-    <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\main.cpp" />
-    <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\object_to_fall.cpp" />
-    <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\power_bar.cpp" />
-    <ClCompile Include="..\..\Don%27t_push\Don%27t_push\source\title.cpp" />
+    <ClCompile Include="source\load.cpp" />
+    <ClCompile Include="source\main.cpp" />
+    <ClCompile Include="source\object_to_fall.cpp" />
+    <ClCompile Include="source\power_bar.cpp" />
+    <ClCompile Include="source\title.cpp" />
     <ClCompile Include="source\end.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
