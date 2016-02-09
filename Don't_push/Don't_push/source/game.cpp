@@ -86,7 +86,7 @@ void game_c::Impl::state_init() NOEXCEPT {
 	this->m_bouninngenn_b.state_init();
 	this->bouninngen_draw();
 	this->score = 0;
-	this->game_end_img = boost::none_t{};
+	this->game_end_img = boost::none;
 }
 #ifdef _MSC_VER
 #pragma warning (push)
