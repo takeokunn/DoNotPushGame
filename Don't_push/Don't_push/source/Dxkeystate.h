@@ -4,7 +4,7 @@
 #define DxHANDLE_WRAP_USE_EXCEPTION//throwする
 #endif
 #include "util_noexcept.h"
-#include "util_constexpr.h"
+#include "dxlibex/config/defines.h"
 
 class keystate
 {

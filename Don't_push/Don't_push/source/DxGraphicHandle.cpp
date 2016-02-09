@@ -1,6 +1,6 @@
 ﻿#include "DxGraphicHandle.h"
 #include "DxLib.h"
-#include "util_constexpr.h"
+#include "dxlibex/config/defines.h"
 #undef max
 #undef min
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION

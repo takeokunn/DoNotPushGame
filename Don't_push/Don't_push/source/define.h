@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include <cstddef>
-#include "util_constexpr.h"
+#include "dxlibex/config/defines.h"
 #include "DxGraphicHandle.h"
 #include "DxSoundHandle.h"
 #include <unordered_map>
