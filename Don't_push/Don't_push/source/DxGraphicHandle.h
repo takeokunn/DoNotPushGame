@@ -1,10 +1,12 @@
 #pragma once
+#ifndef DISABLE_DxHANDLE_WRAP_USE_EXCEPTION
+#define DxHANDLE_WRAP_USE_EXCEPTION//throw‚·‚é
+#endif
 #include <string>
 #include <utility>
 #include <array>
 #include <cstdint>
 #include <dxlibex/basic_types.hpp>
-#include "config.h"
 #include "util_noexcept.h"
 enum class bright_clip_mode : int {
 	LESS,
@@ -16,8 +18,8 @@ public:
 	typedef int DxGHandle_t;
 	DxGHandle() NOEXCEPT : GrHandle(-1) {}
 	DxGHandle(int SizeX, int SizeY) DxHANDLE_NOEXCEPT ;
-	explicit DxGHandle(const char* FileName) DxHANDLE_NOEXCEPT;
-	explicit DxGHandle(const std::string& FileName) DxHANDLE_NOEXCEPT;
+	explicit DxGHandle(const TCHAR* FileName) DxHANDLE_NOEXCEPT;
+	explicit DxGHandle(const dxle::tstring& FileName) DxHANDLE_NOEXCEPT;
 	explicit DxGHandle(dxle::pointi size) DxHANDLE_NOEXCEPT ;
 	explicit DxGHandle(DxGHandle_t GrHandle) DxHANDLE_NOEXCEPT;
 	DxGHandle(const DxGHandle& o) NOEXCEPT : GrHandle(o.GrHandle) {}

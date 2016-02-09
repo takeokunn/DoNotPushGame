@@ -33,8 +33,8 @@ enum class Status{
 	CONTINUE,
 	EXIT
 };
-using img_arr_t   = std::unordered_map<std::string, DxGHandle>;
-using sound_arr_t = std::unordered_map<std::string, DxSHandle>;
+using img_arr_t   = std::unordered_map<dxle::tstring, DxGHandle>;
+using sound_arr_t = std::unordered_map<dxle::tstring, DxSHandle>;
 
 class normal_exit : public std::runtime_error {
 public:

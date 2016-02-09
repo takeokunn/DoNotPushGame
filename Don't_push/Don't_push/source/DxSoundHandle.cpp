@@ -3,18 +3,18 @@
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
 #include "DxHandleException.h"
 #endif
-DxSHandle::DxSHandle(const std::string & FileName) DxHANDLE_NOEXCEPT {
+DxSHandle::DxSHandle(const dxle::tstring & FileName) DxHANDLE_NOEXCEPT {
 	this->SHandle = LoadSoundMem(FileName.c_str());
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
 	if (-1 == this->SHandle) {
-		const auto ext = FileName.substr(FileName.find_first_of('.'), ((FileName.back() == '\\') ? FileName.length() - 2 : std::string::npos));
-		if ("mid" == ext || "MID" == ext) throw DxSHandle_runtime_error(".midi is not supported. Use PlaySound() instead.");
+		const auto ext = FileName.substr(FileName.find_first_of(_T('.')), ((FileName.back() == _T('\\')) ? FileName.length() - 2 : dxle::tstring::npos));
+		if (_T("mid") == ext || _T("MID") == ext) throw DxSHandle_runtime_error(".midi is not supported. Use PlaySound() instead.");
 		throw DxSHandle_runtime_error("Fail to load sound.");
 	}
 #endif
 }
 
-DxSHandle::DxSHandle(const char * FileName) : DxSHandle(std::string(FileName)) DxHANDLE_NOEXCEPT {}
+DxSHandle::DxSHandle(const TCHAR * FileName) : DxSHandle(dxle::tstring(FileName)) DxHANDLE_NOEXCEPT {}
 
 DxSHandle::DxSHandle(DxSHandle_t SHandle) DxHANDLE_NOEXCEPT {
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION

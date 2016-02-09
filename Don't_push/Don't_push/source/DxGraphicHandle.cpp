@@ -8,14 +8,14 @@
 #endif
 #include <algorithm>
 
-DxGHandle::DxGHandle(const char * FileName) DxHANDLE_NOEXCEPT {
+DxGHandle::DxGHandle(const TCHAR * FileName) DxHANDLE_NOEXCEPT {
 	this->GrHandle = LoadGraph(FileName);
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
 	if (-1 == this->GrHandle) throw DxGHandle_runtime_error("Fail to load image.");
 #endif
 }
 
-DxGHandle::DxGHandle(const std::string & FileName) DxHANDLE_NOEXCEPT : DxGHandle(FileName.c_str()){}//C++11:delegating constructor
+DxGHandle::DxGHandle(const dxle::tstring & FileName) DxHANDLE_NOEXCEPT : DxGHandle(FileName.c_str()){}//C++11:delegating constructor
 
 DxGHandle::DxGHandle(int SizeX, int SizeY) DxHANDLE_NOEXCEPT {
 	this->GrHandle = MakeGraph(SizeX, SizeY);

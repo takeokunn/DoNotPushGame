@@ -18,10 +18,10 @@ struct game_c::Impl {
 	Impl(const dxle::pointi& bouninngennA_p, const dxle::pointi& bouninngennB_p)
 		: m_window_s(WINDOW), m_state(), m_back_img(dxle::graph2d::MakeScreen(m_window_s.x, m_window_s.y)),
 		m_img(make_image_array()), m_sound(make_sound_array()), score(), game_end_img(),
-		m_bouninngenn_a{ bouninngennA_p, &m_img["bouninngennA"], &m_img["bouninngennA_fall"] },//棒人形A
-		m_bouninngenn_b{ bouninngennB_p, &m_img["bouninngennB"], &m_img["bouninngennB_fall"] } //棒人形B
+		m_bouninngenn_a{ bouninngennA_p, &m_img[_T("bouninngennA")], &m_img[_T("bouninngennA_fall")] },//棒人形A
+		m_bouninngenn_b{ bouninngennB_p, &m_img[_T("bouninngennB")], &m_img[_T("bouninngennB_fall")] } //棒人形B
 	{
-		this->m_back_img.drawn_on([this]() {m_img["gake"].DrawExtendGraph({}, m_window_s, false); });
+		this->m_back_img.drawn_on([this]() {m_img[_T("gake")].DrawExtendGraph({}, m_window_s, false); });
 	}
 	Impl(const Impl&) = delete;
 	Impl(Impl&&) = delete;
@@ -100,7 +100,7 @@ void game_c::Impl::fadeout_prelude_masseage() {
 	for (int i = 0; i < fadeout_time_frame && (is_normal_state = normal_con_f()) && m_state.update() && !m_state.esc(); ++i) {
 		this->m_back_img.DrawGraph({}, false);
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>((fadeout_time_frame - i) * 256.0 / fadeout_time_frame));
-		this->m_img["back_str"].DrawGraph({}, true);
+		this->m_img[_T("back_str")].DrawGraph({}, true);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		this->bouninngen_draw();
 	}
@@ -196,7 +196,7 @@ template<std::size_t bouninngenn_no> void game_c::Impl::fall_bouninngenn(const s
 #endif
 Status game_c::game_main() {
 	this->pimpl->state_init();//状態初期化
-	this->pimpl->m_sound["flower garden"].play(DxSoundMode::LOOP);
+	this->pimpl->m_sound[_T("flower garden")].play(DxSoundMode::LOOP);
 	this->pimpl->fadeout_prelude_masseage();
 	power_bar_c power_bar(POWER_BAR_POS, POWER_BAR_SIZE, 20, GetColor(64, 142, 142));
 	std::deque<dxle::pointi> pos_record;
@@ -210,7 +210,7 @@ Status game_c::game_main() {
 		this->pimpl->m_back_img.DrawGraph({}, false);
 		this->pimpl->bouninngen_draw();
 		DrawBox_kai(POWER_BAR_BG_POS, POWER_BAR_BG_SIZE, DxLib::GetColor(4, 182, 182), 2, DxLib::GetColor(229, 255, 255));
-		this->pimpl->m_img["game_main_gauge_bg"].DrawExtendGraph(POWER_BAR_BG_POS, POWER_BAR_BG_POS + POWER_BAR_BG_SIZE, false);
+		this->pimpl->m_img[_T("game_main_gauge_bg")].DrawExtendGraph(POWER_BAR_BG_POS, POWER_BAR_BG_POS + POWER_BAR_BG_SIZE, false);
 		power_bar.draw();
 	}
 	if (this->pimpl->m_state.esc()) throw normal_exit();
@@ -253,11 +253,11 @@ Status game_c::game_main() {
 #endif
 Status game_c::helicopter_event() {
 	this->pimpl->state_init();//状態初期化
-	this->pimpl->m_sound["flower garden"].play(DxSoundMode::LOOP);
+	this->pimpl->m_sound[_T("flower garden")].play(DxSoundMode::LOOP);
 	this->pimpl->fadeout_prelude_masseage();
 	circular_motion helicopter(
 		{ pimpl->m_window_s.x / 2, -100 }, { pimpl->m_window_s.x * 23 / 26, pimpl->m_window_s.y * 1 / 82 },
-		1.0 / 30.0, this->pimpl->m_img["herikoputa-"], this->pimpl->m_img["herikoputa-"]
+		1.0 / 30.0, this->pimpl->m_img[_T("herikoputa-")], this->pimpl->m_img[_T("herikoputa-")]
 	);
 	bool is_normal_state = true;
 	while ((is_normal_state = this->pimpl->normal_con_f()) && pimpl->m_state.update() && !pimpl->m_state[KEY_INPUT_Z] && !pimpl->m_state.esc() && helicopter.update()) {
@@ -290,10 +290,10 @@ Status game_c::echo_score()
 	const auto font = CreateFontToHandle(nullptr, 30, 1, DX_FONTTYPE_ANTIALIASING);
 	DrawStringToHandle(
 		WINDOW.width * 13 / 40, WINDOW.height / 16,
-		("GAME WIN!   Score : " + std::to_string(this->pimpl->score)).c_str(),
+		(L"GAME WIN!   Score : " + std::to_wstring(this->pimpl->score)).c_str(),
 		color_black, font
 	);
-	DrawStringToHandle(WINDOW.width * 13 / 40, WINDOW.height / 16 + 50, "Press Z to continue.", color_black, font);
+	DrawStringToHandle(WINDOW.width * 13 / 40, WINDOW.height / 16 + 50, L"Press Z to continue.", color_black, font);
 	is_normal_state = this->pimpl->normal_con_f();
 	while ((is_normal_state = -1 != ProcessMessage()) && pimpl->m_state.update() && !pimpl->m_state[KEY_INPUT_Z] && !pimpl->m_state.esc()) {
 		std::this_thread::sleep_for(std::chrono::milliseconds(50));
@@ -311,8 +311,8 @@ Status game_c::echo_game_over()
 	this->pimpl->game_end_img->DrawGraph({}, false);
 	const auto font = CreateFontToHandle(nullptr, 30, 1, DX_FONTTYPE_ANTIALIASING);
 	const auto color_white = DxLib::GetColor(255, 255, 255);
-	DrawStringToHandle(WINDOW.width * 13 / 40, WINDOW.height / 4, "GAME OVER!", color_white, font);
-	DrawStringToHandle(WINDOW.width * 13 / 40, WINDOW.height / 4 + 50, "Press Z to continue.", color_white, font);
+	DrawStringToHandle(WINDOW.width * 13 / 40, WINDOW.height / 4, L"GAME OVER!", color_white, font);
+	DrawStringToHandle(WINDOW.width * 13 / 40, WINDOW.height / 4 + 50, L"Press Z to continue.", color_white, font);
 	is_normal_state = this->pimpl->normal_con_f();
 	while ((is_normal_state = -1 != ProcessMessage()) && pimpl->m_state.update() && !pimpl->m_state[KEY_INPUT_Z] && !pimpl->m_state.esc()) {
 		std::this_thread::sleep_for(std::chrono::milliseconds(50));

@@ -5,7 +5,7 @@
 #define DxHANDLE_WRAP_USE_EXCEPTION//throwする
 #endif
 #include "util_noexcept.h"
-
+#include <dxlibex/basic_types/tchar.hpp>
 enum class DxSoundMode : int
 {
 	NORMAL = 0,
@@ -17,8 +17,8 @@ class DxSHandle {
 public:
 	typedef int DxSHandle_t;
 	DxSHandle() NOEXCEPT : SHandle(-1) {}
-	explicit DxSHandle(const std::string& FileName) DxHANDLE_NOEXCEPT;
-	explicit DxSHandle(const char* FileName) DxHANDLE_NOEXCEPT;
+	explicit DxSHandle(const dxle::tstring& FileName) DxHANDLE_NOEXCEPT;
+	explicit DxSHandle(const TCHAR* FileName) DxHANDLE_NOEXCEPT;
 	explicit DxSHandle(DxSHandle_t SHandle) DxHANDLE_NOEXCEPT;
 	DxSHandle(const DxSHandle& o) NOEXCEPT : SHandle(o.SHandle) {}
 	explicit DxSHandle(DxSHandle&& o) NOEXCEPT : SHandle(o.SHandle) {}
