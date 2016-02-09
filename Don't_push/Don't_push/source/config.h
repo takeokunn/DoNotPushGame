@@ -8,6 +8,7 @@ struct config_info {
 	config_info& operator=(const config_info&) = default;
 	config_info& operator=(config_info&& o) {
 		this->lang_str = std::move(o.lang_str);
+		return *this;
 	}
 	std::unordered_map<std::wstring, std::wstring> lang_str;
 };

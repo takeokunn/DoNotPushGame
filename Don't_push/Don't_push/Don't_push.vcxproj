@@ -379,6 +379,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="source\make_array.hpp" />
+    <ClInclude Include="source\char_convert.hpp" />
     <ClInclude Include="source\config.h" />
     <ClInclude Include="source\continue.h" />
     <ClInclude Include="source\define.h" />
