@@ -29,7 +29,7 @@ git clone https://yumetodo@bitbucket.org/yumetodo/donotpushgame.git
 ## dependency 依存関係
 - [DxLibEx](https://github.com/Nagarei/DxLibEx)
 - [DxLib](http://homepage2.nifty.com/natupaji/DxLib/)
-- [Boost](www.boost.org)(``boost::optional``を使用。boost 1.59.0で動作確認)
+- [Boost](www.boost.org)(``boost::optional``, ``Boost::property_tree``を使用。boost 1.59.0, 1.60.0で動作確認)
 
 最終的にGHandleとSHandleはDxLibExに移行する。暫定的にオレオレclassを使用中・・・
 
@@ -44,8 +44,142 @@ ex.)``DXLIB_ROOT``を``D:\lib\DxLib_VC\プロジェクトに追加すべきフ�
 ``DXLIBEX_ROOT``を``C:\Users\yumetodo\Documents\git\DxLibEx``に  
 ``BOOST_ROOT``を``C:\lib\boost_1_60_0``に
 2. ``Don't_push.sln``を開く
-3. ビルド構成を適切に選択する。Visual Studio 2015の人は``VS2015Debug``または``VS2015Release``に。なおVisual Studio2013の人はビルドツールセットの設定をやり直すこと。(November CTPいれよう)
-4. ビルド→ソリューションのビルドでビルドする
+3. ビルド構成を適切に選択する。Visual Studio 2015の人は``VS2015Debug``または``VS2015Release``に。
+4. Boost側のコンパイルエラーを回避するために下記の通り変更を加える
+5. ビルド→ソリューションのビルドでビルドする
+
+### Boostに加える変更
+
+``./boost/property_tree/detail/json_parser/standard_callbacks.hpp`` l.131
+
+変更前
+
+```cpp
+        Ptree& new_tree() {
+            if (stack.empty()) {
+                layer l = {leaf, &root};
+                stack.push_back(l);
+                return root;
+            }
+            layer& l = stack.back();
+            switch (l.k) {
+            case array: {
+                l.t->push_back(std::make_pair(string(), Ptree()));
+                layer nl = {leaf, &l.t->back().second};
+                stack.push_back(nl);
+                return *stack.back().t;
+            }
+            case object:
+                assert(false); // must start with string, i.e. call new_value
+            case key: {
+                l.t->push_back(std::make_pair(key_buffer, Ptree()));
+                l.k = object;
+                layer nl = {leaf, &l.t->back().second};
+                stack.push_back(nl);
+                return *stack.back().t;
+            }
+            case leaf:
+                stack.pop_back();
+                return new_tree();
+            }
+            assert(false);
+        }
+```
+
+変更後
+
+```cpp
+        Ptree& new_tree() {
+            if (stack.empty()) {
+                layer l = {leaf, &root};
+                stack.push_back(l);
+                return root;
+            }
+            layer& l = stack.back();
+            switch (l.k) {
+            case array: {
+                l.t->push_back(std::make_pair(string(), Ptree()));
+                layer nl = {leaf, &l.t->back().second};
+                stack.push_back(nl);
+                return *stack.back().t;
+            }
+            case object:
+                assert(false); // must start with string, i.e. call new_value
+            case key: {
+                l.t->push_back(std::make_pair(key_buffer, Ptree()));
+                l.k = object;
+                layer nl = {leaf, &l.t->back().second};
+                stack.push_back(nl);
+                return *stack.back().t;
+            }
+            case leaf:
+                stack.pop_back();
+                return new_tree();
+            }
+			assert(l.k == leaf); stack.pop_back(); return new_tree();
+        }
+
+```
+
+``./boost/property_tree/detail/json_parser/wide_encoding.hpp`` l.120
+
+変更前
+
+```cpp
+        template <typename Iterator, typename Sentinel, typename TranscodedFn,
+                  typename EncodingErrorFn>
+        void transcode_codepoint(Iterator& cur, Sentinel end,
+                                 TranscodedFn transcoded_fn,
+                                 EncodingErrorFn error_fn,
+                                 is_utf16<true>) const {
+            wchar_t c = *cur;
+            if (c < 0x20) {
+                error_fn();
+            }
+            if (is_surrogate_low(c)) {
+                error_fn();
+            }
+            transcoded_fn(c);
+            ++cur;
+            if (is_surrogate_high(c)) {
+                c = *cur;
+                if (!is_surrogate_low(c)) {
+                    error_fn();
+                }
+                transcoded_fn(c);
+                ++cur;
+            }
+        }
+```
+
+変更後
+
+```cpp
+        template <typename Iterator, typename Sentinel, typename TranscodedFn,
+                  typename EncodingErrorFn>
+        void transcode_codepoint(Iterator& cur, Sentinel,
+                                 TranscodedFn transcoded_fn,
+                                 EncodingErrorFn error_fn,
+                                 is_utf16<true>) const {
+            wchar_t c = *cur;
+            if (c < 0x20) {
+                error_fn();
+            }
+            if (is_surrogate_low(c)) {
+                error_fn();
+            }
+            transcoded_fn(c);
+            ++cur;
+            if (is_surrogate_high(c)) {
+                c = *cur;
+                if (!is_surrogate_low(c)) {
+                    error_fn();
+                }
+                transcoded_fn(c);
+                ++cur;
+            }
+        }
+```
 
 ## 動作環境
 - OS : Microsoft Windows Vista/7/8/10(＊XPはビルドツールセット変えれば行けると思いますがサポートしません)
