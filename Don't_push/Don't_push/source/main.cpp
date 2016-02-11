@@ -7,12 +7,13 @@
 #include "title.h"
 #include "continue.h"
 #include "end.h"
+#include "config.h"
 #include <exception>
 //初期化関数
 int init(){
 	SetMainWindowText(L"Don't Push Game.");
 	SetOutApplicationLogValidFlag(FALSE);
-	SetGraphMode(WINDOW_WIDTH, WINDOW_HEIGHT, 16);
+	SetGraphMode(WINDOW.width, WINDOW.height, 16);
 	ChangeWindowMode(TRUE);
 	SetBackgroundColor(255, 255, 255);
 	if (DxLib_Init() == -1)return -1;// エラーが起きたら直ちに終了
@@ -31,11 +32,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	Status status_ = Status::TITLE;
 
-
 	//処理-----------------------------------------------------------
 
 	try{
-		game_c game({ WINDOW_WIDTH * 57 / 256 , WINDOW_HEIGHT * 2 / 7 }, { WINDOW_WIDTH * 71 / 128 , WINDOW_HEIGHT * 2 / 7 });//棒人形A, 棒人形B
+		auto config = load_config("assets/config.json");
+		game_c game({ WINDOW.width * 57 / 256 , WINDOW.height * 2 / 7 }, { WINDOW.width * 71 / 128 , WINDOW.height * 2 / 7 });//棒人形A, 棒人形B
 		while (Status::EXIT != status_ && -1 != ProcessMessage()){
 			switch (status_)
 			{

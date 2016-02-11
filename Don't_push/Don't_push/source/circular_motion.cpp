@@ -46,7 +46,7 @@ const dxle::graph2d::screen& obj_info::get_img() const NOEXCEPT { return this->m
 const dxle::pointi& obj_info::get_fitst_pos() const NOEXCEPT { return this->m_first_pos_; }
 dxle::pointi& obj_info::get_pos() NOEXCEPT { return this->m_p_; }
 const dxle::pointi& obj_info::get_pos() const NOEXCEPT { return this->m_p_; }
-bool obj_info::is_fallen() const NOEXCEPT { return WINDOW_HEIGHT < this->m_p_.y; }
+bool obj_info::is_fallen() const NOEXCEPT { return WINDOW.height < this->m_p_.y; }
 
 circular_motion::circular_motion(const dxle::pointi & center_pos, const dxle::pointi& first_pos, double angular_v, const DxGHandle& img_normal, const DxGHandle& img_fall) NOEXCEPT
 	: m_center_(center_pos), m_r_(std::hypot(first_pos.x - m_center_.x, first_pos.y - m_center_.y)),

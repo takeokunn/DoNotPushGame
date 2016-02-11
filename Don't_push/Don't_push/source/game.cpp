@@ -233,7 +233,7 @@ Status game_c::game_main() {
 	}
 
 	//save image
-	auto tmp = dxle::graph2d::MakeScreen(WINDOW_WIDTH, WINDOW_HEIGHT);
+	auto tmp = dxle::graph2d::MakeScreen(WINDOW);
 	tmp.drawn_on([this, &power_bar](){
 		this->pimpl->m_back_img.DrawGraph({}, false);
 		this->pimpl->bouninngen_draw();
@@ -271,7 +271,7 @@ Status game_c::helicopter_event() {
 	}
 	if (pimpl->m_state.esc()) throw normal_exit();
 	//save image
-	auto tmp = dxle::graph2d::MakeScreen(WINDOW_WIDTH, WINDOW_HEIGHT);
+	auto tmp = dxle::graph2d::MakeScreen(WINDOW);
 	tmp.drawn_on([this, &helicopter]() {
 		this->pimpl->m_back_img.DrawGraph({}, false);
 		helicopter.draw();

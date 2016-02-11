@@ -8,8 +8,6 @@
 #include <stdexcept>
 #include <dxlibex/basic_types.hpp>
 
-DXLE_STATIC_CONSTEXPR std::size_t WINDOW_WIDTH = 800;
-DXLE_STATIC_CONSTEXPR std::size_t WINDOW_HEIGHT = 600;
 DXLE_STATIC_CONSTEXPR dxle::sizei WINDOW = { 800, 600 };
 DXLE_STATIC_CONSTEXPR int FIRST_CHARA_X = WINDOW.width / 2;
 DXLE_STATIC_CONSTEXPR int GROUND_LEFT_X = WINDOW.width / 4;
