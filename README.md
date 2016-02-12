@@ -33,6 +33,27 @@ git clone https://yumetodo@bitbucket.org/yumetodo/donotpushgame.git
 
 最終的にGHandleとSHandleはDxLibExに移行する。暫定的にオレオレclassを使用中・・・
 
+## 動作環境
+- OS : Microsoft Windows Vista/7/8/10(＊XPはビルドツールセット変えれば行けると思いますがサポートしません)
+- CPU: SSE2対応CPU(＊ビルドツールセット変えればSSE2なしで行けますが今時SSE2使えないPCなんてないよね？)
+- メモリ: 128MB以上
+- DirectX9以降が必要
+
+## ゲーム操作方法
+- 十字キー:移動
+- Zキー:状態変遷
+- Esc:終了
+
+## ゲーム終了方法
+ウィンドウ右上の閉じるボタンを押すかEscボタンを押す
+
+## 使用素材
+- あずきフォント  
+http://azukifont.com/kiyaku.html
+
+## 免責事項
+このプログラムを実行したことによって生じたいかなる損害について作者は一切の責任を負いません。
+
 ## Compiler Support 対応コンパイラー
 - Visual Studio 2013 Update 5
 - Visual Studio 2015 Update 1
@@ -49,6 +70,38 @@ ex.)``DXLIB_ROOT``を``D:\lib\DxLib_VC\プロジェクトに追加すべきフ�
 5. ビルド→ソリューションのビルドでビルドする
 
 ### Boostに加える変更
+
+``./boost/smart_ptr/detail/sp_counted_base.hpp``
+
+これがもっとも大事な変更です。書きにくかったのでこれだけdiffを直貼します。cdしてpatchするだけですし。diffを知らないようなプログラマはいないと思いますが、
+http://x68000.q-e-d.net/~68user/unix/pickup?patch
+http://hakobe932.hatenablog.com/entry/20071011/1192135295
+これでもみて勉強しましょう
+
+```patch
+--- C:/Users/yumetodo/Desktop/sp_counted_base.hpp	Thu Feb 11 23:05:32 2016
++++ C:/lib/boost_1_60_0/boost/smart_ptr/detail/sp_counted_base.hpp	Thu Feb 11 23:06:02 2016
+@@ -22,3 +22,3 @@
+ 
+-#if defined( __clang__ ) && defined( __has_extension )
++#if defined( __clang__ ) && defined( __has_extension ) && !defined( __c2__ )
+ # if __has_extension( __c_atomic__ )
+@@ -49,3 +49,3 @@
+ 
+-#elif defined( __GNUC__ ) && ( defined( __i386__ ) || defined( __x86_64__ ) ) && !defined(__PATHSCALE__)
++#elif defined( __GNUC__ ) && ( defined( __i386__ ) || defined( __x86_64__ ) ) && !defined(__PATHSCALE__) && !defined( __c2__ )
+ # include <boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp>
+@@ -55,3 +55,3 @@
+ 
+-#elif defined( __GNUC__ ) && defined( __ia64__ ) && !defined( __INTEL_COMPILER ) && !defined(__PATHSCALE__)
++#elif defined( __GNUC__ ) && defined( __ia64__ ) && !defined( __INTEL_COMPILER ) && !defined(__PATHSCALE__) && !defined( __c2__ )
+ # include <boost/smart_ptr/detail/sp_counted_base_gcc_ia64.hpp>
+```
+
+cf.)
+https://groups.google.com/forum/#!topic/boost-devel-archive/ZzKPda-TVDw
+https://llvm.org/bugs/show_bug.cgi?id=25384
+https://llvm.org/bugs/show_bug.cgi?id=25639
 
 ``./boost/property_tree/detail/json_parser/standard_callbacks.hpp`` l.131
 
@@ -121,6 +174,9 @@ ex.)``DXLIB_ROOT``を``D:\lib\DxLib_VC\プロジェクトに追加すべきフ�
 
 ```
 
+cf.)
+https://svn.boost.org/trac/boost/ticket/11599
+
 ``./boost/property_tree/detail/json_parser/wide_encoding.hpp`` l.120
 
 変更前
@@ -180,24 +236,3 @@ ex.)``DXLIB_ROOT``を``D:\lib\DxLib_VC\プロジェクトに追加すべきフ�
             }
         }
 ```
-
-## 動作環境
-- OS : Microsoft Windows Vista/7/8/10(＊XPはビルドツールセット変えれば行けると思いますがサポートしません)
-- CPU: SSE2対応CPU(＊ビルドツールセット変えればSSE2なしで行けますが今時SSE2使えないPCなんてないよね？)
-- メモリ: 128MB以上
-- DirectX9以降が必要
-
-## ゲーム操作方法
-- 十字キー:移動
-- Zキー:状態変遷
-- Esc:終了
-
-## ゲーム終了方法
-ウィンドウ右上の閉じるボタンを押すかEscボタンを押す
-
-## 使用素材
-- あずきフォント  
-http://azukifont.com/kiyaku.html
-
-## 免責事項
-このプログラムを実行したことによって生じたいかなる損害について作者は一切の責任を負いません。

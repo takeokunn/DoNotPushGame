@@ -3,6 +3,7 @@
 #include "define.h"
 #include "load.h"
 #include "Dxkeystate.h"
+#include "game_preprocess.h"
 #include "game.h"
 #include "title.h"
 #include "continue.h"
@@ -10,8 +11,8 @@
 #include "config.h"
 #include <exception>
 //初期化関数
-int init(){
-	SetMainWindowText(L"Don't Push Game.");
+int init(const config_info::lang_table_t& lang_table){
+	SetMainWindowText(lang_table.at(L"Don't Push Game").c_str());
 	SetOutApplicationLogValidFlag(FALSE);
 	SetGraphMode(WINDOW.width, WINDOW.height, 16);
 	ChangeWindowMode(TRUE);
@@ -26,7 +27,6 @@ int init(){
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
-	init();
 
 	//変数定義------------------------------------------------------
 
@@ -36,18 +36,22 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	try{
 		auto config = load_config("assets/config.json");
-		game_c game({ WINDOW.width * 57 / 256 , WINDOW.height * 2 / 7 }, { WINDOW.width * 71 / 128 , WINDOW.height * 2 / 7 });//棒人形A, 棒人形B
+		init(config.lang_str);
+		game_c game({ WINDOW.width * 57 / 256 , WINDOW.height * 2 / 7 }, { WINDOW.width * 71 / 128 , WINDOW.height * 2 / 7 }, config.lang_str);//棒人形A, 棒人形B
 		while (Status::EXIT != status_ && -1 != ProcessMessage()){
 			switch (status_)
 			{
 			case Status::TITLE:
-				status_ = title(game.get_img(), game.get_sound());//title BGM流す。この中でBGM止める
+				status_ = title(game.get_img(), game.get_sound(), config.lang_str);//title BGM流す。この中でBGM止める
+				break;
+			case Status::GAME_PREPROCESS:
+				status_ = game_preprocess();
 				break;
 			case Status::GAME:
 				status_ = game.game_main();//BGM流し始め
 				break;
 			case Status::END:
-				status_ = end(game.get_img(), game.get_sound());//ここでGAMEで流れだした音楽を止める
+				status_ = end(game.get_img(), game.get_sound(), config.lang_str);//ここでGAMEで流れだした音楽を止める
 				break;
 			case Status::FLYING_MARE_ANIMATION:
 				break;
@@ -63,7 +67,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 				status_ = game.echo_game_over();
 				break;
 			case Status::CONTINUE:
-				status_ = continu(game.get_img(), game.get_sound());//ここでGAMEで流れだした音楽を止める
+				status_ = continu(game.get_img(), game.get_sound(), config.lang_str);//ここでGAMEで流れだした音楽を止める
 				break;
 			case Status::EXIT:
 				break;

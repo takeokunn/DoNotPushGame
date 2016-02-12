@@ -3,11 +3,12 @@
 #include <dxlibex/basic_types.hpp>
 #include <dxlibex/Graph2D.h>
 #include <memory>
+#include "config.h"
 
 class game_c
 {
 public:
-	game_c(const dxle::pointi& bouninngennA_p, const dxle::pointi& bouninngennB_p);
+	game_c(const dxle::pointi& bouninngennA_p, const dxle::pointi& bouninngennB_p, const config_info::lang_table_t& lang_table);
 	~game_c();
 	game_c(const game_c&) = delete;
 	game_c(game_c&&) = delete;

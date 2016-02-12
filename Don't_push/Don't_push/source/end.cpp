@@ -6,7 +6,7 @@
 #pragma warning (push)
 #pragma warning (disable: 4706) //warning C4706: 条件式の比較値は、代入の結果になっています。
 #endif
-Status end(const img_arr_t&, const sound_arr_t& sound) {
+Status end(const img_arr_t&, const sound_arr_t& sound, const config_info::lang_table_t& lang_table) {
 	for (auto& s : sound) s.second.stop();//BGM全部停止
 	//フォントの定義
 	const int Font_title = CreateFontToHandle(nullptr, 100, 5, DX_FONTTYPE_EDGE);//タイトルロゴ
@@ -17,8 +17,8 @@ Status end(const img_arr_t&, const sound_arr_t& sound) {
 	while ((is_normal_state = normal_con_f()) && state.update() && !state[KEY_INPUT_X] && !state.esc()) {
 		DrawBox(0, 0, WINDOW.width, WINDOW.height, GetColor(200, 200, 100), TRUE);	//背景
 
-		DrawStringToHandle(180, WINDOW.height / 4, L"やったぜ。", GetColor(250, 0, 0), Font_title);					//タイトル
-		DrawStringToHandle(260, WINDOW.height - (WINDOW.height / 3), L"- Xキーを押してね -", GetColor(0, 0, 0), Font_1);//Xキー押してね
+		DrawStringToHandle(180, WINDOW.height / 4, (L"- " + lang_table.at(L"I did it!") + L" -").c_str(), GetColor(250, 0, 0), Font_title);					//タイトル
+		DrawStringToHandle(260, WINDOW.height - (WINDOW.height / 3), (L"- " + lang_table.at(L"Press X") + L" -").c_str(), GetColor(0, 0, 0), Font_1);//Xキー押してね
 	}
 	if (!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");
 	if (state.esc()) throw normal_exit();

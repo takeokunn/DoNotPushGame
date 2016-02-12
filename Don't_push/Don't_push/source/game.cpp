@@ -15,9 +15,9 @@
 #include <thread>
 #include <boost/optional.hpp>
 struct game_c::Impl {
-	Impl(const dxle::pointi& bouninngennA_p, const dxle::pointi& bouninngennB_p)
+	Impl(const dxle::pointi& bouninngennA_p, const dxle::pointi& bouninngennB_p, const config_info::lang_table_t& lang_table)
 		: m_window_s(WINDOW), m_state(), m_back_img(dxle::graph2d::MakeScreen(m_window_s.x, m_window_s.y)),
-		m_img(make_image_array()), m_sound(make_sound_array()), score(), game_end_img(),
+		m_img(make_image_array()), m_sound(make_sound_array()), m_score(), m_game_end_img(), m_lang_table(lang_table),
 		m_bouninngenn_a{ bouninngennA_p, &m_img[_T("bouninngennA")], &m_img[_T("bouninngennA_fall")] },//棒人形A
 		m_bouninngenn_b{ bouninngennB_p, &m_img[_T("bouninngennB")], &m_img[_T("bouninngennB_fall")] } //棒人形B
 	{
@@ -38,12 +38,13 @@ struct game_c::Impl {
 	dxle::graph2d::screen m_back_img;
 	img_arr_t m_img;
 	sound_arr_t m_sound;
-	std::uint8_t score;//0-100
-	boost::optional<dxle::graph2d::screen> game_end_img;
+	std::uint8_t m_score;//0-100
+	boost::optional<dxle::graph2d::screen> m_game_end_img;
+	const config_info::lang_table_t& m_lang_table;
 	obj_info m_bouninngenn_a;
 	obj_info m_bouninngenn_b;
 };
-game_c::game_c(const dxle::pointi& bouninngennA_p, const dxle::pointi& bouninngennB_p) : pimpl(new game_c::Impl(bouninngennA_p, bouninngennB_p)){}
+game_c::game_c(const dxle::pointi& bouninngennA_p, const dxle::pointi& bouninngennB_p, const config_info::lang_table_t& lang_table) : pimpl(new game_c::Impl(bouninngennA_p, bouninngennB_p, lang_table)){}
 
 game_c::~game_c() {
 	for (auto& s : this->pimpl->m_sound) s.second.stop();
@@ -85,8 +86,8 @@ void game_c::Impl::state_init() NOEXCEPT {
 	this->m_bouninngenn_a.state_init();
 	this->m_bouninngenn_b.state_init();
 	this->bouninngen_draw();
-	this->score = 0;
-	this->game_end_img = boost::none;
+	this->m_score = 0;
+	this->m_game_end_img = boost::none;
 }
 #ifdef _MSC_VER
 #pragma warning (push)
@@ -222,8 +223,8 @@ Status game_c::game_main() {
 		this->pimpl->fall_bouninngenn<1>(pos_record, power_bar);//落とそうとして落とされる、ゲームオーバー
 	}
 	else {
-		this->pimpl->score = static_cast<uint8_t>((p_rate + rate) / 2);//0-100
-		if (this->pimpl->score < 40) {
+		this->pimpl->m_score = static_cast<uint8_t>((p_rate + rate) / 2);//0-100
+		if (this->pimpl->m_score < 40) {
 			this->pimpl->fall_bouninngenn<1>(pos_record, power_bar);//落とそうとして落とされる、ゲームオーバー
 		}
 		else {
@@ -240,7 +241,7 @@ Status game_c::game_main() {
 		DrawBox_kai(POWER_BAR_BG_POS, POWER_BAR_BG_SIZE, DxLib::GetColor(4, 182, 182), 2, DxLib::GetColor(229, 255, 255));
 		power_bar.draw();
 	});
-	this->pimpl->game_end_img = std::move(tmp);
+	this->pimpl->m_game_end_img = std::move(tmp);
 
 	return re;
 }
@@ -276,21 +277,21 @@ Status game_c::helicopter_event() {
 		this->pimpl->m_back_img.DrawGraph({}, false);
 		helicopter.draw();
 	});
-	this->pimpl->game_end_img = std::move(tmp);
+	this->pimpl->m_game_end_img = std::move(tmp);
 	return Status::CONTINUE;
 }
 Status game_c::echo_score()
 {
-	if (!this->pimpl->game_end_img) throw std::runtime_error("this->pimpl->game_end_img is empty.");
+	if (!this->pimpl->m_game_end_img) throw std::runtime_error("this->pimpl->game_end_img is empty.");
 	this->pimpl->m_state.fllush();
 	bool is_normal_state = this->pimpl->normal_con_f();
 	const auto color_black = DxLib::GetColor(0, 0, 0);
 	DrawBox_kai(SCORE_SHOW_IMAGE_POS - dxle::pointi{ 1, 1 }, WINDOW + dxle::sizei{ 1, 1 } - SCORE_SHOW_IMAGE_POS, color_black, 5);
-	this->pimpl->game_end_img->DrawExtendGraph(SCORE_SHOW_IMAGE_POS, static_cast<dxle::pointi>(WINDOW), false);
+	this->pimpl->m_game_end_img->DrawExtendGraph(SCORE_SHOW_IMAGE_POS, static_cast<dxle::pointi>(WINDOW), false);
 	const auto font = CreateFontToHandle(nullptr, 30, 1, DX_FONTTYPE_ANTIALIASING);
 	DrawStringToHandle(
 		WINDOW.width * 13 / 40, WINDOW.height / 16,
-		(L"GAME WIN!   Score : " + std::to_wstring(this->pimpl->score)).c_str(),
+		(L"GAME WIN!   Score : " + std::to_wstring(this->pimpl->m_score)).c_str(),
 		color_black, font
 	);
 	DrawStringToHandle(WINDOW.width * 13 / 40, WINDOW.height / 16 + 50, L"Press Z to continue.", color_black, font);
@@ -304,11 +305,11 @@ Status game_c::echo_score()
 }
 Status game_c::echo_game_over()
 {
-	if (!this->pimpl->game_end_img) throw std::runtime_error("this->pimpl->game_end_img is empty.");
+	if (!this->pimpl->m_game_end_img) throw std::runtime_error("this->pimpl->game_end_img is empty.");
 	this->pimpl->m_state.fllush();
 	bool is_normal_state = this->pimpl->normal_con_f();
-	this->pimpl->game_end_img->filter_HSB(0, 0, 0, -60);
-	this->pimpl->game_end_img->DrawGraph({}, false);
+	this->pimpl->m_game_end_img->filter_HSB(0, 0, 0, -60);
+	this->pimpl->m_game_end_img->DrawGraph({}, false);
 	const auto font = CreateFontToHandle(nullptr, 30, 1, DX_FONTTYPE_ANTIALIASING);
 	const auto color_white = DxLib::GetColor(255, 255, 255);
 	DrawStringToHandle(WINDOW.width * 13 / 40, WINDOW.height / 4, L"GAME OVER!", color_white, font);
