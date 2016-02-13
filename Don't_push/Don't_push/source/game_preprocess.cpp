@@ -20,7 +20,7 @@
 #include <intrin.h>
 #include <immintrin.h>
 #endif
-constexpr uint32_t RDRAND_MASK = 0x40000000;
+DXLE_STATIC_CONSTEXPR uint32_t RDRAND_MASK = 0x40000000;
 typedef struct { uint32_t EAX, EBX, ECX, EDX; } regs_t;
 regs_t get_cpuid(unsigned int level) {
 	regs_t re = { 0 };

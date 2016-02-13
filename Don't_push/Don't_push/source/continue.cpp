@@ -4,6 +4,7 @@
 #include "DxLib.h"
 #include <array>
 #include <algorithm>
+#include <thread>
 #ifdef _MSC_VER
 #pragma warning (push)
 #pragma warning (disable: 4706) //warning C4706: 条件式の比較値は、代入の結果になっています。
@@ -30,7 +31,6 @@ Status continu(const img_arr_t&, const sound_arr_t& sound, const config_info::la
 				DrawStringToHandle(120, WINDOW.height * 3 / 4, (L"- " + lang_table.at(L"Press Z when it is decided") + L" -").c_str(), GetColor(0, 0, 0), Font_1);//Zキー押してね
 			}))
 	} };
-	const std::array<unsigned int, 2>color = { { GetColor(0,0,0), GetColor(255,255,255) } };//選択している, 選択していない
 	bool flag_no_continue = false;		//コンティニューするかどうか
 
 	//メインループ

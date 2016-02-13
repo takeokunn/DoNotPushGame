@@ -12,7 +12,7 @@
 template<typename CharType>void skip_utf8_bom(std::basic_ifstream<CharType>& fs) {
 	int dst[3];
 	for (auto& i : dst) i = fs.get();
-	constexpr int utf8[] = { 0xEF, 0xBB, 0xBF };
+	DXLE_CONSTEXPR int utf8[] = { 0xEF, 0xBB, 0xBF };
 	if (!std::equal(std::begin(dst), std::end(dst), utf8)) fs.seekg(0);
 }
 

@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <array>
 #include <functional>
+#include <dxlibex/config/defines.h>
 namespace std_future {
 	//https://gist.github.com/lichray/6034753
 	template <typename... T>
@@ -72,7 +73,7 @@ namespace std_future {
 		composed<_is_reference_wrapper, std::remove_cv>::call<T>;
 
 	template <typename V = void, typename... T>
-	constexpr auto make_array(T&&... t)
+	DXLE_CONSTEXPR auto make_array(T&&... t)
 		->std::array
 		<
 		If
@@ -84,7 +85,7 @@ namespace std_future {
 		sizeof...(T)
 		>
 	{
-		static_assert(!std::is_void<V>() ||
+		static_assert(!std::is_void<V>::value ||
 			no_type
 			<
 			composed
@@ -94,7 +95,7 @@ namespace std_future {
 			>
 			::call,
 			T...
-			>(), "T shall not be reference_wrapper");
+			>::value, "T shall not be reference_wrapper");
 
 		return{ { std::forward<T>(t)... } };
 	}
@@ -109,16 +110,16 @@ namespace std_future {
 	struct _build_indices<0, I...> : _indices<I...> {};
 
 	template <typename T, size_t N, size_t... I>
-	constexpr auto _to_array(T(&arr)[N], _indices<I...>)
+	DXLE_CONSTEXPR auto _to_array(T(&arr)[N], _indices<I...>)
 		->std::array<remove_cv_t<T>, N>
 	{
 		return{ { arr[I]... } };
 	}
 
 	template <typename T, size_t N>
-	constexpr auto to_array(T(&arr)[N])
+	DXLE_CONSTEXPR auto to_array(T(&arr)[N])
 		->std::array<remove_cv_t<T>, N>
 	{
-		return _to_array(arr, _build_indices<N>());
+		return _to_array(arr, _build_indices<N>::value);
 	}
 }
