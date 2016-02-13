@@ -189,6 +189,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(DXLIBEX_ROOT);$(DXLIB_ROOT);$(BOOST_ROOT);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <DisableSpecificWarnings>4503</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -206,6 +207,8 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(DXLIBEX_ROOT);$(DXLIB_ROOT);$(BOOST_ROOT);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -223,6 +226,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(DXLIBEX_ROOT);$(DXLIB_ROOT);$(BOOST_ROOT);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <DisableSpecificWarnings>4503</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -240,6 +244,8 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(DXLIBEX_ROOT);$(DXLIB_ROOT);$(BOOST_ROOT);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -259,6 +265,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(DXLIBEX_ROOT);$(DXLIB_ROOT);$(BOOST_ROOT);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <DisableSpecificWarnings>4503</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -281,6 +288,8 @@
       <AdditionalIncludeDirectories>$(DXLIBEX_ROOT);$(DXLIB_ROOT);$(BOOST_ROOT);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -303,6 +312,7 @@
       <AdditionalIncludeDirectories>$(DXLIBEX_ROOT);$(DXLIB_ROOT);$(BOOST_ROOT);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
+      <DisableSpecificWarnings>4503</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -325,6 +335,8 @@
       <AdditionalIncludeDirectories>$(DXLIBEX_ROOT);$(DXLIB_ROOT);$(BOOST_ROOT);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

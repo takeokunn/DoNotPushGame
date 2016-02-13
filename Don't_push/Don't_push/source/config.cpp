@@ -1,7 +1,4 @@
 ﻿#include "config.h"
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/json_parser.hpp>
-#include <boost/optional.hpp>
 #include <codecvt>
 #include <stdexcept>
 #include <type_traits>
@@ -16,6 +13,13 @@ template<typename CharType>void skip_utf8_bom(std::basic_ifstream<CharType>& fs)
 	if (!std::equal(std::begin(dst), std::end(dst), utf8)) fs.seekg(0);
 }
 
+#if defined(_MSC_VER) && _MSC_VER == 1800
+#pragma warning (push)
+#pragma warning (disable: 4512)
+#endif
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/optional.hpp>
 
 boost::property_tree::wptree read_json(const std::string& path) {
 	std::ifstream file(path);
@@ -65,3 +69,6 @@ config_info load_config(const std::string & config_json_path)
 	}
 	return re;
 }
+#if defined(_MSC_VER) && _MSC_VER == 1800
+#pragma warning (pop)
+#endif
