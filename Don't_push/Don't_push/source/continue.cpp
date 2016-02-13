@@ -35,7 +35,11 @@ Status continu(const img_arr_t&, const sound_arr_t& sound, const config_info::la
 
 	//メインループ
 	keystate state;
-	auto normal_con_f = []() -> bool { return -1 != ProcessMessage() && 0 == ScreenFlip() && 0 == ClearDrawScreen(); };
+	auto normal_con_f = []() -> bool {
+		bool re = -1 != ProcessMessage() && 0 == ScreenFlip() && 0 == ClearDrawScreen();
+		if (!re) throw std::runtime_error("ProcessMessage() return -1.");
+		return re;
+	};
 	bool is_normal_state = normal_con_f();
 	screens[flag_no_continue].DrawGraph({}, false);
 	is_normal_state = normal_con_f();

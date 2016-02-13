@@ -14,7 +14,11 @@ Status end(const img_arr_t&, const sound_arr_t& sound, const config_info::lang_t
 	const int font_title = CreateFontToHandle(nullptr, 100, 5, DX_FONTTYPE_EDGE);//タイトルロゴ
 	const int font_1 = CreateFontToHandle(nullptr, 30, 1, DX_FONTTYPE_ANTIALIASING);//「Xキーを押してね」の奴
 	keystate state;
-	auto normal_con_f = []() -> bool { return -1 != ProcessMessage() && 0 == ScreenFlip() && 0 == ClearDrawScreen(); };
+	auto normal_con_f = []() -> bool {
+		bool re = -1 != ProcessMessage() && 0 == ScreenFlip() && 0 == ClearDrawScreen();
+		if (!re) throw std::runtime_error("ProcessMessage() return -1.");
+		return re;
+	};
 	bool is_normal_state = normal_con_f();
 	DrawBox(0, 0, WINDOW.width, WINDOW.height, GetColor(200, 200, 100), TRUE);	//背景
 	DrawStringToHandle(WINDOW.width * 37 / 320, WINDOW.height / 4, (L"- " + lang_table.at(L"I did it!") + L" -").c_str(), GetColor(250, 0, 0), font_title);
