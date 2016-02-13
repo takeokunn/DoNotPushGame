@@ -9,6 +9,7 @@
 #include "continue.h"
 #include "end.h"
 #include "config.h"
+#include "ending_animation.h"
 #include <exception>
 //初期化関数
 int init(const config_info::lang_table_t& lang_table){
@@ -38,48 +39,52 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		auto config = load_config("assets/config.json");
 		init(config.lang_str);
 		game_c game({ WINDOW.width * 57 / 256 , WINDOW.height * 2 / 7 }, { WINDOW.width * 71 / 128 , WINDOW.height * 2 / 7 }, config.lang_str);//棒人形A, 棒人形B
-		while (Status::EXIT != status_ && -1 != ProcessMessage()){
-			switch (status_)
-			{
-			case Status::TITLE:
-				status_ = title(game.get_img(), game.get_sound(), config.lang_str);//title BGM流す。この中でBGM止める
-				break;
-			case Status::GAME_PREPROCESS:
-				status_ = game_preprocess();
-				break;
-			case Status::GAME:
-				status_ = game.game_main();//BGM流し始め
-				break;
-			case Status::END:
-				status_ = end(game.get_img(), game.get_sound(), config.lang_str);//ここでGAMEで流れだした音楽を止める
-				break;
-			case Status::FLYING_MARE_ANIMATION:
-				break;
-			case Status::CAR_ANIMATION:
-				break;
-			case Status::HELICOPTER_ANIMATION:
-				status_ = game.helicopter_event();
-				break;
-			case Status::RESULT_ECHO:
-				status_ = game.echo_score();
-				break;
-			case Status::GAME_OVER:
-				status_ = game.echo_game_over();
-				break;
-			case Status::CONTINUE:
-				status_ = continu(game.get_img(), game.get_sound(), config.lang_str);//ここでGAMEで流れだした音楽を止める
-				break;
-			case Status::EXIT:
-				break;
-			default:
-				DxLib_End();
-				return -1;
-				break;
+		try {
+			while (Status::EXIT != status_ && -1 != ProcessMessage()) {
+				switch (status_)
+				{
+				case Status::TITLE:
+					status_ = title(game.get_img(), game.get_sound(), config.lang_str);//title BGM流す。この中でBGM止める
+					break;
+				case Status::GAME_PREPROCESS:
+					status_ = game_preprocess();
+					break;
+				case Status::GAME:
+					status_ = game.game_main();//BGM流し始め
+					break;
+				case Status::END:
+					status_ = end(game.get_img(), game.get_sound(), config.lang_str);//ここでGAMEで流れだした音楽を止める
+					break;
+				case Status::FLYING_MARE_ANIMATION:
+					break;
+				case Status::CAR_ANIMATION:
+					break;
+				case Status::HELICOPTER_ANIMATION:
+					status_ = game.helicopter_event();
+					break;
+				case Status::RESULT_ECHO:
+					status_ = game.echo_score();
+					break;
+				case Status::GAME_OVER:
+					status_ = game.echo_game_over();
+					break;
+				case Status::CONTINUE:
+					status_ = continu(game.get_img(), game.get_sound(), config.lang_str);//ここでGAMEで流れだした音楽を止める
+					break;
+				case Status::EXIT:
+					break;
+				default:
+					DxLib_End();
+					return -1;
+					break;
+				}
+				ScreenFlip();//裏画面表示
 			}
-			ScreenFlip();//裏画面表示
 		}
-	}
-	catch (const normal_exit&) {
+		catch (const normal_exit&) {
+		}
+		for (auto& s : game.get_sound()) s.second.stop();//BGM全部停止
+		ending(game.get_sound().at(L"Thank_you_for_playing"));
 	}
 	catch (const std::exception&){
 		DxLib_End();

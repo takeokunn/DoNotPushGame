@@ -391,6 +391,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="source\ending_animation.h" />
     <ClInclude Include="source\game_preprocess.h" />
     <ClInclude Include="source\make_array.hpp" />
     <ClInclude Include="source\char_convert.hpp" />
@@ -412,6 +413,7 @@
     <ClInclude Include="source\end.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\ending_animation.cpp" />
     <ClCompile Include="source\game_preprocess.cpp" />
     <ClCompile Include="source\config.cpp" />
     <ClCompile Include="source\continue.cpp" />
