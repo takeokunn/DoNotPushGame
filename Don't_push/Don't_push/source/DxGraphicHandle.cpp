@@ -181,13 +181,13 @@ int DxGHandle::GetGraphSize(int * SizeXBuf, int * SizeYBuf) const DxHANDLE_NOEXC
 	return re;
 }
 
-dxle::pointi DxGHandle::GetGraphSize() const DxHANDLE_NOEXCEPT {
-	dxle::pointi re;
-	return (0 == this->GetGraphSize(&re.x, &re.y)) ? re : dxle::pointi();
+dxle::sizei DxGHandle::GetGraphSize() const DxHANDLE_NOEXCEPT {
+	dxle::sizei re;
+	return (0 == this->GetGraphSize(&re.width, &re.height)) ? re : dxle::sizei();
 }
 
 dxle::pointi DxGHandle::GetRelativeGraphCenter() const DxHANDLE_NOEXCEPT{
-	return this->GetGraphSize() / 2;
+	return static_cast<dxle::pointi>(this->GetGraphSize()) / 2;
 }
 namespace detail {
 	DXLE_CONSTEXPR uint8_t DxGetRValue(unsigned int X8R8G8B8) { return static_cast<uint8_t>((0x00FF0000 & X8R8G8B8) >> 16); }
@@ -338,16 +338,16 @@ int DxGHandle::filter_gradient_map(unsigned int base_color, bool Reverse_flag) D
 #ifdef DxHANDLE_WRAP_USE_EXCEPTION
 BASEIMAGE to_BASEIMAGE(const DxGHandle & handle) {//YOU MUST CALL ReleaseBaseImage to free memory.
 	const auto size = handle.GetGraphSize();
-	const auto tmp_screen = DxLib::MakeScreen(size.x, size.y, TRUE);
+	const auto tmp_screen = DxLib::MakeScreen(size.width, size.height, TRUE);
 	auto err = DxLib::SetDrawScreen(tmp_screen);
 	if (-1 == err) std::runtime_error("Fail DxLib::SetDrawScreen().");
 	err = DxLib::SetDrawBlendMode(DX_BLENDMODE_SRCCOLOR, 255);// 透明部分もそのまま描画先に描き込むブレンドモードにセット
 	if (-1 == err) std::runtime_error("Fail DxLib::SetDrawBlendMode().");
 	handle.DrawGraph(0, 0, true);//透明度を有効に
 	BASEIMAGE BaseImage;
-	err = DxLib::CreateARGB8ColorBaseImage(size.x, size.y, &BaseImage);//画像サイズと同じサイズの BASEIMAGE を作成
+	err = DxLib::CreateARGB8ColorBaseImage(size.width, size.height, &BaseImage);//画像サイズと同じサイズの BASEIMAGE を作成
 	if (-1 == err) std::runtime_error("Fail DxLib::CreateARGB8ColorBaseImage().");
-	err = DxLib::GetDrawScreenBaseImage(0, 0, size.x, size.y, &BaseImage);//描画先から画像を取り込む
+	err = DxLib::GetDrawScreenBaseImage(0, 0, size.width, size.height, &BaseImage);//描画先から画像を取り込む
 	if (-1 == err) std::runtime_error("Fail DxLib::GetDrawScreenBaseImage().");
 	err = DxLib::DeleteGraph(tmp_screen);
 	if (-1 == err) std::runtime_error("Fail DxLib::DeleteGraph().");

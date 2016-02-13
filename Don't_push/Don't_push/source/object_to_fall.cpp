@@ -15,5 +15,5 @@ bool object_to_fall_c::collision_detecter(int target_x, int target_y, const DxGH
 bool object_to_fall_c::collision_detecter(const dxle::pointi& target, const DxGHandle& target_handle){
 	const auto self_center = this->handle_.GetRelativeGraphCenter() + this->self_;
 	const auto tareget_pic_size = target_handle.GetGraphSize() + target;
-	return (target.y < self_center.y && self_center.y < tareget_pic_size.y && target.x < self_center.x && self_center.x < tareget_pic_size.x);
+	return (target.y < self_center.y && self_center.y < tareget_pic_size.height && target.x < self_center.x && self_center.x < tareget_pic_size.width);
 }

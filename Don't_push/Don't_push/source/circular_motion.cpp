@@ -3,22 +3,19 @@
 obj_info::obj_info(const dxle::pointi& first_p, const DxGHandle* img_normal, const DxGHandle* img_fall)
 	: m_fall_frame(0), m_first_pos_(first_p), m_p_(first_p), m_img_({ { img_normal, img_fall } }), m_current_img_no_(0)
 {
-	this->m_screen_ = dxle::graph2d::MakeScreen(this->m_img_[0]->GetGraphSize().x / 3, this->m_img_[0]->GetGraphSize().y / 3, true);
-	this->m_screen_.drawn_on([this]() {this->m_img_[0]->DrawExtendGraph({}, { this->m_img_[0]->GetGraphSize().x / 3, this->m_img_[0]->GetGraphSize().y / 3 }, true); });
 }
 
 dxle::sizei obj_info::get_obj_size() const NOEXCEPT
 {
-	return this->m_screen_.GetGraphSize();
+	return this->m_img_[this->m_current_img_no_]->GetGraphSize();
 }
 
 obj_info::obj_info(obj_info&& o) NOEXCEPT
-	: m_first_pos_(o.m_first_pos_), m_p_(o.m_p_), m_img_(o.m_img_),
-	m_screen_(std::move(o.m_screen_)), m_current_img_no_(o.m_current_img_no_)
+	: m_first_pos_(o.m_first_pos_), m_p_(o.m_p_), m_img_(o.m_img_), m_current_img_no_(o.m_current_img_no_)
 {}
 
 dxle::pointi obj_info::calc_first_bottom_right_pos() const NOEXCEPT {
-	auto re = this->m_p_ + this->m_screen_.GetGraphSize();
+	auto re = this->m_p_ + this->get_obj_size();
 	return re;
 }
 
@@ -28,13 +25,10 @@ dxle::pointi obj_info::distance_from_first() const NOEXCEPT {
 
 void obj_info::change_img(int no) NOEXCEPT {
 	this->m_current_img_no_ = (no < 0 || this->m_img_.size() <= static_cast<size_t>(no)) ? this->m_current_img_no_ ^ 1 : static_cast<uint8_t>(no);
-	this->m_screen_.drawn_on([this]() {
-		this->m_img_[0]->DrawExtendGraph({}, { this->m_img_[m_current_img_no_]->GetGraphSize().x / 3, this->m_img_[m_current_img_no_]->GetGraphSize().y / 3 }, true);
-	});
 }
 
 bool obj_info::draw(bool Trans_flag) const NOEXCEPT {
-	return 0 == this->m_screen_.DrawGraph(this->m_p_, Trans_flag);
+	return 0 == this->m_img_[this->m_current_img_no_]->DrawGraph(this->m_p_, Trans_flag);
 }
 
 void obj_info::state_init() NOEXCEPT {
@@ -42,7 +36,6 @@ void obj_info::state_init() NOEXCEPT {
 	this->change_img(0);
 }
 
-const dxle::graph2d::screen& obj_info::get_img() const NOEXCEPT { return this->m_screen_; }
 const dxle::pointi& obj_info::get_fitst_pos() const NOEXCEPT { return this->m_first_pos_; }
 dxle::pointi& obj_info::get_pos() NOEXCEPT { return this->m_p_; }
 const dxle::pointi& obj_info::get_pos() const NOEXCEPT { return this->m_p_; }
@@ -87,7 +80,7 @@ static int calc_free_fall(int y, size_t t) ATT_PURE {
 	return y + static_cast<int>(correction_factor * g / 2 * t);
 }
 static void extruder_helper(obj_info& move_target) NOEXCEPT {
-	if (move_target.get_pos().x + move_target.get_img().GetGraphSize().width < GROUND_LEFT_X) {
+	if (move_target.get_pos().x + move_target.get_obj_size().width < GROUND_LEFT_X) {
 		++move_target.m_fall_frame;
 		move_target.get_pos().y = calc_free_fall(move_target.get_fitst_pos().y, move_target.m_fall_frame);
 		if (1 == move_target.m_fall_frame) {
@@ -102,6 +95,6 @@ void extruder(obj_info & move_target, const int v) NOEXCEPT {
 void extruder(obj_info& move_target, const obj_info& move_cause) NOEXCEPT {
 	extruder_helper(move_target);
 	if (distance(move_target, move_cause) < 0) {
-		move_target.get_pos().x = move_cause.get_pos().x - move_target.get_img().GetGraphSize().width;
+		move_target.get_pos().x = move_cause.get_pos().x - move_target.get_obj_size().width;
 	}
 }

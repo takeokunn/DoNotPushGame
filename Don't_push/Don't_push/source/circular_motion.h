@@ -16,7 +16,6 @@ public:
 	void change_img(int no = -1) NOEXCEPT;
 	bool draw(bool Trans_flag = true) const NOEXCEPT;
 	void state_init() NOEXCEPT;
-	const dxle::graph2d::screen& get_img() const NOEXCEPT;
 	const dxle::pointi& get_fitst_pos() const NOEXCEPT;
 	dxle::pointi& get_pos() NOEXCEPT;
 	const dxle::pointi& get_pos() const NOEXCEPT;
@@ -30,7 +29,6 @@ private:
 	const dxle::pointi m_first_pos_;
 	dxle::pointi m_p_;
 	std::array<const DxGHandle*, 2> m_img_;
-	dxle::graph2d::screen m_screen_;
 	uint8_t m_current_img_no_;
 };
 int distance(const obj_info& l, const obj_info& r) NOEXCEPT;

@@ -43,7 +43,7 @@ public:
 	DxGHandle DerivationGraph(int SrcX, int SrcY, int Width, int Height) const DxHANDLE_NOEXCEPT ;
 	DxGHandle DerivationGraph(dxle::pointi Src, dxle::pointi coord) const DxHANDLE_NOEXCEPT ;
 	int GetGraphSize(int *SizeXBuf, int *SizeYBuf) const DxHANDLE_NOEXCEPT ;
-	dxle::pointi GetGraphSize() const DxHANDLE_NOEXCEPT ;
+	dxle::sizei GetGraphSize() const DxHANDLE_NOEXCEPT ;
 	dxle::pointi GetRelativeGraphCenter() const DxHANDLE_NOEXCEPT;
 	int filter_mono(int16_t Cb, int16_t Cr)DxHANDLE_NOEXCEPT;
 	int filter_gaussian(uint16_t PixelWidth, int Param)DxHANDLE_NOEXCEPT;
