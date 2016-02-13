@@ -29,6 +29,8 @@ boost::property_tree::wptree read_json(const std::string& path) {
 	for (std::string tmp; std::getline(file, tmp);) {
 		buf += tmp + "\n";
 	}
+	//UTF-8 -> UTF16(wchar_t in Windows.)
+	static_assert(sizeof(wchar_t) == 2, "In function load_config, wchar_t is not UTF16.");
 	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t> cvt;
 	std::wstringstream ss;
 	ss << cvt.from_bytes(buf);
@@ -38,9 +40,6 @@ boost::property_tree::wptree read_json(const std::string& path) {
 }
 config_info::lang_table_t load_lang(const std::string& lang_json_path) {
 	boost::property_tree::wptree pt = read_json(lang_json_path);
-	static_assert(sizeof(wchar_t) == 2, "In function load_config, wchar_t is not UTF16.");
-	//UTF-8 -> UTF16(wchar_t in Windows.)
-	//boost::property_tree::read_json(lang_json_path, pt, std::locale(std::locale(), new std::codecvt_utf8_utf16<wchar_t>()));
 	auto str_table = std_future::make_array(L"Don't Push Game", L"I did it!", L"Press X", L"Press Z", L"Press Z when it is decided");
 	config_info::lang_table_t re;
 	re.reserve(str_table.size());
@@ -57,9 +56,6 @@ config_info::lang_table_t load_lang(const std::string& lang_json_path) {
 config_info load_config(const std::string & config_json_path)
 {
 	boost::property_tree::wptree pt = read_json(config_json_path);
-	static_assert(sizeof(wchar_t) == 2, "In function load_config, wchar_t is not UTF16.");
-	//UTF-8 -> UTF16(wchar_t in Windows.)
-	//boost::property_tree::read_json(config_json_path, pt, std::locale(std::locale(), new std::codecvt_utf8_utf16<wchar_t>()));
 	config_info re{};
 	for (auto& p : pt) {
 		if (L"current_lang" == p.first) {
