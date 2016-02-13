@@ -278,7 +278,7 @@ Status game_c::helicopter_event() {
 		helicopter.draw();
 	});
 	this->pimpl->m_game_end_img = std::move(tmp);
-	return Status::CONTINUE;
+	return Status::GAME_OVER;
 }
 Status game_c::echo_score()
 {
@@ -301,7 +301,7 @@ Status game_c::echo_score()
 	}
 	if (!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");
 	if (pimpl->m_state.esc()) throw normal_exit();
-	return Status::CONTINUE;
+	return Status::END;
 }
 Status game_c::echo_game_over()
 {
