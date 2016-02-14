@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Don't_push", "Don't_push\Don't_push.vcxproj", "{0AAC0B39-62EF-40A7-AED9-300DA0922B73}"
 EndProject
@@ -15,6 +15,8 @@ Global
 		Debug|x86 = Debug|x86
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
+		ReleasePGO2015|x64 = ReleasePGO2015|x64
+		ReleasePGO2015|x86 = ReleasePGO2015|x86
 		VS2015Debug|x64 = VS2015Debug|x64
 		VS2015Debug|x86 = VS2015Debug|x86
 		VS2015Release|x64 = VS2015Release|x64
@@ -37,6 +39,10 @@ Global
 		{0AAC0B39-62EF-40A7-AED9-300DA0922B73}.Release|x64.Build.0 = Release|x64
 		{0AAC0B39-62EF-40A7-AED9-300DA0922B73}.Release|x86.ActiveCfg = Release|Win32
 		{0AAC0B39-62EF-40A7-AED9-300DA0922B73}.Release|x86.Build.0 = Release|Win32
+		{0AAC0B39-62EF-40A7-AED9-300DA0922B73}.ReleasePGO2015|x64.ActiveCfg = ReleasePGO2015|x64
+		{0AAC0B39-62EF-40A7-AED9-300DA0922B73}.ReleasePGO2015|x64.Build.0 = ReleasePGO2015|x64
+		{0AAC0B39-62EF-40A7-AED9-300DA0922B73}.ReleasePGO2015|x86.ActiveCfg = ReleasePGO2015|Win32
+		{0AAC0B39-62EF-40A7-AED9-300DA0922B73}.ReleasePGO2015|x86.Build.0 = ReleasePGO2015|Win32
 		{0AAC0B39-62EF-40A7-AED9-300DA0922B73}.VS2015Debug|x64.ActiveCfg = VS2015Debug|x64
 		{0AAC0B39-62EF-40A7-AED9-300DA0922B73}.VS2015Debug|x64.Build.0 = VS2015Debug|x64
 		{0AAC0B39-62EF-40A7-AED9-300DA0922B73}.VS2015Debug|x86.ActiveCfg = VS2015Debug|Win32
