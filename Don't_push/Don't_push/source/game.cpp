@@ -261,7 +261,7 @@ Status game_c::helicopter_event() {
 		1.0 / 30.0, this->pimpl->m_img[_T("herikoputa-")], this->pimpl->m_img[_T("herikoputa-")]
 	);
 	bool is_normal_state = true;
-	while ((is_normal_state = this->pimpl->normal_con_f()) && pimpl->m_state.update() && !pimpl->m_state[KEY_INPUT_Z] && !pimpl->m_state.esc() && helicopter.update()) {
+	while ((is_normal_state = this->pimpl->normal_con_f()) && pimpl->m_state.update() && !pimpl->m_state.esc() && helicopter.update()) {
 		this->pimpl->m_back_img.DrawGraph({}, false);
 		extruder(this->pimpl->m_bouninngenn_b, helicopter.get_obj());
 		extruder(this->pimpl->m_bouninngenn_a, this->pimpl->m_bouninngenn_b);
