@@ -6,7 +6,7 @@
 
 ![Presentation1](Don't_push/Don't_push/assets/img/Presentation1.png)
 
-製作中。
+**現在画面が暗転するバグが有ります。Releaseのものを利用してください**
 
 ## Download方法
 [Release](https://github.com/TakeObara/DoNotPushGame/releases)よりビルド済みバイナリが手にはいります。
@@ -57,7 +57,11 @@ http://azukifont.com/kiyaku.html
 ## Compiler Support 対応コンパイラー
 - Visual Studio 2013 Update 5
 - Visual Studio 2015 Update 1
-- Visual Studio 2015 Update 1 Clang with Microsoft CodeGen(clang3.7)
+- Visual Studio 2015 Update 2
+- Visual Studio 2015 Clang with Microsoft CodeGen(clang3.7) preview
+- Visual Studio 2015 Clang with Microsoft CodeGen(clang3.7) january
+- Visual Studio 2015 Clang with Microsoft CodeGen(clang3.7) march
+- Visual Studio 2015 Clang with Microsoft CodeGen(clang3.7) May
 
 ## Compile方法
 1. 環境変数``DXLIB_ROOT``と``DXLIBEX_ROOT``と``BOOST_ROOT``を設定する  
