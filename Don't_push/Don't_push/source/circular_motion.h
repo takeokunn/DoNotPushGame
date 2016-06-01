@@ -1,7 +1,7 @@
 #pragma once
 #include "define.h"
 #include <dxlibex/basic_types.hpp>
-#include <dxlibex/Graph2D.h>
+#include <dxlibex/graph2d.hpp>
 #include <array>
 #include <cstdint>
 

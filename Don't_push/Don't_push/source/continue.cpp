@@ -1,6 +1,6 @@
 ﻿#include "continue.h"
 #include "Dxkeystate.h"
-#include <dxlibex/Graph2D.h>
+#include <dxlibex/graph2d.hpp>
 #include "DxLib.h"
 #include <array>
 #include <algorithm>
@@ -14,7 +14,7 @@ Status continu(const img_arr_t&, const sound_arr_t& sound, const config_info::la
 	const auto Font_1 = CreateFontToHandle(NULL, 30, 1, DX_FONTTYPE_ANTIALIASING);//選択肢表示の文字
 	DXLE_STATIC_CONSTEXPR std::array<dxle::pointi, 2> select = { {{WINDOW.width * 13 / 40, WINDOW.height / 4}, { WINDOW.width * 13 / 40, WINDOW.height / 4 + 100 }} };
 	const std::array<dxle::screen, 2> screens = { { 
-			std::move(dxle::MakeScreen(WINDOW).drawn_on([Font_1, &lang_table]() {
+			std::move(dxle::MakeScreen(WINDOW).draw_on_this([Font_1, &lang_table]() {
 				const auto color = GetColor(0, 0, 0);
 				DrawBox(0, 0, WINDOW.width, WINDOW.height, GetColor(180, 180, 180), TRUE);	//背景
 				DrawStringToHandle(select[0].x + 40, select[0].y, L"CONTINUE !!", color, Font_1);//CONTINUE
@@ -22,7 +22,7 @@ Status continu(const img_arr_t&, const sound_arr_t& sound, const config_info::la
 				DrawBox(180, 155, 200, 175, color, TRUE);	//選択してるのが分かるようにするやつ
 				DrawStringToHandle(120, WINDOW.height * 3 / 4, (L"- " + lang_table.at(L"Press Z when it is decided") + L" -").c_str(), GetColor(0, 0, 0), Font_1);//Zキー押してね
 			})),
-			std::move(dxle::MakeScreen(WINDOW).drawn_on([Font_1, &lang_table]() {
+			std::move(dxle::MakeScreen(WINDOW).draw_on_this([Font_1, &lang_table]() {
 				const auto color_black = GetColor(0, 0, 0);
 				DrawBox(0, 0, WINDOW.width, WINDOW.height, GetColor(180, 180, 180), TRUE);	//背景
 				DrawStringToHandle(select[0].x, select[0].y, L"CONTINUE !!", GetColor(255, 255, 255), Font_1);//CONTINUE

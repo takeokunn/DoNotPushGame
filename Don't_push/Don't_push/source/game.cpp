@@ -21,7 +21,7 @@ struct game_c::Impl {
 		m_bouninngenn_a{ bouninngennA_p, &m_img[_T("bouninngennA")], &m_img[_T("bouninngennA_fall")] },//棒人形A
 		m_bouninngenn_b{ bouninngennB_p, &m_img[_T("bouninngennB")], &m_img[_T("bouninngennB_fall")] } //棒人形B
 	{
-		this->m_back_img.drawn_on([this]() {m_img[_T("gake")].DrawExtendGraph({}, m_window_s, false); });
+		this->m_back_img.draw_on_this([this]() {m_img[_T("gake")].DrawExtendGraph({}, m_window_s, false); });
 	}
 	Impl(const Impl&) = delete;
 	Impl(Impl&&) = delete;
@@ -235,7 +235,7 @@ Status game_c::game_main() {
 
 	//save image
 	auto tmp = dxle::graph2d::MakeScreen(WINDOW);
-	tmp.drawn_on([this, &power_bar](){
+	tmp.draw_on_this([this, &power_bar](){
 		this->pimpl->m_back_img.DrawGraph({}, false);
 		this->pimpl->bouninngen_draw();
 		DrawBox_kai(POWER_BAR_BG_POS, POWER_BAR_BG_SIZE, DxLib::GetColor(4, 182, 182), 2, DxLib::GetColor(229, 255, 255));
@@ -273,7 +273,7 @@ Status game_c::helicopter_event() {
 	if (pimpl->m_state.esc()) throw normal_exit();
 	//save image
 	auto tmp = dxle::graph2d::MakeScreen(WINDOW);
-	tmp.drawn_on([this, &helicopter]() {
+	tmp.draw_on_this([this, &helicopter]() {
 		this->pimpl->m_back_img.DrawGraph({}, false);
 		helicopter.draw();
 	});

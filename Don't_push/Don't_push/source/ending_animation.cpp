@@ -1,6 +1,6 @@
 #include "ending_animation.h"
 #include "define.h"
-#include <dxlibex/Graph2D.h>
+#include <dxlibex/graph2d.hpp>
 #include <chrono>
 #include <thread>
 
@@ -17,7 +17,7 @@ void ending(const DxSHandle& sound)
 	static const TCHAR* plain_text = _T("Thank you for playing");
 	const int font = CreateFontToHandle(nullptr, test_height, 1, DX_FONTTYPE_ANTIALIASING);//「Xキーを押してね」の奴
 	auto text = dxle::MakeScreen(GetDrawStringWidthToHandle(plain_text, static_cast<int>(dxle::tstrlen(plain_text)), font), test_height);
-	text.drawn_on([font]() {
+	text.draw_on_this([font]() {
 		DxLib::DrawStringToHandle(0, 0, plain_text, DxLib::GetColor(255, 255, 255), font);
 	});
 	auto normal_con_f = []() -> bool {
