@@ -1,4 +1,7 @@
-﻿#include "config.h"
+﻿#if !defined(BOOST_USE_WINDOWS_H) && (defined(_MSC_VER) && defined(__clang__))
+#define BOOST_USE_WINDOWS_H//to avoid missing __declspec(dllimport) attribute.
+#endif
+#include "config.h"
 #include <codecvt>
 #include <stdexcept>
 #include <type_traits>
