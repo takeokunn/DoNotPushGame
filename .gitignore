@@ -11,8 +11,10 @@
 *.userprefs
 
 # Build results
+clang_[Dd]ebug/
 [Dd]ebug/
 [Dd]ebugPublic/
+clang_[Rr]elease/
 [Rr]elease/
 [Rr]eleases/
 [Xx]64/

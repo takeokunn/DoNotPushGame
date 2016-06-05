@@ -61,7 +61,7 @@ http://azukifont.com/kiyaku.html
 - Visual Studio 2015 Clang with Microsoft CodeGen(clang3.7) preview
 - Visual Studio 2015 Clang with Microsoft CodeGen(clang3.7) january
 - Visual Studio 2015 Clang with Microsoft CodeGen(clang3.7) march
-- Visual Studio 2015 Clang with Microsoft CodeGen(clang3.7) May
+- Visual Studio 2015 Clang with Microsoft CodeGen(clang3.8) May
 
 ## Compile方法
 1. 環境変数``DXLIB_ROOT``と``DXLIBEX_ROOT``と``BOOST_ROOT``を設定する  
@@ -76,9 +76,9 @@ ex.)``DXLIB_ROOT``を``D:\lib\DxLib_VC\プロジェクトに追加すべきフ�
 
 ``./boost/smart_ptr/detail/sp_counted_base.hpp``
 
-これがもっとも大事な変更です。書きにくかったのでこれだけdiffを直貼します。cdしてpatchするだけですし。diffを知らないようなプログラマはいないと思いますが、
-http://x68000.q-e-d.net/~68user/unix/pickup?patch
-http://hakobe932.hatenablog.com/entry/20071011/1192135295
+これがもっとも大事な変更です。書きにくかったのでこれだけdiffを直貼します。cdしてpatchするだけですし。diffを知らないようなプログラマはいないと思いますが、  
+http://x68000.q-e-d.net/~68user/unix/pickup?patch  
+http://hakobe932.hatenablog.com/entry/20071011/1192135295  
 これでもみて勉強しましょう
 
 ```patch
@@ -102,8 +102,8 @@ http://hakobe932.hatenablog.com/entry/20071011/1192135295
 ```
 
 cf.)
-https://groups.google.com/forum/#!topic/boost-devel-archive/ZzKPda-TVDw
-https://llvm.org/bugs/show_bug.cgi?id=25384
+https://groups.google.com/forum/#!topic/boost-devel-archive/ZzKPda-TVDw  
+https://llvm.org/bugs/show_bug.cgi?id=25384  
 https://llvm.org/bugs/show_bug.cgi?id=25639
 
 ``./boost/property_tree/detail/json_parser/standard_callbacks.hpp`` l.131
