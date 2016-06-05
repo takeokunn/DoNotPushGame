@@ -279,7 +279,7 @@
       <AdditionalIncludeDirectories>$(DXLIBEX_ROOT);$(DXLIB_ROOT);$(BOOST_ROOT);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>Enabled</ExceptionHandling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalOptions>-msse2 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>-msse2 -Wextra %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(DXLIB_ROOT);</AdditionalLibraryDirectories>
@@ -291,6 +291,7 @@
       <ExceptionHandling>Enabled</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <Optimization>Disabled</Optimization>
+      <AdditionalOptions>-Wextra %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(DXLIB_ROOT);</AdditionalLibraryDirectories>
@@ -301,7 +302,7 @@
       <AdditionalIncludeDirectories>$(DXLIBEX_ROOT);$(DXLIB_ROOT);$(BOOST_ROOT);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>Enabled</ExceptionHandling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalOptions>-mavx %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>-mavx -Wextra %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(DXLIB_ROOT);</AdditionalLibraryDirectories>
@@ -313,6 +314,7 @@
       <ExceptionHandling>Enabled</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <Optimization>Disabled</Optimization>
+      <AdditionalOptions>-Wextra %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(DXLIB_ROOT);</AdditionalLibraryDirectories>
