@@ -137,7 +137,6 @@ detail::vector_push_back_helper<T> push_back(T pointer) { return{ pointer }; }
 using seed_v_t = std::vector<unsigned int>;
 seed_v_t create_seed_v() {
 	const auto begin_time = std::chrono::high_resolution_clock::now();
-	std::random_device rnd;// ランダムデバイス
 #if defined(__c2__) && __clang_minor__ < 9
 	constexpr std::size_t randome_device_generate_num = 12;//Clnag with Microsoft CodeGen does not support RDRND/RDSEED so that use std::random_device agressively.
 #else
@@ -145,6 +144,7 @@ seed_v_t create_seed_v() {
 #endif
 	seed_v_t sed_v(randome_device_generate_num);// 初期化用ベクター
 #ifndef _CRT_RAND_S
+	std::random_device rnd;// ランダムデバイス
 	std::generate(sed_v.begin(), sed_v.end(), std::ref(rnd));// ベクタの初期化
 #else //_CRT_RAND_S
 	std::generate(sed_v.begin(), sed_v.end(), []() {
@@ -214,7 +214,7 @@ static std::mt19937 create_engine() {
 
 Status game_preprocess()
 {
-	auto engine = create_engine();
+	static auto engine = create_engine();
 	std::bernoulli_distribution dist(transition_rate_to_helicopter_animation);
 	return (dist(engine))? Status::HELICOPTER_ANIMATION : Status::GAME;
 }
