@@ -1,4 +1,10 @@
-﻿#include "DxLib.h"
+﻿#	if !defined(CINTERFACE) && defined(__c2__) &&  __clang_major__ == 3 && __clang_minor__ == 8
+//To avoid compile error
+//C:\Program Files (x86)\Windows Kits\8.1\Include\um\combaseapi.h(229,21): error : unknown type name 'IUnknown'
+//          static_cast<IUnknown*>(*pp);    // make sure everyone derives from IUnknown
+#		define CINTERFACE
+#	endif
+#include "DxLib.h"
 #include "DxGraphicHandle.h"
 #include "define.h"
 #include "load.h"
