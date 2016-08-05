@@ -1,3 +1,3 @@
 ﻿#pragma once
 #include "define.h"
-Status game_preprocess();
+main_status game_preprocess();

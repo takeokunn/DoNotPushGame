@@ -9,7 +9,7 @@
 #pragma warning (push)
 #pragma warning (disable: 4706) //warning C4706: 条件式の比較値は、代入の結果になっています。
 #endif
-Status continu(const img_arr_t&, const sound_arr_t& sound, const config_info::lang_table_t& lang_table) {
+main_status continu(const img_arr_t&, const sound_arr_t& sound, const config_info::lang_table_t& lang_table) {
 	for (auto& s : sound) s.second.stop();//BGM全部停止
 	const auto Font_1 = CreateFontToHandle(NULL, 30, 1, DX_FONTTYPE_ANTIALIASING);//選択肢表示の文字
 	DXLE_STATIC_CONSTEXPR std::array<dxle::pointi, 2> select = { {{WINDOW.width * 13 / 40, WINDOW.height / 4}, { WINDOW.width * 13 / 40, WINDOW.height / 4 + 100 }} };
@@ -54,7 +54,7 @@ Status continu(const img_arr_t&, const sound_arr_t& sound, const config_info::la
 	}
 	if (!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");
 	if (state.esc()) throw normal_exit();
-	return (flag_no_continue) ? Status::TITLE : Status::GAME_PREPROCESS;
+	return (flag_no_continue) ? main_status::title : main_status::game_preprocess;
 }
 #ifdef _MSC_VER
 #pragma warning (pop)

@@ -17,10 +17,10 @@ public:
 	const img_arr_t& get_img() const NOEXCEPT;
 	const sound_arr_t& get_sound() const NOEXCEPT;
 
-	Status game_main();
-	Status helicopter_event();
-	Status echo_score();
-	Status echo_game_over();
+	main_status game_main();
+	main_status helicopter_event();
+	main_status echo_score();
+	main_status echo_game_over();
 private:
 	struct Impl;
 	std::unique_ptr<Impl> pimpl;

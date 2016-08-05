@@ -37,7 +37,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	//変数定義------------------------------------------------------
 
-	Status status_ = Status::TITLE;
+	main_status status_ = main_status::title;
 
 	//処理-----------------------------------------------------------
 
@@ -46,38 +46,38 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		init(config.lang_str);
 		game_c game({ WINDOW.width * 57 / 256 , WINDOW.height * 2 / 7 }, { WINDOW.width * 71 / 128 , WINDOW.height * 2 / 7 }, config.lang_str);//棒人形A, 棒人形B
 		try {
-			while (Status::EXIT != status_ && -1 != ProcessMessage()) {
+			while (main_status::exit != status_ && -1 != ProcessMessage()) {
 				switch (status_)
 				{
-				case Status::TITLE:
+				case main_status::title:
 					status_ = title(game.get_img(), game.get_sound(), config.lang_str);//title BGM流す。この中でBGM止める
 					break;
-				case Status::GAME_PREPROCESS:
+				case main_status::game_preprocess:
 					status_ = game_preprocess();
 					break;
-				case Status::GAME:
+				case main_status::game_main:
 					status_ = game.game_main();//BGM流し始め
 					break;
-				case Status::END:
+				case main_status::end:
 					status_ = end(game.get_img(), game.get_sound(), config.lang_str);//ここでGAMEで流れだした音楽を止める
 					break;
-				case Status::FLYING_MARE_ANIMATION:
+				case main_status::flying_mare_animation:
 					break;
-				case Status::CAR_ANIMATION:
+				case main_status::car_animation:
 					break;
-				case Status::HELICOPTER_ANIMATION:
+				case main_status::helicopter_animation:
 					status_ = game.helicopter_event();
 					break;
-				case Status::RESULT_ECHO:
+				case main_status::result_echo:
 					status_ = game.echo_score();
 					break;
-				case Status::GAME_OVER:
+				case main_status::gameover:
 					status_ = game.echo_game_over();
 					break;
-				case Status::CONTINUE:
+				case main_status::game_continue:
 					status_ = continu(game.get_img(), game.get_sound(), config.lang_str);//ここでGAMEで流れだした音楽を止める
 					break;
-				case Status::EXIT:
+				case main_status::exit:
 					break;
 				default:
 					DxLib_End();

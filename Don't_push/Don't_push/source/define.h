@@ -20,18 +20,18 @@ DXLE_STATIC_CONSTEXPR dxle::pointi SCORE_SHOW_IMAGE_POS = static_cast<dxle::poin
 DXLE_STATIC_CONSTEXPR double transition_rate_to_helicopter_animation = 0.1;
 
 //状態管理
-enum class Status{
-	TITLE,
-	GAME_PREPROCESS,
-	GAME,
-	END,
-	FLYING_MARE_ANIMATION,
-	CAR_ANIMATION,
-	HELICOPTER_ANIMATION,
-	GAME_OVER,
-	RESULT_ECHO,
-	CONTINUE,
-	EXIT
+enum class main_status{
+	title,
+	game_preprocess,
+	game_main,
+	end,
+	flying_mare_animation,
+	car_animation,
+	helicopter_animation,
+	gameover,
+	result_echo,
+	game_continue,
+	exit
 };
 using img_arr_t   = std::unordered_map<dxle::tstring, DxGHandle>;
 using sound_arr_t = std::unordered_map<dxle::tstring, DxSHandle>;

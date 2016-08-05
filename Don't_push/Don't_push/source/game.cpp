@@ -195,7 +195,7 @@ template<std::size_t bouninngenn_no> void game_c::Impl::fall_bouninngenn(const s
 #pragma warning (push)
 #pragma warning (disable: 4706) //warning C4706: 条件式の比較値は、代入の結果になっています。
 #endif
-Status game_c::game_main() {
+main_status game_c::game_main() {
 	this->pimpl->state_init();//状態初期化
 	this->pimpl->m_sound[_T("flower garden")].play(DxSoundMode::LOOP);
 	this->pimpl->fadeout_prelude_masseage();
@@ -218,7 +218,7 @@ Status game_c::game_main() {
 
 	const auto rate = bouninngenn_moving_distance(this->pimpl->m_bouninngenn_a, this->pimpl->m_bouninngenn_b);
 	const auto p_rate = power_bar.get_percent();
-	Status re = Status::GAME_OVER;
+	main_status re = main_status::gameover;
 	if (rate < 70.0 || p_rate < 60.0) {
 		this->pimpl->fall_bouninngenn<1>(pos_record, power_bar);//落とそうとして落とされる、ゲームオーバー
 	}
@@ -229,7 +229,7 @@ Status game_c::game_main() {
 		}
 		else {
 			this->pimpl->fall_bouninngenn<0>(pos_record, power_bar);//落とす。成功！
-			re = Status::RESULT_ECHO;
+			re = main_status::result_echo;
 		}
 	}
 
@@ -252,7 +252,7 @@ Status game_c::game_main() {
 #pragma warning (push)
 #pragma warning (disable: 4706) //warning C4706: 条件式の比較値は、代入の結果になっています。
 #endif
-Status game_c::helicopter_event() {
+main_status game_c::helicopter_event() {
 	this->pimpl->state_init();//状態初期化
 	this->pimpl->m_sound[_T("flower garden")].play(DxSoundMode::LOOP);
 	this->pimpl->fadeout_prelude_masseage();
@@ -278,9 +278,9 @@ Status game_c::helicopter_event() {
 		helicopter.draw();
 	});
 	this->pimpl->m_game_end_img = std::move(tmp);
-	return Status::GAME_OVER;
+	return main_status::gameover;
 }
-Status game_c::echo_score()
+main_status game_c::echo_score()
 {
 	if (!this->pimpl->m_game_end_img) throw std::runtime_error("this->pimpl->game_end_img is empty.");
 	this->pimpl->m_state.fllush();
@@ -301,9 +301,9 @@ Status game_c::echo_score()
 	}
 	if (!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");
 	if (pimpl->m_state.esc()) throw normal_exit();
-	return Status::END;
+	return main_status::end;
 }
-Status game_c::echo_game_over()
+main_status game_c::echo_game_over()
 {
 	if (!this->pimpl->m_game_end_img) throw std::runtime_error("this->pimpl->game_end_img is empty.");
 	this->pimpl->m_state.fllush();
@@ -320,7 +320,7 @@ Status game_c::echo_game_over()
 	}
 	if (!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");
 	if (pimpl->m_state.esc()) throw normal_exit();
-	return Status::CONTINUE;
+	return main_status::game_continue;
 }
 #ifdef _MSC_VER
 #pragma warning (pop)

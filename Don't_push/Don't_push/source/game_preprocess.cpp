@@ -212,9 +212,9 @@ static std::mt19937 create_engine() {
 	return std::mt19937(seq);
 }
 
-Status game_preprocess()
+main_status game_preprocess()
 {
 	static auto engine = create_engine();
 	std::bernoulli_distribution dist(transition_rate_to_helicopter_animation);
-	return (dist(engine))? Status::HELICOPTER_ANIMATION : Status::GAME;
+	return (dist(engine))? main_status::helicopter_animation : main_status::game_main;
 }

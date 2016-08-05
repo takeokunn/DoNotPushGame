@@ -8,7 +8,7 @@
 #pragma warning (push)
 #pragma warning (disable: 4706) //warning C4706: 条件式の比較値は、代入の結果になっています。
 #endif
-Status end(const img_arr_t&, const sound_arr_t& sound, const config_info::lang_table_t& lang_table) {
+main_status end(const img_arr_t&, const sound_arr_t& sound, const config_info::lang_table_t& lang_table) {
 	for (auto& s : sound) s.second.stop();//BGM全部停止
 	//フォントの定義
 	const int font_title = CreateFontToHandle(nullptr, 100, 5, DX_FONTTYPE_EDGE);//タイトルロゴ
@@ -29,7 +29,7 @@ Status end(const img_arr_t&, const sound_arr_t& sound, const config_info::lang_t
 	}
 	if (!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");
 	if (state.esc()) throw normal_exit();
-	return Status::TITLE;
+	return main_status::title;
 }
 #ifdef _MSC_VER
 #pragma warning (pop)
