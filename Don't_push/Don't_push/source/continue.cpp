@@ -11,24 +11,24 @@
 #endif
 main_status continu(const img_arr_t&, const sound_arr_t& sound, const config_info::lang_table_t& lang_table) {
 	for (auto& s : sound) s.second.stop();//BGM全部停止
-	const auto Font_1 = CreateFontToHandle(NULL, 30, 1, DX_FONTTYPE_ANTIALIASING);//選択肢表示の文字
+	static const auto font_1 = CreateFontToHandle(NULL, 30, 1, DX_FONTTYPE_ANTIALIASING);//選択肢表示の文字
 	DXLE_STATIC_CONSTEXPR std::array<dxle::pointi, 2> select = { {{WINDOW.width * 13 / 40, WINDOW.height / 4}, { WINDOW.width * 13 / 40, WINDOW.height / 4 + 100 }} };
 	const std::array<dxle::screen, 2> screens = { { 
-			std::move(dxle::MakeScreen(WINDOW).draw_on_this([Font_1, &lang_table]() {
+			std::move(dxle::MakeScreen(WINDOW).draw_on_this([&lang_table]() {
 				const auto color = GetColor(0, 0, 0);
 				DrawBox(0, 0, WINDOW.width, WINDOW.height, GetColor(180, 180, 180), TRUE);	//背景
-				DrawStringToHandle(select[0].x + 40, select[0].y, L"CONTINUE !!", color, Font_1);//CONTINUE
-				DrawStringToHandle(select[1].x, select[1].y, L"RETIRE. . .", GetColor(255, 255, 255), Font_1);//RETIRE
+				DrawStringToHandle(select[0].x + 40, select[0].y, L"CONTINUE !!", color, font_1);//CONTINUE
+				DrawStringToHandle(select[1].x, select[1].y, L"RETIRE. . .", GetColor(255, 255, 255), font_1);//RETIRE
 				DrawBox(180, 155, 200, 175, color, TRUE);	//選択してるのが分かるようにするやつ
-				DrawStringToHandle(120, WINDOW.height * 3 / 4, (L"- " + lang_table.at(L"Press Z when it is decided") + L" -").c_str(), GetColor(0, 0, 0), Font_1);//Zキー押してね
+				DrawStringToHandle(120, WINDOW.height * 3 / 4, (L"- " + lang_table.at(L"Press Z when it is decided") + L" -").c_str(), GetColor(0, 0, 0), font_1);//Zキー押してね
 			})),
-			std::move(dxle::MakeScreen(WINDOW).draw_on_this([Font_1, &lang_table]() {
+			std::move(dxle::MakeScreen(WINDOW).draw_on_this([&lang_table]() {
 				const auto color_black = GetColor(0, 0, 0);
 				DrawBox(0, 0, WINDOW.width, WINDOW.height, GetColor(180, 180, 180), TRUE);	//背景
-				DrawStringToHandle(select[0].x, select[0].y, L"CONTINUE !!", GetColor(255, 255, 255), Font_1);//CONTINUE
-				DrawStringToHandle(select[1].x + 40, select[1].y, L"RETIRE. . .", color_black, Font_1);//RETIRE
+				DrawStringToHandle(select[0].x, select[0].y, L"CONTINUE !!", GetColor(255, 255, 255), font_1);//CONTINUE
+				DrawStringToHandle(select[1].x + 40, select[1].y, L"RETIRE. . .", color_black, font_1);//RETIRE
 				DrawBox(180, 255, 200, 275, color_black, TRUE);	//選択してるのが分かるようにするやつ
-				DrawStringToHandle(120, WINDOW.height * 3 / 4, (L"- " + lang_table.at(L"Press Z when it is decided") + L" -").c_str(), GetColor(0, 0, 0), Font_1);//Zキー押してね
+				DrawStringToHandle(120, WINDOW.height * 3 / 4, (L"- " + lang_table.at(L"Press Z when it is decided") + L" -").c_str(), GetColor(0, 0, 0), font_1);//Zキー押してね
 			}))
 	} };
 	bool flag_no_continue = false;		//コンティニューするかどうか

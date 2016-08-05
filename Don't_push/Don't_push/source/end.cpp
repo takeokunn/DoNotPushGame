@@ -11,8 +11,8 @@
 main_status end(const img_arr_t&, const sound_arr_t& sound, const config_info::lang_table_t& lang_table) {
 	for (auto& s : sound) s.second.stop();//BGM全部停止
 	//フォントの定義
-	const int font_title = CreateFontToHandle(nullptr, 100, 5, DX_FONTTYPE_EDGE);//タイトルロゴ
-	const int font_1 = CreateFontToHandle(nullptr, 30, 1, DX_FONTTYPE_ANTIALIASING);//「Xキーを押してね」の奴
+	static const int font_title = CreateFontToHandle(nullptr, 100, 5, DX_FONTTYPE_EDGE);//タイトルロゴ
+	static const int font_1 = CreateFontToHandle(nullptr, 30, 1, DX_FONTTYPE_ANTIALIASING);//「Xキーを押してね」の奴
 	keystate state;
 	auto normal_con_f = []() -> bool {
 		bool re = -1 != ProcessMessage() && 0 == ScreenFlip() && 0 == ClearDrawScreen();

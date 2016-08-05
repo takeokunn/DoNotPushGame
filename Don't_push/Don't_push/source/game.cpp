@@ -288,7 +288,7 @@ main_status game_c::echo_score()
 	const auto color_black = DxLib::GetColor(0, 0, 0);
 	DrawBox_kai(SCORE_SHOW_IMAGE_POS - dxle::pointi{ 1, 1 }, WINDOW + dxle::sizei{ 1, 1 } - SCORE_SHOW_IMAGE_POS, color_black, 5);
 	this->pimpl->m_game_end_img->DrawExtendGraph(SCORE_SHOW_IMAGE_POS, static_cast<dxle::pointi>(WINDOW), false);
-	const auto font = CreateFontToHandle(nullptr, 30, 1, DX_FONTTYPE_ANTIALIASING);
+	static const auto font = CreateFontToHandle(nullptr, 30, 1, DX_FONTTYPE_ANTIALIASING);
 	DrawStringToHandle(
 		WINDOW.width * 13 / 40, WINDOW.height / 16,
 		(L"GAME WIN!   Score : " + std::to_wstring(this->pimpl->m_score)).c_str(),
@@ -310,7 +310,7 @@ main_status game_c::echo_game_over()
 	bool is_normal_state = this->pimpl->normal_con_f();
 	this->pimpl->m_game_end_img->filter_HSB(0, 0, 0, -60);
 	this->pimpl->m_game_end_img->DrawGraph({}, false);
-	const auto font = CreateFontToHandle(nullptr, 30, 1, DX_FONTTYPE_ANTIALIASING);
+	static const auto font = CreateFontToHandle(nullptr, 30, 1, DX_FONTTYPE_ANTIALIASING);
 	const auto color_white = DxLib::GetColor(255, 255, 255);
 	DrawStringToHandle(WINDOW.width * 13 / 40, WINDOW.height / 4, L"GAME OVER!", color_white, font);
 	DrawStringToHandle(WINDOW.width * 13 / 40, WINDOW.height / 4 + 50, L"Press Z to continue.", color_white, font);

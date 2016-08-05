@@ -15,9 +15,9 @@ void ending(const DxSHandle& sound)
 	sound.play(DxSoundMode::BACK);
 	DXLE_STATIC_CONSTEXPR int test_height = 20;
 	static const TCHAR* plain_text = _T("Thank you for playing");
-	const int font = CreateFontToHandle(nullptr, test_height, 1, DX_FONTTYPE_ANTIALIASING);//「Xキーを押してね」の奴
+	static const int font = CreateFontToHandle(nullptr, test_height, 1, DX_FONTTYPE_ANTIALIASING);//「Xキーを押してね」の奴
 	auto text = dxle::MakeScreen(GetDrawStringWidthToHandle(plain_text, static_cast<int>(dxle::tstrlen(plain_text)), font), test_height);
-	text.draw_on_this([font]() {
+	text.draw_on_this([]() {
 		DxLib::DrawStringToHandle(0, 0, plain_text, DxLib::GetColor(255, 255, 255), font);
 	});
 	auto normal_con_f = []() -> bool {
