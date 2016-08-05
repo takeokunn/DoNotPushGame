@@ -27,15 +27,15 @@ git clone https://yumetodo@bitbucket.org/yumetodo/donotpushgame.git
 ```
 
 ## dependency 依存関係
-- [DxLibEx](https://github.com/Nagarei/DxLibEx)
+- [DxLibEx](https://github.com/Nagarei/DxLibEx)(commit 75dd5cc9f9031e34d9d064f5839ccec59dda9948(2016/08/05 JST)以降を推奨)
 - [DxLib](http://homepage2.nifty.com/natupaji/DxLib/)
 - [Boost](www.boost.org)(``boost::optional``, ``Boost::property_tree``を使用。boost 1.59.0, 1.60.0, 1.61.0で動作確認)
 
-最終的にGHandleとSHandleはDxLibExに移行する。暫定的にオレオレclassを使用中・・・
+最終的にSHandleはDxLibExに移行する。暫定的にオレオレclassを使用中・・・
 
 ## 動作環境
 - OS : Microsoft Windows Vista/7/8/10(＊XPはビルドツールセット変えれば行けると思いますがサポートしません)
-- CPU: SSE2対応CPU(＊ビルドツールセット変えればSSE2なしで行けますが今時SSE2使えないPCなんてないよね？)
+- CPU: SSE2対応CPU(＊ビルドツールセット変えればSSE2なしで行けますが今時SSE2使えないPCなんてないよね？)。RDRAND/RDSEED命令も対応していれば使用します。
 - メモリ: 128MB以上
 - DirectX9以降が必要
 
@@ -56,12 +56,22 @@ http://azukifont.com/kiyaku.html
 
 ## Compiler Support 対応コンパイラー
 - Visual Studio 2013 Update 5
+- Visual Studio 2015 Update 3
+- Visual Studio 2015 Clang with Microsoft CodeGen(clang3.8) (July 2016)
+
+## Not Supported but may be work　非対応だがおそらく動くコンパイラ
 - Visual Studio 2015 Update 1
 - Visual Studio 2015 Update 2
-- Visual Studio 2015 Clang with Microsoft CodeGen(clang3.7) preview
-- Visual Studio 2015 Clang with Microsoft CodeGen(clang3.7) january
-- Visual Studio 2015 Clang with Microsoft CodeGen(clang3.7) march
-- Visual Studio 2015 Clang with Microsoft CodeGen(clang3.8) May
+- mingw-gcc 5.4.0
+- mingw-clang 3.8.0
+
+## We will never support 非対応コンパイラ
+- Visaul Studio 2015
+- Visual Studio 2013 November CTP
+- Visual Studio 2012 November CTP
+- or before...
+- Visual Studio 2015 Clang with Microsoft CodeGen(clang 3.8)(May 2016)
+- or before...
 
 ## Compile方法
 1. 環境変数``DXLIB_ROOT``と``DXLIBEX_ROOT``と``BOOST_ROOT``を設定する  
