@@ -8,7 +8,7 @@
 class obj_info
 {
 public:
-	obj_info(const dxle::pointi& first_p, const DxGHandle* img_normal, const DxGHandle* img_fall);
+	obj_info(const dxle::pointi& first_p, const dxle::texture2d* img_normal, const dxle::texture2d* img_fall);
 	obj_info(const obj_info& o) = delete;
 	obj_info(obj_info&& o) NOEXCEPT;
 	obj_info& operator=(const obj_info&) = delete;
@@ -28,7 +28,7 @@ public:
 private:
 	const dxle::pointi m_first_pos_;
 	dxle::pointi m_p_;
-	std::array<const DxGHandle*, 2> m_img_;
+	std::array<const dxle::texture2d*, 2> m_img_;
 	uint8_t m_current_img_no_;
 };
 int distance(const obj_info& l, const obj_info& r) NOEXCEPT;
@@ -40,7 +40,7 @@ class circular_motion
 {
 public:
 	circular_motion() = delete;
-	circular_motion(const dxle::pointi& center_pos, const dxle::pointi& first_pos, double angular_v, const DxGHandle& img_normal, const DxGHandle& img_fall) NOEXCEPT;
+	circular_motion(const dxle::pointi& center_pos, const dxle::pointi& first_pos, double angular_v, const dxle::texture2d& img_normal, const dxle::texture2d& img_fall) NOEXCEPT;
 	circular_motion(const circular_motion&) = delete;
 	circular_motion(circular_motion&&) = delete;
 	circular_motion& operator=(const circular_motion&) = delete;

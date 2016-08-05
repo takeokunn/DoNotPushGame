@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include <cstddef>
 #include "dxlibex/config/defines.h"
-#include "DxGraphicHandle.h"
+#include <dxlibex/graph2d.hpp>
 #include "DxSoundHandle.h"
 #include <unordered_map>
 #include <string>
@@ -33,7 +33,7 @@ enum class main_status{
 	game_continue,
 	exit
 };
-using img_arr_t   = std::unordered_map<dxle::tstring, DxGHandle>;
+using img_arr_t   = std::unordered_map<dxle::tstring, dxle::texture2d>;
 using sound_arr_t = std::unordered_map<dxle::tstring, DxSHandle>;
 
 class normal_exit : public std::runtime_error {

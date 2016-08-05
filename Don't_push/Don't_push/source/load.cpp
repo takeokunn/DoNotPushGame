@@ -1,17 +1,17 @@
 ﻿#include "load.h"
-class make_DxGHandle_pair{
+class make_texture2d_pair{
 public:
-	make_DxGHandle_pair(const dxle::tstring& path_) : path(path_) {}
-	make_DxGHandle_pair(dxle::tstring&& path_) : path(path_) {}
-	std::pair<dxle::tstring, DxGHandle> operator() (const dxle::tstring& name, const TCHAR* ext = _T("png")){
-		return make_pair(name, DxGHandle(this->path + name + _T(".") + ext));
+	make_texture2d_pair(const dxle::tstring& path_) : path(path_) {}
+	make_texture2d_pair(dxle::tstring&& path_) : path(path_) {}
+	std::pair<dxle::tstring, dxle::texture2d> operator() (const dxle::tstring& name, const TCHAR* ext = _T("png")){
+		return make_pair(name, dxle::LoadGraph(this->path + name + _T(".") + ext));
 	}
 private:
 	dxle::tstring path;
 };
 img_arr_t make_image_array() {
 	img_arr_t re;
-	make_DxGHandle_pair img(_T("assets\\img\\"));
+	make_texture2d_pair img(_T("assets\\img\\"));
 	re.insert(img(_T("bouninngennA")));
 	re.insert(img(_T("bouninngennA_fall")));
 	re.insert(img(_T("bouninngennB")));

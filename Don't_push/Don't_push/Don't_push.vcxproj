@@ -332,7 +332,6 @@
     <ClInclude Include="source\config.h" />
     <ClInclude Include="source\continue.h" />
     <ClInclude Include="source\define.h" />
-    <ClInclude Include="source\DxGraphicHandle.h" />
     <ClInclude Include="source\DxHandleException.h" />
     <ClInclude Include="source\Dxkeystate.h" />
     <ClInclude Include="source\DxSoundHandle.h" />
@@ -350,7 +349,6 @@
     <ClCompile Include="source\game_preprocess.cpp" />
     <ClCompile Include="source\config.cpp" />
     <ClCompile Include="source\continue.cpp" />
-    <ClCompile Include="source\DxGraphicHandle.cpp" />
     <ClCompile Include="source\Dxkeystate.cpp" />
     <ClCompile Include="source\DxSoundHandle.cpp" />
     <ClCompile Include="source\flying_mare.cpp" />

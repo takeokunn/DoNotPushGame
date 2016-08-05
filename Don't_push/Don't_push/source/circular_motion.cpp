@@ -1,6 +1,6 @@
 #include "circular_motion.h"
 #include "DxLib.h"
-obj_info::obj_info(const dxle::pointi& first_p, const DxGHandle* img_normal, const DxGHandle* img_fall)
+obj_info::obj_info(const dxle::pointi& first_p, const dxle::texture2d* img_normal, const dxle::texture2d* img_fall)
 	: m_fall_frame(0), m_first_pos_(first_p), m_p_(first_p), m_img_({ { img_normal, img_fall } }), m_current_img_no_(0)
 {
 }
@@ -41,7 +41,7 @@ dxle::pointi& obj_info::get_pos() NOEXCEPT { return this->m_p_; }
 const dxle::pointi& obj_info::get_pos() const NOEXCEPT { return this->m_p_; }
 bool obj_info::is_fallen() const NOEXCEPT { return WINDOW.height < this->m_p_.y; }
 
-circular_motion::circular_motion(const dxle::pointi & center_pos, const dxle::pointi& first_pos, double angular_v, const DxGHandle& img_normal, const DxGHandle& img_fall) NOEXCEPT
+circular_motion::circular_motion(const dxle::pointi & center_pos, const dxle::pointi& first_pos, double angular_v, const dxle::texture2d& img_normal, const dxle::texture2d& img_fall) NOEXCEPT
 	: m_center_(center_pos), m_r_(std::hypot(first_pos.x - m_center_.x, first_pos.y - m_center_.y)),
 	m_first_rad_(std::acos((first_pos.x - m_center_.x) / m_r_) * (((first_pos.y - m_center_.y) < 0) ? -1 : 1)),
 	m_angular_v_(angular_v), m_obj_(first_pos, &img_normal, &img_fall), m_t_()

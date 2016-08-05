@@ -1,5 +1,4 @@
 ﻿#pragma once
-#include "DxGraphicHandle.h"
 #include "DxSoundHandle.h"
 #include "define.h"
 #include <unordered_map>

@@ -33,9 +33,6 @@
     <ClInclude Include="source\define.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="source\DxGraphicHandle.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="source\DxHandleException.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -84,9 +81,6 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="source\continue.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="source\DxGraphicHandle.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="source\Dxkeystate.cpp">

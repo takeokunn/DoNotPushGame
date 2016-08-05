@@ -5,7 +5,6 @@
 #		define CINTERFACE
 #	endif
 #include "DxLib.h"
-#include "DxGraphicHandle.h"
 #include "define.h"
 #include "load.h"
 #include "Dxkeystate.h"
