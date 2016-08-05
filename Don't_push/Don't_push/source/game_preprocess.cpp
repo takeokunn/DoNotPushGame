@@ -84,13 +84,13 @@ namespace intrin {
 		return is_amd_cpu;
 	}
 	bool IsRDRANDsupport() {
-		constexpr uint32_t RDRAND_MASK = 1U << 30U;
+		DXLE_STATIC_CONSTEXPR uint32_t RDRAND_MASK = 1U << 30U;
 		if (!IsIntelCPU() && !IsAMDCPU()) return false;
 		const auto reg = get_cpuid(1);//If RDRAND is supported, the bit 30 of the ECX register is set after calling CPUID standard function 01H.
 		return (RDRAND_MASK == (reg.ECX & RDRAND_MASK));
 	}
 	bool IsRDSEEDsupport() {
-		constexpr uint32_t RDSEED_MASK = 1U << 18U;
+		DXLE_STATIC_CONSTEXPR uint32_t RDSEED_MASK = 1U << 18U;
 		if (!IsIntelCPU()) return false;
 		const auto reg = get_cpuid(7);//If RDSEED is supported, the bit 18 of the EBX register is set after calling CPUID standard function 07H.
 		return (RDSEED_MASK == (reg.EBX & RDSEED_MASK));
@@ -119,8 +119,8 @@ namespace detail {
 	template<typename value_type, typename T>
 	struct vector_push_back_operator_impl<value_type, T, true> {
 		void operator()(std::vector<value_type>& v, vector_push_back_helper<T> info) {
-			constexpr size_t size_time = sizeof(T) / sizeof(value_type);
-			constexpr size_t rshft_num = sizeof(value_type) * CHAR_BIT;
+			DXLE_STATIC_CONSTEXPR size_t size_time = sizeof(T) / sizeof(value_type);
+			DXLE_STATIC_CONSTEXPR size_t rshft_num = sizeof(value_type) * CHAR_BIT;
 			for (size_t i = 0; i < size_time; ++i) {
 				const auto tmp = static_cast<value_type>((std::uintmax_t)(info.value) >> (rshft_num * i));
 				if (tmp) v.push_back(tmp);
@@ -140,7 +140,7 @@ seed_v_t create_seed_v() {
 #if defined(__c2__) && __clang_minor__ < 9
 	constexpr std::size_t randome_device_generate_num = 12;//Clnag with Microsoft CodeGen does not support RDRND/RDSEED so that use std::random_device agressively.
 #else
-	constexpr std::size_t randome_device_generate_num = 9;
+	DXLE_STATIC_CONSTEXPR std::size_t randome_device_generate_num = 9;
 #endif
 	seed_v_t sed_v(randome_device_generate_num);// 初期化用ベクター
 #ifndef _CRT_RAND_S
