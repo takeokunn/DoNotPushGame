@@ -27,9 +27,9 @@ git clone https://yumetodo@bitbucket.org/yumetodo/donotpushgame.git
 ```
 
 ## dependency 依存関係
-- [DxLibEx](https://github.com/Nagarei/DxLibEx)(commit 75dd5cc9f9031e34d9d064f5839ccec59dda9948(2016/08/05 JST)以降を推奨)
+- [DxLibEx](https://github.com/Nagarei/DxLibEx)(commit [641b3b06367d3c50347b55d1eeff07fcb1b22763(2016/09/25 JST)](https://github.com/Nagarei/DxLibEx/tree/641b3b06367d3c50347b55d1eeff07fcb1b22763)以降を推奨)
 - [DxLib](http://homepage2.nifty.com/natupaji/DxLib/)
-- [Boost](www.boost.org)(``boost::optional``, ``Boost::property_tree``を使用。boost 1.59.0, 1.60.0, 1.61.0で動作確認)
+- [Boost](www.boost.org)(``boost::optional``, ``Boost::property_tree``を使用。boost 1.59.0, 1.60.0, 1.61.0, 1.62.0で動作確認)
 
 最終的にSHandleはDxLibExに移行する。暫定的にオレオレclassを使用中・・・
 
@@ -82,7 +82,7 @@ ex.)``DXLIB_ROOT``を``D:\lib\DxLib_VC\プロジェクトに追加すべきフ�
 3. (boost1.60.0以前のみ)Boost側のコンパイルエラーを回避するために下記の通り変更を加える
 4. ビルド→ソリューションのビルドでビルドする
 
-### Boostに加える変更(1.61.0では不要)
+### Boostに加える変更(1.61.0以降では不要)
 
 ``./boost/smart_ptr/detail/sp_counted_base.hpp``
 
