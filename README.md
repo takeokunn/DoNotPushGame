@@ -49,7 +49,7 @@ git clone https://yumetodo@bitbucket.org/yumetodo/donotpushgame.git
 
 ## LICENSE
 
-[LICENSE.md](LICENSE.md)
+[License.md](License.md)
 
 ## 免責事項
 このプログラムを実行したことによって生じたいかなる損害について作者は一切の責任を負いません。
