@@ -1,4 +1,4 @@
-# Do Not Push Game ～押すなよ！絶対！～
+﻿# Do Not Push Game ～押すなよ！絶対！～
 
 日本は言霊の力が強い、不思議な国。  
 ならば言霊で遊ぼうやないか！  
@@ -47,9 +47,9 @@ git clone https://yumetodo@bitbucket.org/yumetodo/donotpushgame.git
 ## ゲーム終了方法
 ウィンドウ右上の閉じるボタンを押すかEscボタンを押す
 
-## 使用素材
-- あずきフォント  
-http://azukifont.com/kiyaku.html
+## LICENSE
+
+[LICENSE.md](LICENSE.md)
 
 ## 免責事項
 このプログラムを実行したことによって生じたいかなる損害について作者は一切の責任を負いません。
