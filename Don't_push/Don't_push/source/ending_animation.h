@@ -1,3 +1,3 @@
 #pragma once
-#include "DxSoundHandle.h"
-void ending(const DxSHandle& sound);
+#include "define.h"
+void ending(const sound_arr_t& sound);

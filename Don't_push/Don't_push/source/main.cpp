@@ -89,7 +89,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		catch (const normal_exit&) {
 		}
 		for (auto& s : game.get_sound()) s.second.stop();//BGM全部停止
-		ending(game.get_sound().at(L"Thank_you_for_playing"));
+		ending(game.get_sound());
 	}
 	catch (const std::exception&){
 		DxLib_End();

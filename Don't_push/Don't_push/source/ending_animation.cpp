@@ -3,6 +3,7 @@
 #include <dxlibex/graph2d.hpp>
 #include <chrono>
 #include <thread>
+#include <future>
 
 //#include <fstream>
 #ifdef _MSC_VER
@@ -10,9 +11,15 @@
 #pragma warning (disable: 4706) //warning C4706: 条件式の比較値は、代入の結果になっています。
 #endif
 
-void ending(const DxSHandle& sound)
+void ending(const sound_arr_t& sound)
 {
-	sound.play(DxSoundMode::BACK);
+	for (auto& s : sound) s.second.stop();//BGM全部停止
+	std::thread sound_th([&sound]() {
+		using namespace std::chrono_literals;
+		sound.at(_T("Thank_you_for_playing_en")).play(DxSoundMode::NORMAL);
+		std::this_thread::sleep_for(2ms);
+		sound.at(_T("Thank_you_for_playing_ja")).play(DxSoundMode::NORMAL);
+	});
 	DXLE_STATIC_CONSTEXPR int test_height = 20;
 	static const TCHAR* plain_text = _T("Thank you for playing");
 	static const int font = CreateFontToHandle(nullptr, test_height, 1, DX_FONTTYPE_ANTIALIASING);//「Xキーを押してね」の奴
@@ -37,7 +44,8 @@ void ending(const DxSHandle& sound)
 		text.DrawGraph(text_pos, WINDOW.height / 3, true);
 		//log << "text_pos:" << text_pos << " text_pos + text.size().width:" << text_pos + text.size().width << std::endl;
 	}
-	while (1 == sound.is_during_playback() && (is_normal_state = -1 != ProcessMessage())) std::this_thread::sleep_for(std::chrono::milliseconds(50));
+	sound_th.join();
+	for (auto& s : sound) s.second.stop();//BGM全部停止
 	if(!is_normal_state) throw std::runtime_error("ProcessMessage() return -1.");
 }
 #ifdef _MSC_VER
