@@ -6,8 +6,6 @@
 
 ![Presentation1](Don't_push/Don't_push/assets/img/Presentation1.png)
 
-**現在画面が暗転するバグが有ります。Releaseのものを利用してください**
-
 ## Download方法
 [Release](https://github.com/TakeObara/DoNotPushGame/releases)よりビルド済みバイナリが手にはいります。
 
