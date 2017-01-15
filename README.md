@@ -6,6 +6,12 @@
 
 ![Presentation1](Don't_push/Don't_push/assets/img/Presentation1.png)
 
+## 紹介
+
+このゲームはクソゲーを作ることを目的として開発されています。
+
+れっきとしたクソゲーに仕上がっているはずなのでクソゲーぶりをお楽しみください。
+
 ## Download方法
 [Release](https://github.com/TakeObara/DoNotPushGame/releases)よりビルド済みバイナリが手にはいります。
 
